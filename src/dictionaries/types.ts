@@ -132,4 +132,8 @@ export interface Dictionary {
   viewProducts: string;
   whatsappInquiry: string;
   callLabel: string;
+  faq: {
+    title: string;
+    items: { question: string; answer: string }[];
+  };
 }

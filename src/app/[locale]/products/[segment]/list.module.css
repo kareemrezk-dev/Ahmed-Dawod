@@ -51,10 +51,12 @@
     cursor: pointer; color: var(--text-muted);
   }
   .mobileFilterBtn {
-    display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.9rem;
-    border-radius: 20px; border: 1.5px solid var(--color-primary); background: #eff6ff; 
-    color: var(--color-primary); font-weight: 600; font-size: 0.85rem; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem;
+    border-radius: 25px; border: 1.5px solid var(--border); background: #fff; 
+    color: var(--text-secondary); font-weight: 600; font-size: 0.82rem; cursor: pointer;
+    font-family: inherit; transition: all 0.2s ease; white-space: nowrap;
   }
+  .mobileFilterBtn:hover { border-color: var(--color-primary); color: var(--color-primary); }
 }
 @media (max-width: 768px) { .page { padding: 2rem 0 4rem; } .container { padding: 0 1.25rem; } }
 @media (max-width: 540px) { 

@@ -1,5 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
 import { getCategoryLabel, type CategoryName, type Product } from "@/lib/products";
@@ -26,6 +27,7 @@ export function ProductsClient({
   allBrands,
 }: ProductsClientProps) {
   const searchParams = useSearchParams();
+  const [filterOpen, setFilterOpen] = useState(false);
 
   // ── Active filters ──
   const rawCategory = searchParams.get("category");
@@ -99,10 +101,18 @@ export function ProductsClient({
       ? `${resultsCount} ${dict.products.resultsCount}`
       : `${resultsCount} ${dict.products.resultsCount}${resultsCount !== 1 ? "s" : ""}`;
 
+  const filterBtnLabel = locale === "ar" ? "تصفية" : "Filter";
+
   return (
     <div className={styles.body}>
+      {/* Backdrop for mobile filter */}
+      <div
+        className={`${styles.backdrop} ${filterOpen ? styles.backdropVisible : ""}`}
+        onClick={() => setFilterOpen(false)}
+      />
+
       {/* Sidebar */}
-      <aside className={styles.sidebar}>
+      <aside className={`${styles.sidebar} ${filterOpen ? styles.sidebarOpen : ""}`}>
         <ProductsFilter
           locale={locale}
           dict={dict}
@@ -112,6 +122,7 @@ export function ProductsClient({
           activeCategory={activeCategory}
           activeBrand={activeBrand}
           activeSize={rawSize}
+          onClose={() => setFilterOpen(false)}
         />
       </aside>
 
@@ -124,11 +135,22 @@ export function ProductsClient({
             {activeBrand && ` · ${activeBrand}`}
             {rawSize && ` · ${rawSize}`}
           </span>
-          {totalPages > 1 && (
-            <span className={styles.pageInfo}>
-              {dict.products.pagination.page} {safePage} / {totalPages}
-            </span>
-          )}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            {totalPages > 1 && (
+              <span className={styles.pageInfo}>
+                {dict.products.pagination.page} {safePage} / {totalPages}
+              </span>
+            )}
+            <button
+              className={styles.filterToggle}
+              onClick={() => setFilterOpen(true)}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+              </svg>
+              {filterBtnLabel}
+            </button>
+          </div>
         </div>
 
         <div className={styles.grid}>
@@ -157,3 +179,4 @@ export function ProductsClient({
     </div>
   );
 }
+

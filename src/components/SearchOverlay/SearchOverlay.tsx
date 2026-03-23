@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./SearchOverlay.module.css";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
-import { searchProducts, getCategoryLabel, getProductName } from "@/lib/products";
+import { searchProducts, getCategoryLabel, getProductName, getProductImagePath, getProductImageAlt } from "@/lib/products";
 import type { Product } from "@/lib/products";
 
 interface SearchOverlayProps {
@@ -162,11 +163,23 @@ export function SearchOverlay({ locale, dict, isOpen, onClose, initialQuery = ""
                           className={styles.resultItem}
                           onClick={onClose}
                         >
-                          <span className={styles.resultModel}>
-                            <HighlightMatch text={p.modelNumber} query={debouncedQuery} />
+                          <span className={styles.resultThumb}>
+                            <Image
+                              src={getProductImagePath(p)}
+                              alt={getProductImageAlt(p)}
+                              width={40}
+                              height={40}
+                              className={styles.resultThumbImg}
+                              unoptimized={getProductImagePath(p).endsWith(".svg")}
+                            />
                           </span>
-                          <span className={styles.resultName}>
-                            <HighlightMatch text={getProductName(p, locale)} query={debouncedQuery} />
+                          <span className={styles.resultTextCol}>
+                            <span className={styles.resultModel}>
+                              <HighlightMatch text={p.modelNumber} query={debouncedQuery} />
+                            </span>
+                            <span className={styles.resultName}>
+                              <HighlightMatch text={getProductName(p, locale)} query={debouncedQuery} />
+                            </span>
                           </span>
                           <span className={styles.resultCategory}>{getCategoryLabel(p.category, locale)}</span>
                         </Link>

@@ -13,6 +13,7 @@ import { Breadcrumb } from "@/components/Breadcrumb/Breadcrumb";
 import styles from "./page.module.css";
 import { TopCategoriesNav } from "@/components/TopCategoriesNav/TopCategoriesNav";
 import { ProductsClient } from "./ProductsClient";
+import { FAQ } from "@/components/FAQ/FAQ";
 
 interface PageProps {
   params: { locale: Locale };
@@ -69,6 +70,8 @@ export default async function ProductsPage({ params }: PageProps) {
             allBrands={allBrands}
           />
         </Suspense>
+
+        <FAQ title={dict.faq.title} items={dict.faq.items} />
       </div>
     </div>
   );

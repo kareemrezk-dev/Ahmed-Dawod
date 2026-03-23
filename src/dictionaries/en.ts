@@ -160,4 +160,14 @@ export const en: Dictionary = {
   viewProducts: "View products",
   whatsappInquiry: "Inquire via WhatsApp",
   callLabel: "Call",
+  faq: {
+    title: "Frequently Asked Questions",
+    items: [
+      { question: "What types of bearings do you supply?", answer: "We supply all types of bearings: Deep Groove Ball Bearings, Tapered Roller Bearings, Cylindrical Roller Bearings, Needle Roller Bearings, Cam Followers, and Thrust Bearings. Each type is available in multiple sizes from world-renowned brands." },
+      { question: "Which global brands do you offer?", answer: "We supply genuine bearings from top global brands including SKF (Sweden), NSK (Japan), NTN (Japan), FAG/INA (Germany), TIMKEN (USA), and KOYO (Japan). All products are 100% original with quality guarantees." },
+      { question: "How do I choose the right bearing for my machine?", answer: "Choosing the right bearing depends on several factors: load type (radial or axial), speed, temperature, and operating environment. Contact us via WhatsApp and we'll help you select the right model based on your machine specifications." },
+      { question: "Do you offer delivery services?", answer: "Yes, we offer delivery to all governorates across Egypt. You can also visit our branch at 10th of Ramadan City, El Masreya Center 1 Mall, Shop No. 30 & 86." },
+      { question: "What's the difference between genuine and counterfeit bearings?", answer: "Genuine bearings feature superior manufacturing precision and last 3-5 times longer. Counterfeit bearings can cause frequent breakdowns and damage to machinery. All our products are 100% genuine with manufacturer certificates." },
+    ],
+  },
 };
