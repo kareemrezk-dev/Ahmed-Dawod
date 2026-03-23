@@ -140,7 +140,6 @@
     border-color 0.2s ease,
     box-shadow 0.2s ease,
     background 0.2s ease;
-  overflow: hidden;
   cursor: pointer;
 }
 
@@ -229,6 +228,110 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.7); }
   to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Nav Search Dropdown ── */
+.navDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  inset-inline-end: 0;
+  width: 340px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.14);
+  z-index: 500;
+  overflow: hidden;
+  animation: navDropIn 0.18s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes navDropIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.navDropdownList {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+}
+
+.navDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.12s;
+}
+.navDropdownItem:hover,
+.navDropdownItemActive {
+  background: var(--bg);
+}
+
+.navDropdownThumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.navDropdownThumbImg {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.navDropdownText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.navDropdownModel {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navDropdownName {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navDropdownViewAll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: none;
+  border-top: 1px solid var(--border);
+  background: #f8fafc;
+  color: var(--color-primary);
+  font-size: 0.83rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.navDropdownViewAll:hover {
+  background: #eff6ff;
 }
 
 /* hide search bar on mobile — use icon button instead */

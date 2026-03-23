@@ -2,12 +2,13 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import styles from "./Navbar.module.css";
 import { SearchOverlay } from "@/components/SearchOverlay/SearchOverlay";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher/LocaleSwitcher";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
+import { searchProducts, getProductName, getProductImagePath, getProductImageAlt } from "@/lib/products";
 
 interface NavbarClientProps {
   locale: Locale;
@@ -152,12 +153,25 @@ function CategoryIconSvg({ type }: { type: string }) {
 
 /* ── Inline Search Bar ──────────────────────────────────────── */
 function NavSearchBar({
-  placeholder, locale, onOpen,
-}: { placeholder: string; locale: string; onOpen: (query: string) => void }) {
+  placeholder, locale, onOpen, dict,
+}: { placeholder: string; locale: string; onOpen: (query: string) => void; dict: Dictionary }) {
   const [expanded, setExpanded] = useState(false);
   const [value, setValue] = useState("");
+  const [results, setResults] = useState<ReturnType<typeof searchProducts>>([]);
+  const [activeIdx, setActiveIdx] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  // Debounced search
+  useEffect(() => {
+    if (value.trim().length < 1) { setResults([]); return; }
+    const t = setTimeout(() => {
+      setResults(searchProducts(value).slice(0, 5));
+      setActiveIdx(-1);
+    }, 100);
+    return () => clearTimeout(t);
+  }, [value]);
 
   function expand() {
     setExpanded(true);
@@ -167,6 +181,12 @@ function NavSearchBar({
   function collapse() {
     setExpanded(false);
     setValue("");
+    setResults([]);
+  }
+
+  function goToProduct(slug: string) {
+    collapse();
+    router.push(`/${locale}/products/${slug}`);
   }
 
   // Close on outside click
@@ -182,11 +202,18 @@ function NavSearchBar({
 
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === "Escape") { collapse(); return; }
-    if (e.key === "Enter" && value.trim().length >= 2) {
-      onOpen(value);
-      collapse();
+    if (e.key === "ArrowDown") { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, results.length - 1)); return; }
+    if (e.key === "ArrowUp") { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, -1)); return; }
+    if (e.key === "Enter") {
+      if (activeIdx >= 0 && results[activeIdx]) { goToProduct(results[activeIdx].slug); return; }
+      if (value.trim().length >= 1) {
+        collapse();
+        router.push(`/${locale}/products?q=${encodeURIComponent(value.trim())}`);
+      }
     }
   }
+
+  const showDropdown = expanded && value.trim().length >= 1 && results.length > 0;
 
   return (
     <div
@@ -225,6 +252,50 @@ function NavSearchBar({
             <path d="M1 1l10 10M11 1L1 11"/>
           </svg>
         </button>
+      )}
+
+      {/* Inline suggestions dropdown */}
+      {showDropdown && (
+        <div className={styles.navDropdown}>
+          <ul className={styles.navDropdownList}>
+            {results.map((p, i) => (
+              <li
+                key={p.slug}
+                className={`${styles.navDropdownItem} ${i === activeIdx ? styles.navDropdownItemActive : ""}`}
+                onMouseDown={() => goToProduct(p.slug)}
+                onMouseEnter={() => setActiveIdx(i)}
+              >
+                <span className={styles.navDropdownThumb}>
+                  <Image
+                    src={getProductImagePath(p)}
+                    alt={getProductImageAlt(p)}
+                    width={32}
+                    height={32}
+                    className={styles.navDropdownThumbImg}
+                    unoptimized={getProductImagePath(p).endsWith(".svg")}
+                  />
+                </span>
+                <span className={styles.navDropdownText}>
+                  <span className={styles.navDropdownModel}>{p.brand} {p.modelNumber}</span>
+                  <span className={styles.navDropdownName}>{getProductName(p, locale as Locale)}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            className={styles.navDropdownViewAll}
+            onMouseDown={() => {
+              collapse();
+              router.push(`/${locale}/products?q=${encodeURIComponent(value.trim())}`);
+            }}
+          >
+            {dict.search.viewAll}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: locale === 'ar' ? 'scaleX(-1)' : 'none' }}>
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       )}
     </div>
   );
@@ -349,6 +420,7 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
             <NavSearchBar
               placeholder={dict.search.placeholder}
               locale={locale}
+              dict={dict}
               onOpen={(q) => { setSearchInitialQuery(q); setSearchOpen(true); }}
             />
             <button
