@@ -23,7 +23,7 @@ export function SearchBar({ locale, dict }: SearchBarProps) {
 
   // Debounced search
   useEffect(() => {
-    if (query.trim().length < 2) { setResults([]); setOpen(false); return; }
+    if (query.trim().length < 1) { setResults([]); setOpen(false); return; }
     const t = setTimeout(() => {
       const res = searchProducts(query).slice(0, 6);
       setResults(res);
@@ -56,7 +56,7 @@ export function SearchBar({ locale, dict }: SearchBarProps) {
     if (e.key === "ArrowUp") { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, -1)); return; }
     if (e.key === "Enter") {
       if (activeIdx >= 0 && results[activeIdx]) { goToProduct(results[activeIdx].slug); return; }
-      if (query.trim().length >= 2) {
+      if (query.trim().length >= 1) {
         setOpen(false);
         router.push(`/${locale}/products?q=${encodeURIComponent(query.trim())}`);
       }

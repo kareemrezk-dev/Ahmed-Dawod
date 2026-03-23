@@ -49,7 +49,7 @@ export function SearchOverlay({ locale, dict, isOpen, onClose, initialQuery = ""
 
   // Run search whenever debounced query changes
   useEffect(() => {
-    if (debouncedQuery.trim().length < 2) {
+    if (debouncedQuery.trim().length < 1) {
       setResults([]);
       return;
     }
@@ -143,7 +143,7 @@ export function SearchOverlay({ locale, dict, isOpen, onClose, initialQuery = ""
 
         {/* Results */}
         <div className={styles.results}>
-          {debouncedQuery.trim().length >= 2 && results.length === 0 && (
+          {debouncedQuery.trim().length >= 1 && results.length === 0 && (
             <p className={styles.noResults}>{dict.search.noResults}</p>
           )}
 
@@ -206,7 +206,7 @@ export function SearchOverlay({ locale, dict, isOpen, onClose, initialQuery = ""
             </div>
           )}
 
-          {query.trim().length < 2 && (
+          {query.trim().length < 1 && (
             <div className={styles.hint}>
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
                 <circle cx="18" cy="18" r="12" stroke="var(--border)" strokeWidth="2" />
