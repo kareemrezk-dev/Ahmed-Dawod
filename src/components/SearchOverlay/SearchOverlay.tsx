@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./SearchOverlay.module.css";
@@ -43,6 +44,7 @@ export function SearchOverlay({ locale, dict, isOpen, onClose, initialQuery = ""
   const [results, setResults] = useState<Product[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const debouncedQuery = useDebounce(query, 220);
 
   // Run search whenever debounced query changes
@@ -188,6 +190,19 @@ export function SearchOverlay({ locale, dict, isOpen, onClose, initialQuery = ""
                   </ul>
                 </div>
               ))}
+              <button
+                type="button"
+                className={styles.viewAllBtn}
+                onClick={() => {
+                  onClose();
+                  router.push(`/${locale}/products?q=${encodeURIComponent(debouncedQuery.trim())}`);
+                }}
+              >
+                {dict.search.viewAll}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: locale === 'ar' ? 'scaleX(-1)' : 'none' }}>
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
           )}
 
