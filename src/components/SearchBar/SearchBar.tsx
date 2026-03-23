@@ -1,7 +1,8 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { searchProducts, getProductName, getCategoryLabel, type Product } from "@/lib/products";
+import Image from "next/image";
+import { searchProducts, getProductName, getCategoryLabel, getProductImagePath, getProductImageAlt, type Product } from "@/lib/products";
 import type { Dictionary } from "@/dictionaries/types";
 import type { Locale } from "@/lib/i18n";
 import styles from "./SearchBar.module.css";
@@ -105,25 +106,54 @@ export function SearchBar({ locale, dict }: SearchBarProps) {
 
         {/* Dropdown results */}
         {open && results.length > 0 && (
-          <ul className={styles.dropdown} role="listbox" aria-label={dict.search.resultsFor}>
-            {results.map((p, i) => {
-              const name = getProductName(p, locale);
-              return (
-                <li
-                  key={p.slug}
-                  role="option"
-                  aria-selected={i === activeIdx}
-                  className={`${styles.item} ${i === activeIdx ? styles.itemActive : ""}`}
-                  onMouseDown={() => goToProduct(p.slug)}
-                  onMouseEnter={() => setActiveIdx(i)}
-                >
-                  <span className={styles.itemModel}>{p.brand} {p.modelNumber}</span>
-                  <span className={styles.itemName}>{name}</span>
-                  <span className={styles.itemCat}>{getCategoryLabel(p.category, locale)}</span>
-                </li>
-              );
-            })}
-          </ul>
+          <div className={styles.dropdown} role="listbox" aria-label={dict.search.resultsFor}>
+            <ul className={styles.dropdownList}>
+              {results.map((p, i) => {
+                const name = getProductName(p, locale);
+                const imgSrc = getProductImagePath(p);
+                return (
+                  <li
+                    key={p.slug}
+                    role="option"
+                    aria-selected={i === activeIdx}
+                    className={`${styles.item} ${i === activeIdx ? styles.itemActive : ""}`}
+                    onMouseDown={() => goToProduct(p.slug)}
+                    onMouseEnter={() => setActiveIdx(i)}
+                  >
+                    <span className={styles.itemThumb}>
+                      <Image
+                        src={imgSrc}
+                        alt={getProductImageAlt(p)}
+                        width={36}
+                        height={36}
+                        className={styles.itemThumbImg}
+                        unoptimized={imgSrc.endsWith(".svg")}
+                      />
+                    </span>
+                    <span className={styles.itemText}>
+                      <span className={styles.itemModel}>{p.brand} {p.modelNumber}</span>
+                      <span className={styles.itemName}>{name}</span>
+                    </span>
+                    <span className={styles.itemCat}>{getCategoryLabel(p.category, locale)}</span>
+                  </li>
+                );
+              })}
+            </ul>
+            <button
+              type="button"
+              className={styles.viewAllBtn}
+              onMouseDown={() => {
+                setOpen(false);
+                setQuery("");
+                router.push(`/${locale}/products?q=${encodeURIComponent(query.trim())}`);
+              }}
+            >
+              {dict.search.viewAll}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: locale === 'ar' ? 'scaleX(-1)' : 'none' }}>
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         )}
       </div>
     </div>
