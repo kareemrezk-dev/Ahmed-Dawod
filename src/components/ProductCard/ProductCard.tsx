@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Product } from "@/lib/products";
-import { getProductImagePath, getProductImageAlt, getProductName, getProductModelNumber } from "@/lib/products";
+import { getProductImagePath, getProductImageAlt, getProductName, getProductModelNumber, getCategoryLabel } from "@/lib/products";
 import type { Locale } from "@/lib/i18n";
 import styles from "./ProductCard.module.css";
 
@@ -47,10 +47,11 @@ export function ProductCard({
   const model = getProductModelNumber(product, locale);
   const imageSrc = getProductImagePath(product);
   const imageAlt = getProductImageAlt(product);
-
+  
+  const categoryLabel = getCategoryLabel(product.category, locale);
   const waMsg =
-    locale === "ar" ? `السلام عليكم، أرغب في الاستفسار عن: ${model}` :
-    `Hello, I'd like to inquire about: ${model}`;
+    locale === "ar" ? `السلام عليكم، أرغب في الاستفسار عن ${categoryLabel} موديل: ${model}` :
+    `Hello, I'd like to inquire about ${categoryLabel} model: ${model}`;
   const waUrl = `https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(waMsg)}`;
 
   const viewLabel = locale === "ar" ? "عرض التفاصيل" : "View Details";

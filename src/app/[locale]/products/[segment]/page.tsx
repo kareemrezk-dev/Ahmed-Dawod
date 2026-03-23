@@ -148,9 +148,12 @@ async function ProductDetailView({ product, locale }: { product: Product; locale
   const name = getProductName(product, locale);
   const model = getProductModelNumber(product, locale);
   const description = getProductDescription(product, locale);
+  const categoryLabel = getCategoryLabel(product.category, locale);
+  
   const waMsg =
-    locale === "ar" ? `السلام عليكم، أرغب في الاستفسار عن الموديل: ${model}` :
-    `Hello, I'd like to inquire about model: ${model}`;
+    locale === "ar" ? `السلام عليكم، أرغب في الاستفسار عن ${categoryLabel} موديل: ${model}` :
+    `Hello, I'd like to inquire about ${categoryLabel} model: ${model}`;
+  
   const waUrl = `https://wa.me/${dict.company.whatsappIntl.replace(/\D/g, "")}?text=${encodeURIComponent(waMsg)}`;
   const breadcrumbItems = [
     { label: dict.nav.home, href: `/${locale}` },
@@ -267,6 +270,7 @@ async function ProductDetailView({ product, locale }: { product: Product; locale
                     phone={dict.company.phone}
                     phoneIntl={dict.company.phoneIntl}
                     waModelLabel={locale === "ar" ? "الموديل: " : "Model: "}
+                    categoryLabel={categoryLabel}
                   />
                 </div>
               ) : (

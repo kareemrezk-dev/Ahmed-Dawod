@@ -5,8 +5,8 @@
 .visualPanel { position: sticky; top: calc(72px + 1.5rem); display: flex; flex-direction: column; gap: 0.75rem; }
 .visualCard { background: linear-gradient(135deg, #eff6ff 0%, #e8f0fe 100%); border-radius: 16px; overflow: hidden; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; }
 .visualSvg { opacity: 0.32; }
-.visualOverlay { position: absolute; inset: 0; background: radial-gradient(ellipse at 65% 35%, rgba(29,78,216,0.1) 0%, transparent 65%); pointer-events: none; }
-.modelBadge { position: absolute; bottom: 1.5rem; inset-inline-start: 1.5rem; background-color: rgba(15,17,21,0.88); border: 1px solid rgba(29,78,216,0.3); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 9px; padding: 0.7rem 1.1rem; display: flex; flex-direction: column; gap: 0.15rem; z-index: 2; }
+.visualOverlay { position: absolute; inset: 0; background: radial-gradient(ellipse at 65% 35%, rgba(42,88,149,0.1) 0%, transparent 65%); pointer-events: none; }
+.modelBadge { position: absolute; bottom: 1.5rem; inset-inline-start: 1.5rem; background-color: rgba(15,17,21,0.88); border: 1px solid rgba(42,88,149,0.3); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 9px; padding: 0.7rem 1.1rem; display: flex; flex-direction: column; gap: 0.15rem; z-index: 2; }
 .modelLabel { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.38); }
 .modelValue { font-size: 1.25rem; font-weight: 900; color: var(--color-primary); letter-spacing: 0.04em; line-height: 1; font-family: "SF Mono", "Fira Code", monospace; }
 .specMiniCard { display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 1rem; background-color: var(--card); border: 1px solid var(--border); border-radius: 8px; gap: 1rem; }
@@ -18,7 +18,7 @@
 .categoryDot { width: 5px; height: 5px; border-radius: 50%; background-color: var(--color-primary); flex-shrink: 0; }
 .productTitle { font-size: clamp(1.4rem, 3vw, 1.95rem); font-weight: 900; color: var(--text-primary); line-height: 1.25; letter-spacing: -0.01em; }
 .metaRow { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
-.brandPill { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; background-color: rgba(29,78,216,0.08); border: 1px solid rgba(29,78,216,0.22); border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em; }
+.brandPill { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; background-color: rgba(42,88,149,0.08); border: 1px solid rgba(42,88,149,0.22); border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em; }
 .modelChip { font-size: 0.78rem; font-weight: 700; font-family: "SF Mono", "Fira Code", monospace; color: var(--text-muted); background-color: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.25rem 0.65rem; }
 .productDescription { font-size: 0.935rem; color: var(--text-muted); line-height: 1.85; max-width: 60ch; }
 .sizeBlock { display: flex; flex-direction: column; gap: 0.65rem; }
@@ -36,7 +36,7 @@
 .specKey { padding: 0.7rem 1rem; font-size: 0.82rem; font-weight: 500; color: var(--text-muted); width: 42%; vertical-align: middle; background-color: var(--card); }
 .specValue { padding: 0.7rem 1rem; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); background-color: var(--card); font-family: "SF Mono", "Fira Code", monospace; }
 .tagsRow { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.tag { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; padding: 0.25rem 0.65rem; border-radius: 5px; background-color: rgba(29,78,216,0.08); color: var(--color-primary); border: 1px solid rgba(29,78,216,0.2); }
+.tag { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; padding: 0.25rem 0.65rem; border-radius: 5px; background-color: rgba(42,88,149,0.08); color: var(--color-primary); border: 1px solid rgba(42,88,149,0.2); }
 .ctaBlock { display: flex; flex-direction: column; gap: 0.85rem; padding: 1.5rem; background-color: var(--card); border: 1px solid var(--border); border-radius: 12px; }
 .ctaHeading { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
 .whatsappBtn { display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem; padding: 0.95rem 1.5rem; background-color: var(--color-accent); color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 8px; text-decoration: none; transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 14px rgba(245,158,11,0.30); }
@@ -50,7 +50,7 @@
   display: flex; align-items: center; gap: 0.5rem;
   padding: 0.6rem 0.9rem;
   background-color: #eff6ff;
-  border: 1px solid rgba(29,78,216,0.2);
+  border: 1px solid rgba(42,88,149,0.2);
   border-radius: 8px; margin-bottom: 0.5rem;
 }
 .activePartLabel {
@@ -119,12 +119,12 @@
   justify-content: center;
 }
 .thumbnailBtn:hover {
-  border-color: rgba(29, 78, 216, 0.3);
+  border-color: rgba(42, 88, 149, 0.3);
   transform: translateY(-2px);
 }
 .thumbnailActive {
   border-color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.15);
+  box-shadow: 0 4px 12px rgba(42, 88, 149, 0.15);
 }
 .thumbnailImg {
   object-fit: contain;

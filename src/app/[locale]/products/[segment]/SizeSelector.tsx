@@ -12,11 +12,13 @@ interface SizeSelectorProps {
   phone: string;
   phoneIntl: string;
   waModelLabel: string;
+  categoryLabel: string;
 }
 
 export function SizeSelector({
   sizes, basePartNumber, selectLabel,
   locale, waBase, phone, phoneIntl, waModelLabel,
+  categoryLabel,
 }: SizeSelectorProps) {
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -25,8 +27,8 @@ export function SizeSelector({
 
   const waMsg =
     locale === "ar"
-      ? `السلام عليكم، أرغب في الاستفسار عن الموديل: ${activeModel}`
-      : `Hello, I'd like to inquire about model: ${activeModel}`;
+      ? `السلام عليكم، أرغب في الاستفسار عن ${categoryLabel} موديل: ${activeModel}`
+      : `Hello, I'd like to inquire about ${categoryLabel} model: ${activeModel}`;
   const waUrl = `https://wa.me/${waBase}?text=${encodeURIComponent(waMsg)}`;
 
   const inquiryLabel =

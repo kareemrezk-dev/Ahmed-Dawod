@@ -5,7 +5,7 @@
 .required { color:var(--color-primary); margin-inline-start:0.15rem; }
 .input,.textarea,.select { width:100%; padding:0.7rem 0.95rem; background-color:var(--bg); border:1.5px solid var(--border); border-radius:7px; font-size:0.9rem; color:var(--text-primary); font-family:inherit; outline:none; transition:border-color 0.18s ease,box-shadow 0.18s ease; appearance:none; -webkit-appearance:none; }
 .input::placeholder,.textarea::placeholder { color:var(--text-muted); opacity:0.6; }
-.input:focus,.textarea:focus,.select:focus { border-color:var(--color-primary); box-shadow:0 0 0 3px rgba(29,78,216,0.12); }
+.input:focus,.textarea:focus,.select:focus { border-color:var(--color-primary); box-shadow:0 0 0 3px rgba(42,88,149,0.12); }
 .textarea { min-height:120px; resize:vertical; line-height:1.6; }
 .selectWrapper { position:relative; }
 .selectArrow { position:absolute; inset-inline-end:0.875rem; top:50%; transform:translateY(-50%); pointer-events:none; color:var(--text-muted); }
@@ -13,7 +13,7 @@
 .submitBtn { display:inline-flex; align-items:center; justify-content:center; gap:0.65rem; padding:0.9rem 2rem; background-color:var(--color-primary); color:#ffffff; font-size:0.95rem; font-weight:700; border-radius:7px; border:none; cursor:pointer; font-family:inherit; letter-spacing:0.03em; transition:background-color 0.2s ease,transform 0.2s ease,opacity 0.2s ease; margin-top:0.25rem; width:100%; }
 .submitBtn:hover:not(:disabled) { background-color:#a08830; transform:translateY(-1px); }
 .submitBtn:disabled { opacity:0.65; cursor:not-allowed; }
-.successBox { display:flex; flex-direction:column; align-items:center; text-align:center; gap:0.75rem; padding:2.5rem 1.5rem; background-color:rgba(29,78,216,0.06); border:1px solid rgba(29,78,216,0.2); border-radius:12px; animation:fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+.successBox { display:flex; flex-direction:column; align-items:center; text-align:center; gap:0.75rem; padding:2.5rem 1.5rem; background-color:rgba(42,88,149,0.06); border:1px solid rgba(42,88,149,0.2); border-radius:12px; animation:fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
 .successIcon { color:var(--color-primary); }
 .successTitle { font-size:1.1rem; font-weight:800; color:var(--text-primary); }
 .successSubtitle { font-size:0.87rem; color:var(--text-muted); line-height:1.6; }

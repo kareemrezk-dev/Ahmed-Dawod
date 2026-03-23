@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-  border: 1px solid rgba(29,78,216,0.2);
+  border: 1px solid rgba(42,88,149,0.2);
   cursor: pointer;
   /* Hidden by default */
   opacity: 0;
@@ -30,7 +30,7 @@
 .btn:hover {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
-  box-shadow: 0 6px 20px rgba(29,78,216,0.3);
+  box-shadow: 0 6px 20px rgba(42,88,149,0.3);
 }
 
 @media (max-width: 640px) {

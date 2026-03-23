@@ -401,7 +401,7 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
             >
               <Link
                 href={`/${locale}/products`}
-                className={[styles.navLink, styles.productsBtn, (megaOpen || pathname.startsWith("/" + locale + "/products")) ? styles.navLinkActive : ""].join(" ")}
+                className={[styles.navLink, styles.productsBtn, pathname.startsWith("/" + locale + "/products") ? styles.navLinkActive : ""].join(" ")}
                 aria-expanded={megaOpen}
                 aria-haspopup="true"
               >

@@ -79,7 +79,7 @@
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 16px 40px rgba(30,41,59,0.1);
-  border-color: rgba(29,78,216,0.45);
+  border-color: rgba(42,88,149,0.45);
 }
 
 .card::before {

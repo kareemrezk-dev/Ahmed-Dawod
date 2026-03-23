@@ -9,8 +9,8 @@
 :root {
   --color-background:    #ffffff;
   --color-section:       #f0f4ff;
-  --color-primary:       #1d4ed8;
-  --color-primary-hover: #1e40af;
+  --color-primary:       #2A5895;
+  --color-primary-hover: #1F4370;
   --color-text:          #111827;
   --color-accent:        #f59e0b;
   --color-accent-hover:  #d97706;
@@ -108,5 +108,5 @@ ul, ol { list-style: none; }
 }
 .hoverLift:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(29,78,216,0.12);
+  box-shadow: 0 8px 24px rgba(42,88,149,0.12);
 }

@@ -1,5 +1,4 @@
 "use client";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
@@ -9,93 +8,44 @@ import { ProductsFilter } from "@/components/ProductsFilter/ProductsFilter";
 import { Pagination } from "@/components/Pagination/Pagination";
 import styles from "./page.module.css";
 
-const PAGE_SIZE = 12;
+interface FilterOption {
+  value: string;
+  label: string;
+  count: number;
+}
 
 interface ProductsClientProps {
   locale: Locale;
   dict: Dictionary;
-  allProducts: Product[];
-  allCategories: CategoryName[];
-  allBrands: string[];
+  paginatedProducts: Product[];
+  totalPages: number;
+  currentPage: number;
+  resultsCount: number;
+  categoryOptions: FilterOption[];
+  brandOptions: FilterOption[];
+  sizeOptions: FilterOption[];
+  activeCategory: CategoryName | null;
+  activeBrand: string | null;
+  activeSize: string | null;
 }
 
 export function ProductsClient({
   locale,
   dict,
-  allProducts,
-  allCategories,
-  allBrands,
+  paginatedProducts,
+  totalPages,
+  currentPage,
+  resultsCount,
+  categoryOptions,
+  brandOptions,
+  sizeOptions,
+  activeCategory,
+  activeBrand,
+  activeSize,
 }: ProductsClientProps) {
-  const searchParams = useSearchParams();
   const [filterOpen, setFilterOpen] = useState(false);
 
-  // ── Active filters ──
-  const rawCategory = searchParams.get("category");
-  const rawBrand = searchParams.get("brand");
-  const rawSize = searchParams.get("size");
-  const currentPage = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10));
-
-  const activeCategory: CategoryName | null =
-    rawCategory && (allCategories as string[]).includes(rawCategory)
-      ? (rawCategory as CategoryName)
-      : null;
-
-  const activeBrand: string | null =
-    rawBrand && allBrands.map((b) => b.toLowerCase()).includes(rawBrand.toLowerCase())
-      ? allBrands.find((b) => b.toLowerCase() === rawBrand.toLowerCase()) ?? null
-      : null;
-
-  // ── Filter products ──
-  let filtered = allProducts;
-  if (activeCategory) filtered = filtered.filter((p) => p.category === activeCategory);
-  if (activeBrand) filtered = filtered.filter((p) => p.brand.toLowerCase() === activeBrand.toLowerCase());
-  if (rawSize) filtered = filtered.filter((p) => p.sizes?.some((s) => s.toLowerCase().includes(rawSize.toLowerCase())));
-
-  // ── Pagination ──
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-  const safePage = Math.min(currentPage, Math.max(1, totalPages));
-  const paginated = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
-
-  // ── Build filter option arrays ──
-  const categoryOptions = allCategories.map((cat) => {
-    let base = allProducts;
-    if (activeBrand) base = base.filter((p) => p.brand.toLowerCase() === activeBrand.toLowerCase());
-    if (rawSize) base = base.filter((p) => p.sizes?.some((s) => s.toLowerCase().includes(rawSize.toLowerCase())));
-    return {
-      value: cat,
-      label: getCategoryLabel(cat, locale),
-      count: base.filter((p) => p.category === cat).length,
-    };
-  }).filter((o) => o.count > 0);
-
-  const brandOptions = allBrands.map((brand) => {
-    let base = allProducts;
-    if (activeCategory) base = base.filter((p) => p.category === activeCategory);
-    if (rawSize) base = base.filter((p) => p.sizes?.some((s) => s.toLowerCase().includes(rawSize.toLowerCase())));
-    return {
-      value: brand,
-      label: brand,
-      count: base.filter((p) => p.brand.toLowerCase() === brand.toLowerCase()).length,
-    };
-  }).filter((o) => o.count > 0);
-
-  const sizeBase = activeCategory
-    ? activeBrand
-      ? allProducts.filter((p) => p.category === activeCategory && p.brand.toLowerCase() === activeBrand.toLowerCase())
-      : allProducts.filter((p) => p.category === activeCategory)
-    : activeBrand
-    ? allProducts.filter((p) => p.brand.toLowerCase() === activeBrand.toLowerCase())
-    : allProducts;
-
-  const allSizes = [...new Set(sizeBase.flatMap((p) => p.sizes ?? []))].sort();
-  const sizeOptions = allSizes.map((size) => ({
-    value: size,
-    label: size,
-    count: sizeBase.filter((p) => p.sizes?.includes(size)).length,
-  }));
-
   // ── Labels ──
-  const resultsCount = filtered.length;
   const resultsLabel =
     locale === "ar"
       ? `${resultsCount} ${dict.products.resultsCount}`
@@ -121,7 +71,7 @@ export function ProductsClient({
           sizeOptions={sizeOptions}
           activeCategory={activeCategory}
           activeBrand={activeBrand}
-          activeSize={rawSize}
+          activeSize={activeSize}
           onClose={() => setFilterOpen(false)}
         />
       </aside>
@@ -133,12 +83,12 @@ export function ProductsClient({
             <span className={styles.resultsCountBold}>{resultsLabel}</span>
             {activeCategory && ` — ${getCategoryLabel(activeCategory, locale)}`}
             {activeBrand && ` · ${activeBrand}`}
-            {rawSize && ` · ${rawSize}`}
+            {activeSize && ` · ${activeSize}`}
           </span>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
             {totalPages > 1 && (
               <span className={styles.pageInfo}>
-                {dict.products.pagination.page} {safePage} / {totalPages}
+                {dict.products.pagination.page} {currentPage} / {totalPages}
               </span>
             )}
             <button
@@ -154,10 +104,10 @@ export function ProductsClient({
         </div>
 
         <div className={styles.grid}>
-          {paginated.length === 0 ? (
+          {paginatedProducts.length === 0 ? (
             <p className={styles.empty}>{dict.products.empty}</p>
           ) : (
-            paginated.map((product, i) => (
+            paginatedProducts.map((product, i) => (
               <ProductCard
                 key={product.slug}
                 product={product}
@@ -172,7 +122,7 @@ export function ProductsClient({
         <Pagination
           locale={locale}
           dict={dict}
-          currentPage={safePage}
+          currentPage={currentPage}
           totalPages={totalPages}
         />
       </div>

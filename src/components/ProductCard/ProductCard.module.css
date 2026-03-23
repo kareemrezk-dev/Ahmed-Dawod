@@ -14,8 +14,8 @@
   position: relative;
 }
 .card:hover {
-  box-shadow: 0 10px 32px rgba(29,78,216,0.10);
-  border-color: rgba(29,78,216,0.30); transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(42,88,149,0.10);
+  border-color: rgba(42,88,149,0.30); transform: translateY(-2px);
 }
 .card::before {
   content: ""; position: absolute; inset-block: 0; inset-inline-start: 0;
@@ -46,8 +46,8 @@
   position: absolute; top: 0.75rem; inset-inline-start: 0.75rem; z-index: 2;
   font-size: 0.62rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
   padding: 0.2rem 0.55rem;
-  background-color: rgba(29,78,216,0.08); color: var(--color-primary);
-  border: 1px solid rgba(29,78,216,0.20); border-radius: 4px;
+  background-color: rgba(42,88,149,0.08); color: var(--color-primary);
+  border: 1px solid rgba(42,88,149,0.20); border-radius: 4px;
 }
 
 .featuredBadge {
@@ -92,8 +92,8 @@
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
   margin-top: auto; font-size: 0.78rem; font-weight: 600; color: var(--color-primary);
   text-decoration: none; padding: 0.48rem 0.8rem;
-  border: 1px solid rgba(29,78,216,0.22); border-radius: 6px;
-  background-color: rgba(29,78,216,0.04);
+  border: 1px solid rgba(42,88,149,0.22); border-radius: 6px;
+  background-color: rgba(42,88,149,0.04);
   transition: background-color 0.16s, border-color 0.16s, color 0.16s; width: 100%;
 }
 .detailsBtn:hover { background-color: var(--color-primary); color: #fff; border-color: var(--color-primary); }

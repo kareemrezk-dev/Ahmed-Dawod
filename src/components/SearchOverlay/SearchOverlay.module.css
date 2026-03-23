@@ -140,7 +140,7 @@
   color: var(--color-primary);
   margin-bottom: 0.4rem;
   padding: 0.15rem 0.5rem;
-  background-color: rgba(29, 78, 216, 0.08);
+  background-color: rgba(42, 88, 149, 0.08);
   border-radius: 4px;
 }
 
@@ -226,7 +226,7 @@
 
 /* ── Highlight ── */
 .highlight {
-  background-color: rgba(29, 78, 216, 0.25);
+  background-color: rgba(42, 88, 149, 0.25);
   color: var(--text-primary);
   border-radius: 2px;
   font-style: normal;
@@ -244,7 +244,7 @@
   border: none;
   border-top: 1px solid var(--border);
   background: rgba(248, 250, 252, 0.8);
-  color: var(--color-primary, #1d4ed8);
+  color: var(--color-primary, #2A5895);
   font-size: 0.9rem;
   font-weight: 700;
   font-family: inherit;
