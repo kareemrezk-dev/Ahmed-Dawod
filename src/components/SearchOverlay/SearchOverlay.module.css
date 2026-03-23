@@ -1,0 +1,250 @@
+/* ── Backdrop ── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background-color: rgba(30, 41, 59, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+  animation: fadeIn 0.18s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Panel ── */
+.panel {
+  width: 100%;
+  max-width: 640px;
+  background-color: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  animation: slideDown 0.2s ease;
+  margin: 0 1rem;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Input row ── */
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.searchIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  min-width: 0;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Hide native clear button on search inputs */
+.input::-webkit-search-cancel-button { display: none; }
+
+.clearBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  background: var(--bg);
+  transition: color 0.15s ease, background-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.clearBtn:hover {
+  color: var(--text-primary);
+  background-color: var(--border);
+}
+
+.closeBtn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0.3rem 0.65rem;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  transition: color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.closeBtn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+/* ── Results area ── */
+.results {
+  max-height: 420px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.resultsInner {
+  padding: 1rem 1.25rem;
+}
+
+.resultsLabel {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.resultsLabel strong {
+  color: var(--text-primary);
+}
+
+/* ── Brand group ── */
+.group {
+  margin-bottom: 1.25rem;
+}
+
+.group:last-child {
+  margin-bottom: 0;
+}
+
+.groupLabel {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 0.4rem;
+  padding: 0.15rem 0.5rem;
+  background-color: rgba(29, 78, 216, 0.08);
+  border-radius: 4px;
+}
+
+.groupList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+/* ── Result item ── */
+.resultItem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 7px;
+  text-decoration: none;
+  transition: background-color 0.14s ease;
+}
+
+.resultItem:hover {
+  background-color: var(--bg);
+}
+
+.resultModel {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: "SF Mono", "Fira Code", monospace;
+  white-space: nowrap;
+}
+
+.resultName {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resultCategory {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background-color: var(--bg);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+}
+
+/* ── Highlight ── */
+.highlight {
+  background-color: rgba(29, 78, 216, 0.25);
+  color: var(--text-primary);
+  border-radius: 2px;
+  font-style: normal;
+}
+
+/* ── No results / hint ── */
+.noResults {
+  padding: 2rem 1.25rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2.5rem 1.25rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* ── RTL support ── */
+[dir="rtl"] .resultItem {
+  grid-template-columns: auto 1fr auto;
+  direction: rtl;
+}
+
+[dir="rtl"] .input {
+  text-align: right;
+}
+
+/* ── Mobile ── */
+@media (max-width: 680px) {
+  .backdrop {
+    padding-top: 60px;
+    align-items: flex-start;
+  }
+  .panel {
+    border-radius: 0 0 12px 12px;
+    margin: 0;
+    max-width: 100%;
+  }
+  .resultItem {
+    grid-template-columns: auto 1fr;
+  }
+  .resultCategory {
+    display: none;
+  }
+}

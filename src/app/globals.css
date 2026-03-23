@@ -1,0 +1,112 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-background:    #ffffff;
+  --color-section:       #f0f4ff;
+  --color-primary:       #1d4ed8;
+  --color-primary-hover: #1e40af;
+  --color-text:          #111827;
+  --color-accent:        #f59e0b;
+  --color-accent-hover:  #d97706;
+  --color-accent-light:  #fef3c7;
+  --color-border:        #e2e8f0;
+  --color-muted:         #6b7280;
+
+  /* Backward-compat aliases */
+  --bg:              var(--color-section);
+  --card:            var(--color-background);
+  --text-primary:    var(--color-text);
+  --text-muted:      var(--color-muted);
+  --primary:         var(--color-primary);
+  --accent:          var(--color-accent);
+  --border:          var(--color-border);
+  --border-strong:   #cbd5e1;
+  --color-section-bg: var(--color-section);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[dir="rtl"] body { font-family: "Cairo", "Noto Sans Arabic", system-ui, sans-serif; }
+[dir="ltr"] body { font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+img    { max-width: 100%; height: auto; display: block; }
+a      { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font: inherit; }
+ul, ol { list-style: none; }
+
+/* ── Global Animations ────────────────────────────────── */
+
+/* Fade up — for sections entering viewport */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Slide in from right (for RTL = slide from left) */
+@keyframes slideInEnd {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+[dir="rtl"] .animSlideIn {
+  animation: slideInStart 0.55s cubic-bezier(0.22,1,0.36,1) both;
+}
+[dir="ltr"] .animSlideIn {
+  animation: slideInEnd 0.55s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes slideInStart {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Scale in */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Utility animation classes */
+.animFadeUp   { animation: fadeUp   0.55s cubic-bezier(0.22,1,0.36,1) both; }
+.animFadeIn   { animation: fadeIn   0.45s ease both; }
+.animScaleIn  { animation: scaleIn  0.45s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* Stagger delays */
+.animDelay1 { animation-delay: 0.08s; }
+.animDelay2 { animation-delay: 0.16s; }
+.animDelay3 { animation-delay: 0.24s; }
+.animDelay4 { animation-delay: 0.32s; }
+
+/* Page transition wrapper */
+.pageEnter {
+  animation: fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+/* Smooth hover lift */
+.hoverLift {
+  transition: transform 0.22s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s ease;
+}
+.hoverLift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(29,78,216,0.12);
+}

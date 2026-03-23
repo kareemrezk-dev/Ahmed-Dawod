@@ -1,0 +1,44 @@
+@keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+.page { padding:3rem 0 6rem; min-height:70vh; }
+.container { max-width:1280px; margin:0 auto; padding:0 2rem; }
+.pageHeader { margin-bottom:3rem; padding-bottom:1.75rem; border-bottom:1px solid var(--border); animation:fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+.breadcrumbRow { margin-bottom:1rem; }
+.eyebrow { display:flex; align-items:center; gap:0.65rem; margin-bottom:0.75rem; }
+.eyebrowRule { width:24px; height:2px; background-color:var(--color-primary); flex-shrink:0; }
+.eyebrowText { font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--color-primary); }
+.pageTitle { font-size:clamp(1.6rem,3vw,2.1rem); font-weight:900; color:var(--text-primary); letter-spacing:-0.01em; line-height:1.2; }
+.pageSubtitle { font-size:0.92rem; color:var(--text-muted); margin-top:0.4rem; line-height:1.65; }
+.body { display:grid; grid-template-columns:1fr 1.1fr; gap:3.5rem; align-items:start; }
+.infoCol { display:flex; flex-direction:column; gap:1.5rem; animation:fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
+.contactCard { background-color:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+.cardHeader { background:linear-gradient(135deg,#f0f2f5 0%,#e8eaed 100%); padding:1.75rem 1.75rem 1.5rem; position:relative; overflow:hidden; }
+.cardHeader::before { content:""; position:absolute; inset:0; background-image:linear-gradient(rgba(29,78,216,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,78,216,0.04) 1px,transparent 1px); background-size:32px 32px; pointer-events:none; }
+.cardBrandName { font-size:1.15rem; font-weight:900; color:var(--text-primary); letter-spacing:0.02em; position:relative; }
+.cardBrandSlogan { font-size:0.72rem; color:var(--color-primary); letter-spacing:0.05em; font-weight:500; margin-top:0.2rem; position:relative; }
+.cardEstablished { display:inline-block; margin-top:0.75rem; font-size:0.65rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.35); position:relative; }
+.contactRow { display:flex; align-items:flex-start; gap:1rem; padding:1.1rem 1.5rem; border-bottom:1px solid var(--border); transition:background-color 0.18s ease; }
+.contactRow:last-child { border-bottom:none; }
+.contactRow:hover { background-color:rgba(29,78,216,0.03); }
+.contactRowIcon { flex-shrink:0; width:34px; height:34px; border-radius:8px; background-color:rgba(29,78,216,0.08); border:1px solid rgba(29,78,216,0.15); display:flex; align-items:center; justify-content:center; color:var(--color-primary); margin-top:1px; }
+.contactRowContent { display:flex; flex-direction:column; gap:0.1rem; min-width:0; }
+.contactRowLabel { font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); }
+.contactRowValue { font-size:0.9rem; font-weight:600; color:var(--text-primary); line-height:1.45; }
+.contactRowLink { font-size:0.9rem; font-weight:600; color:var(--text-primary); text-decoration:none; transition:color 0.18s ease; }
+.contactRowLink:hover { color:var(--color-primary); }
+.socialRow { padding:1.25rem 1.5rem; border-top:1px solid var(--border); display:flex; align-items:center; gap:0.65rem; }
+.socialLabel { font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-inline-end:0.25rem; }
+.socialBtn { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:7px; background-color:var(--bg); border:1px solid var(--border); color:var(--text-muted); text-decoration:none; transition:background-color 0.18s ease,color 0.18s ease,border-color 0.18s ease; }
+.socialBtn:hover { background-color:var(--color-primary); color:var(--text-primary); border-color:var(--color-primary); }
+.mapBlock { display:block; background-color:var(--card); border:1px solid var(--color-border); border-radius:12px; overflow:hidden; text-decoration:none; cursor:pointer; transition:border-color 0.2s, box-shadow 0.2s; } .mapBlock:hover { border-color:var(--color-primary); box-shadow:0 4px 20px rgba(29,78,216,0.12); }
+.mapPlaceholder { aspect-ratio:16/7; background:linear-gradient(135deg,#f0f2f5 0%,#e8eaed 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.65rem; position:relative; overflow:hidden; }
+.mapPlaceholder::before { content:""; position:absolute; inset:0; background-image:linear-gradient(rgba(29,78,216,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,78,216,0.04) 1px,transparent 1px); background-size:24px 24px; pointer-events:none; }
+.mapIcon { color:var(--color-primary); opacity:0.7; position:relative; }
+.mapAddress { font-size:0.85rem; color:#1f2937; text-align:center; padding:0 2rem; line-height:1.6; position:relative; font-weight:500; }
+.formCol { animation:fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.1s both; }
+.formCard { background-color:var(--card); border:1px solid var(--border); border-radius:14px; padding:2rem; }
+.formCardHeading { font-size:1.05rem; font-weight:900; color:var(--text-primary); margin-bottom:0.25rem; letter-spacing:-0.01em; }
+.formCardSubheading { font-size:0.84rem; color:var(--text-muted); margin-bottom:1.75rem; line-height:1.5; }
+.formDivider { height:1px; background-color:var(--border); margin-bottom:1.75rem; }
+@media (max-width:900px) { .body { grid-template-columns:1fr; gap:2.5rem; } .container { padding:0 1.25rem; } }
+
+.mapCta { font-size:0.75rem; font-weight:600; color:var(--color-primary); letter-spacing:0.04em; position:relative; }

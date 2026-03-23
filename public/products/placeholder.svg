@@ -1,0 +1,30 @@
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="1000" fill="white"/>
+  <!-- Outer ring -->
+  <circle cx="500" cy="500" r="380" stroke="#1d4ed8" stroke-width="55" fill="none" opacity="0.10"/>
+  <circle cx="500" cy="500" r="380" stroke="#1d4ed8" stroke-width="6" fill="none" opacity="0.5"/>
+  <!-- Rolling elements: 12 balls -->
+  <circle cx="500" cy="122" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="690" cy="172" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="828" cy="310" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="878" cy="500" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="828" cy="690" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="690" cy="828" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="500" cy="878" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="310" cy="828" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="172" cy="690" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="122" cy="500" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="172" cy="310" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <circle cx="310" cy="172" r="40" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="5"/>
+  <!-- Cage ring -->
+  <circle cx="500" cy="500" r="320" stroke="#f59e0b" stroke-width="4" fill="none" stroke-dasharray="20 14" opacity="0.65"/>
+  <!-- Inner ring -->
+  <circle cx="500" cy="500" r="220" stroke="#1d4ed8" stroke-width="42" fill="none" opacity="0.10"/>
+  <circle cx="500" cy="500" r="220" stroke="#1d4ed8" stroke-width="5" fill="none" opacity="0.6"/>
+  <!-- Bore -->
+  <circle cx="500" cy="500" r="110" fill="#eff6ff" stroke="#1d4ed8" stroke-width="5"/>
+  <!-- Cross -->
+  <line x1="440" y1="500" x2="560" y2="500" stroke="#1d4ed8" stroke-width="4" opacity="0.35"/>
+  <line x1="500" y1="440" x2="500" y2="560" stroke="#1d4ed8" stroke-width="4" opacity="0.35"/>
+  <circle cx="500" cy="500" r="18" fill="#1d4ed8" opacity="0.7"/>
+</svg>

@@ -1,0 +1,62 @@
+.page { min-height: 60vh; padding: 3rem 0 5rem; background-color: var(--bg); }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+.pageHeader { margin-bottom: 1.75rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.breadcrumbRow { margin-bottom: 1rem; }
+.pageTitle { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 900; color: var(--text-primary); letter-spacing: -0.01em; line-height: 1.2; }
+.pageSubtitle { font-size: 1rem; color: var(--text-muted); margin-top: 1rem; max-width: 60ch; }
+.categoryDesc { font-size: 0.95rem; color: var(--text-muted); margin-top: 1rem; line-height: 1.8; max-width: 68ch; padding: 1rem 1.25rem; background-color: var(--color-background); border-inline-start: 3px solid var(--color-primary); border-radius: 0 8px 8px 0; }
+.subcategoryChips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+.chip { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.85rem; border-radius: 20px; border: 1px solid var(--border); background-color: var(--card); font-size: 0.82rem; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease; white-space: nowrap; }
+.chip:hover { background-color: var(--bg); border-color: var(--text-muted); color: var(--text-primary); }
+.chipActive { background-color: var(--text-primary); border-color: var(--text-primary); color: #ffffff; font-weight: 600; }
+.chipCount { font-size: 0.68rem; font-weight: 700; background-color: rgba(255,255,255,0.15); border-radius: 10px; padding: 0.05rem 0.35rem; }
+.body { display: grid; grid-template-columns: 240px 1fr; gap: 2.5rem; align-items: start; }
+.sidebar { position: sticky; top: calc(72px + 1.5rem); background-color: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; max-height: calc(100vh - 120px); overflow-y: auto; }
+.main { min-width: 0; }
+.resultsHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem; }
+.resultsCount { font-size: 0.85rem; color: var(--text-muted); }
+.resultsCountBold { font-weight: 700; color: var(--text-primary); }
+.pageInfo { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.empty { grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: var(--text-muted); font-size: 0.95rem; }
+
+.mobileSidebarHeader { display: none; }
+.sidebarOverlay { display: none; }
+.mobileFilterBtn { display: none; }
+.headerActions { display: flex; align-items: center; gap: 1rem; }
+
+@media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 900px) { 
+  .body { grid-template-columns: 1fr; } 
+  .sidebar { 
+    position: fixed; bottom: 0; left: 0; right: 0; top: auto; z-index: 1000;
+    max-height: 85vh; border-radius: 24px 24px 0 0;
+    transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+  }
+  .sidebarOpen { transform: translateY(0); }
+  .sidebarOverlay {
+    display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .sidebarOverlayOpen { opacity: 1; pointer-events: auto; }
+  .mobileSidebarHeader {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border);
+    font-weight: 700; font-size: 1.1rem; color: var(--text-primary);
+  }
+  .closeFilterBtn {
+    background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    cursor: pointer; color: var(--text-muted);
+  }
+  .mobileFilterBtn {
+    display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.9rem;
+    border-radius: 20px; border: 1.5px solid var(--color-primary); background: #eff6ff; 
+    color: var(--color-primary); font-weight: 600; font-size: 0.85rem; cursor: pointer;
+  }
+}
+@media (max-width: 768px) { .page { padding: 2rem 0 4rem; } .container { padding: 0 1.25rem; } }
+@media (max-width: 540px) { 
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; } 
+}

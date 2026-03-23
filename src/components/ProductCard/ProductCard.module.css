@@ -1,0 +1,109 @@
+@keyframes fadeUpCard {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  display: flex; flex-direction: column;
+  background-color: var(--card); /* Pure white to pop from page bg */
+  border: 1px solid var(--color-border);
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03); /* Permanent shadow to stand out */
+  animation: fadeUpCard 0.45s cubic-bezier(0.22,1,0.36,1) both;
+  transition: box-shadow 0.22s, border-color 0.22s, transform 0.22s;
+  position: relative;
+}
+.card:hover {
+  box-shadow: 0 10px 32px rgba(29,78,216,0.10);
+  border-color: rgba(29,78,216,0.30); transform: translateY(-2px);
+}
+.card::before {
+  content: ""; position: absolute; inset-block: 0; inset-inline-start: 0;
+  width: 3px; background-color: var(--color-primary);
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1); z-index: 1;
+}
+.card:hover::before { transform: scaleY(1); }
+
+/* ── Image area: 240px / ~55% ── */
+.imageArea {
+  display: block; position: relative; aspect-ratio: 1 / 1;
+  background-color: #ffffff;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.11); /* Very visible line separator */
+  text-decoration: none; overflow: hidden; flex-shrink: 0;
+}
+.imageBox {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; padding: 0.75rem;
+}
+.productImage {
+  object-fit: contain; width: 100% !important; height: 100% !important;
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+.card:hover .productImage { transform: scale(1.05); }
+
+.brandTag {
+  position: absolute; top: 0.75rem; inset-inline-start: 0.75rem; z-index: 2;
+  font-size: 0.62rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  background-color: rgba(29,78,216,0.08); color: var(--color-primary);
+  border: 1px solid rgba(29,78,216,0.20); border-radius: 4px;
+}
+
+.featuredBadge {
+  position: absolute; top: 0.75rem; inset-inline-end: 0.75rem; z-index: 2;
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  background-color: var(--color-accent); color: #fff;
+  border-radius: 4px;
+}
+
+/* ── Text area: ~45% ── */
+.textArea {
+  display: flex; flex-direction: column; gap: 0.45rem;
+  padding: 0.85rem 1rem 1rem; flex: 1;
+  background-color: transparent;
+}
+.modelNumber {
+  font-size: 0.7rem; font-weight: 700;
+  font-family: "SF Mono","Fira Code",monospace;
+  color: var(--color-muted); letter-spacing: 0.06em;
+}
+.productName {
+  font-size: 0.88rem; font-weight: 700; color: var(--color-text);
+  line-height: 1.4; text-decoration: none; transition: color 0.16s;
+  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.productName:hover { color: var(--color-primary); }
+
+/* Quick specs under name */
+.quickSpecs {
+  display: flex; flex-direction: column; gap: 0.18rem; margin-top: 0.15rem;
+}
+.quickSpecRow {
+  display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--color-muted);
+}
+.quickSpecKey { font-weight: 500; }
+.quickSpecValue { font-weight: 700; color: var(--color-text); }
+.quickSpecSep { opacity: 0.35; }
+
+/* Buttons */
+.detailsBtn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  margin-top: auto; font-size: 0.78rem; font-weight: 600; color: var(--color-primary);
+  text-decoration: none; padding: 0.48rem 0.8rem;
+  border: 1px solid rgba(29,78,216,0.22); border-radius: 6px;
+  background-color: rgba(29,78,216,0.04);
+  transition: background-color 0.16s, border-color 0.16s, color 0.16s; width: 100%;
+}
+.detailsBtn:hover { background-color: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+.waBtn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  font-size: 0.78rem; font-weight: 600; color: #16a34a;
+  text-decoration: none; padding: 0.48rem 0.8rem;
+  border: 1px solid rgba(22,163,74,0.22); border-radius: 6px;
+  background-color: rgba(22,163,74,0.04);
+  transition: background-color 0.16s, border-color 0.16s, color 0.16s; width: 100%;
+}
+.waBtn:hover { background-color: #16a34a; color: #fff; border-color: #16a34a; }

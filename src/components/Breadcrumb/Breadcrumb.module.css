@@ -1,0 +1,6 @@
+.breadcrumb { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-muted); }
+.link { color: var(--text-muted); text-decoration: none; transition: color 0.18s ease; }
+.link:hover { color: var(--color-primary); }
+.separator { color: var(--border); font-size: 0.75rem; flex-shrink: 0; opacity: 0.6; }
+.current { color: var(--text-primary); font-weight: 600; }

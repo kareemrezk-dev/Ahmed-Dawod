@@ -1,0 +1,73 @@
+.page {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.inner {
+  text-align: center;
+  max-width: 400px;
+}
+
+.iconWrap {
+  margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  margin-bottom: 1.75rem;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.retryBtn {
+  padding: 0.625rem 1.5rem;
+  border-radius: 8px;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.18s ease;
+}
+
+.retryBtn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.backLink {
+  padding: 0.625rem 1.5rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.backLink:hover {
+  background-color: var(--color-section);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}

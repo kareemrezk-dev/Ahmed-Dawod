@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1e3a6e"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="g1" x1="816.11" y1="688.57" x2="1499.58" y2="688.57" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e0e7ff"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="1143.43" y1="782.54" x2="1105.67" y2="653.93" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#c7d2fe"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="1283.99" y1="688.57" x2="1929.05" y2="688.57" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e0e7ff"/>
+    </linearGradient>
+    <radialGradient id="g4" cx="1844.55" cy="889.45" fx="1844.55" fy="889.45" r="79.4" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </radialGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg-grad)"/>
+  <!-- Logo scaled and centered: translate to center, scale down -->
+  <g transform="translate(256, 256) scale(0.38) translate(-1370, -690)">
+    <polygon points="971.1 963.39 816.11 963.39 1072.15 413.75 1241.49 413.75 1499.58 963.39 1343.9 963.39 1157.84 564.64 971.1 963.39" fill="url(#g1)"/>
+    <polygon points="1291.46 831.64 1024.22 831.64 1079.68 720.75 1236.21 720.75 1291.46 831.64" fill="url(#g2)"/>
+    <polygon points="1290.91 413.75 1807.79 413.75 1929.05 519.18 1929.05 789.75 1732.76 963.39 1549.35 963.39 1400.8 656.36 1400.8 577.54 1556.93 577.54 1556.93 839.01 1719.12 839.01 1778.23 792.02 1778.23 586.63 1719.87 535.85 1344.72 535.85 1283.99 413.75 1290.91 413.75" fill="url(#g3)"/>
+    <polygon points="1929.05 815.52 1929.05 858.72 1809.31 963.39 1760.04 963.39 1929.05 815.52" fill="url(#g4)"/>
+  </g>
+</svg>

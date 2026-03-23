@@ -1,0 +1,43 @@
+.btn {
+  position: fixed;
+  bottom: 2rem;
+  inset-inline-start: 2rem;
+  z-index: 150;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background-color: var(--text-primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  border: 1px solid rgba(29,78,216,0.2);
+  cursor: pointer;
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.18s ease;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.btn:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 20px rgba(29,78,216,0.3);
+}
+
+@media (max-width: 640px) {
+  .btn {
+    bottom: 1.25rem;
+    inset-inline-start: 1.25rem;
+    width: 40px;
+    height: 40px;
+  }
+}

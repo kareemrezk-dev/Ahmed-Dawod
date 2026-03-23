@@ -1,0 +1,50 @@
+.switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.2rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 26px;
+  padding: 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: background-color 0.18s ease, color 0.18s ease;
+  white-space: nowrap;
+}
+
+.option:hover {
+  color: var(--text-primary);
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.active {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.active:hover {
+  color: #ffffff;
+  background-color: var(--color-primary);
+}
+
+.divider {
+  width: 1px;
+  height: 14px;
+  background-color: var(--border);
+  flex-shrink: 0;
+}

@@ -1,0 +1,174 @@
+.page { padding: 3rem 0 6rem; min-height: 70vh; background-color: var(--bg); }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+.breadcrumbRow { margin-bottom: 2rem; }
+.productLayout { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3.5rem; align-items: start; }
+.visualPanel { position: sticky; top: calc(72px + 1.5rem); display: flex; flex-direction: column; gap: 0.75rem; }
+.visualCard { background: linear-gradient(135deg, #eff6ff 0%, #e8f0fe 100%); border-radius: 16px; overflow: hidden; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; }
+.visualSvg { opacity: 0.32; }
+.visualOverlay { position: absolute; inset: 0; background: radial-gradient(ellipse at 65% 35%, rgba(29,78,216,0.1) 0%, transparent 65%); pointer-events: none; }
+.modelBadge { position: absolute; bottom: 1.5rem; inset-inline-start: 1.5rem; background-color: rgba(15,17,21,0.88); border: 1px solid rgba(29,78,216,0.3); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 9px; padding: 0.7rem 1.1rem; display: flex; flex-direction: column; gap: 0.15rem; z-index: 2; }
+.modelLabel { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.38); }
+.modelValue { font-size: 1.25rem; font-weight: 900; color: var(--color-primary); letter-spacing: 0.04em; line-height: 1; font-family: "SF Mono", "Fira Code", monospace; }
+.specMiniCard { display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 1rem; background-color: var(--card); border: 1px solid var(--border); border-radius: 8px; gap: 1rem; }
+.specMiniKey { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+.specMiniValue { font-size: 0.82rem; font-weight: 700; color: var(--text-primary); font-family: "SF Mono", "Fira Code", monospace; text-align: end; }
+.infoPanel { display: flex; flex-direction: column; gap: 2rem; }
+.productHeader { display: flex; flex-direction: column; gap: 0.7rem; padding-bottom: 1.75rem; border-bottom: 1px solid var(--border); }
+.categoryTag { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary); }
+.categoryDot { width: 5px; height: 5px; border-radius: 50%; background-color: var(--color-primary); flex-shrink: 0; }
+.productTitle { font-size: clamp(1.4rem, 3vw, 1.95rem); font-weight: 900; color: var(--text-primary); line-height: 1.25; letter-spacing: -0.01em; }
+.metaRow { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.brandPill { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; background-color: rgba(29,78,216,0.08); border: 1px solid rgba(29,78,216,0.22); border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em; }
+.modelChip { font-size: 0.78rem; font-weight: 700; font-family: "SF Mono", "Fira Code", monospace; color: var(--text-muted); background-color: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.25rem 0.65rem; }
+.productDescription { font-size: 0.935rem; color: var(--text-muted); line-height: 1.85; max-width: 60ch; }
+.sizeBlock { display: flex; flex-direction: column; gap: 0.65rem; }
+.sizeBlockLabel { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+.sizeGrid { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.sizeChip { font-size: 0.78rem; font-weight: 600; font-family: "SF Mono", "Fira Code", monospace; color: var(--text-muted); background-color: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.35rem 0.7rem; cursor: pointer; font-family: inherit; transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease; }
+.sizeChip:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.sizeChipActive { background-color: var(--color-primary); border-color: var(--color-primary); color: #ffffff; }
+.specsBlock { display: flex; flex-direction: column; gap: 0.75rem; }
+.specsHeading { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-primary); }
+.specsTable { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+.specRow { border-bottom: 1px solid var(--border); }
+.specRow:last-child { border-bottom: none; }
+.specRow:nth-child(even) .specKey, .specRow:nth-child(even) .specValue { background-color: rgba(244,246,248,0.4); }
+.specKey { padding: 0.7rem 1rem; font-size: 0.82rem; font-weight: 500; color: var(--text-muted); width: 42%; vertical-align: middle; background-color: var(--card); }
+.specValue { padding: 0.7rem 1rem; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); background-color: var(--card); font-family: "SF Mono", "Fira Code", monospace; }
+.tagsRow { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tag { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; padding: 0.25rem 0.65rem; border-radius: 5px; background-color: rgba(29,78,216,0.08); color: var(--color-primary); border: 1px solid rgba(29,78,216,0.2); }
+.ctaBlock { display: flex; flex-direction: column; gap: 0.85rem; padding: 1.5rem; background-color: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+.ctaHeading { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.whatsappBtn { display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem; padding: 0.95rem 1.5rem; background-color: var(--color-accent); color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 8px; text-decoration: none; transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 14px rgba(245,158,11,0.30); }
+.whatsappBtn:hover { background-color: var(--color-accent-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,158,11,0.45); }
+.phoneBtn { display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem; padding: 0.8rem 1.5rem; background-color: transparent; border: 1.5px solid var(--border); color: var(--text-primary); font-size: 0.88rem; font-weight: 600; border-radius: 8px; text-decoration: none; transition: border-color 0.2s ease, color 0.2s ease; }
+.phoneBtn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+@media (max-width: 860px) { .productLayout { grid-template-columns: 1fr; gap: 2rem; } .visualPanel { position: static; max-width: 420px; } .container { padding: 0 1.25rem; } }
+
+/* Reactive part number display */
+.activePartNumber {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  background-color: #eff6ff;
+  border: 1px solid rgba(29,78,216,0.2);
+  border-radius: 8px; margin-bottom: 0.5rem;
+}
+.activePartLabel {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted);
+}
+.activePartValue {
+  font-size: 1rem; font-weight: 900;
+  font-family: "SF Mono","Fira Code",monospace;
+  color: var(--color-primary);
+}
+
+/* Live specs block shown after size selection */
+.liveSpecsBlock { margin-top: 0.75rem; }
+
+/* Next.js Image container for detail page */
+.imageWrap {
+  width: 100%;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 2rem;
+}
+.productImage {
+  object-fit: contain;
+  width: 100% !important;
+  height: 100% !important;
+  transition: transform 0.4s ease;
+}
+.visualCard:hover .productImage { transform: scale(1.05); }
+
+
+/* Gallery Styles */
+.galleryContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.thumbnailRow {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none; /* Firefox */
+}
+.thumbnailRow::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+.thumbnailBtn {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+  padding: 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.thumbnailBtn:hover {
+  border-color: rgba(29, 78, 216, 0.3);
+  transform: translateY(-2px);
+}
+.thumbnailActive {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.15);
+}
+.thumbnailImg {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+/* Share button row */
+.shareRow {
+  display: flex;
+  align-items: center;
+  padding-top: 0.25rem;
+}
+
+/* Dynamic SVG Image & Text Overlay */
+.svgProductImage {
+  mix-blend-mode: multiply; /* Removes the hardcoded white SVG background */
+  clip-path: inset(0 0 16% 0); /* Hides the original embedded text at the bottom */
+}
+.svgTextOverlay {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  right: 2rem;
+  height: 16%; 
+  background: transparent; /* No more white background! */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+.svgModelText {
+  font-family: Arial, sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+  font-weight: 800;
+  color: #1e293b;
+  line-height: 1.1;
+  margin-bottom: 0.2rem;
+}
+.svgBrandText {
+  font-family: Arial, sans-serif;
+  font-size: clamp(0.7rem, 2vw, 1.4rem);
+  color: #64748b;
+  line-height: 1.1;
+}

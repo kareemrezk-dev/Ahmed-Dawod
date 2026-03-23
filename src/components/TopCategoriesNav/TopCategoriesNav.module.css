@@ -1,0 +1,44 @@
+.navContainer { 
+  display: flex; 
+  overflow-x: auto; 
+  gap: 1.25rem; 
+  padding: 0.5rem 0.25rem 1rem; 
+  margin-block: 0.5rem 1.75rem;
+  scrollbar-width: none; 
+}
+.navContainer::-webkit-scrollbar { display: none; }
+
+.categoryBox { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 0.5rem; 
+  text-decoration: none; 
+  min-width: 64px; 
+}
+
+.iconCircle {
+  width: 60px; height: 60px; border-radius: 16px;
+  background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease; border: 1.5px solid transparent;
+}
+.categoryBox:hover .iconCircle { background: #e2e8f0; transform: translateY(-2px); }
+.activeBox .iconCircle { border-color: var(--color-primary); background: #eff6ff; }
+
+.iconSvg { stroke: #64748b; width: 28px; height: 28px; transition: stroke 0.2s; }
+.activeBox .iconSvg { stroke: var(--color-primary); }
+.categoryBox:hover .iconSvg { stroke: var(--text-primary); }
+
+.boxLabel {
+  font-size: 0.72rem; font-weight: 600; color: var(--text-muted);
+  text-align: center; white-space: nowrap; transition: color 0.2s;
+}
+.activeBox .boxLabel { color: var(--color-primary); font-weight: 700; }
+.categoryBox:hover .boxLabel { color: var(--text-primary); }
+
+@media (max-width: 540px) {
+  .navContainer { gap: 0.8rem; padding-inline: 0.5rem; }
+  .iconCircle { width: 56px; height: 56px; border-radius: 14px; }
+  .iconSvg { width: 24px; height: 24px; }
+  .boxLabel { font-size: 0.65rem; }
+}
