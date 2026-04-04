@@ -1,47 +1,5 @@
 [
   {
-    "slug": "بلي-حراري-ستة-الافات-zz-6000",
-    "modelNumber": "6000 ENC250 High temperature",
-    "topCategory": "bearings",
-    "category": "بلي حراري واستانلس",
-    "brand": "ENC",
-    "nameAr": "بلي حراري ستة الافات",
-    "nameEn": "6000 ENC250 High temperature",
-    "descriptionAr": "HIGH TEMPERATURE BEARINGS ENC250ENC250 bearings are made of AISI 52100 steel with C4 radial clearance and greased -20º C up to 265ºC. 2RS-265C Vulcanized Rubber Protection.",
-    "descriptionEn": "HIGH TEMPERATURE BEARINGS ENC250ENC250 bearings are made of AISI 52100 steel with C4 radial clearance and greased -20º C up to 265ºC. 2RS-265C Vulcanized Rubber Protection.",
-    "specs": [
-      {
-        "labelAr": "الشركة المصنعة",
-        "labelEn": "Manufacturer",
-        "value": "ENC"
-      },
-      {
-        "labelAr": "العلامات",
-        "labelEn": "Tags",
-        "value": "6000 SERIES, ENC, ZZ"
-      }
-    ],
-    "tags": [
-      "6000 SERIES",
-      "ENC",
-      "ZZ"
-    ],
-    "sizes": [
-      "6008 2RS 250C ENC",
-      "6010 2RS 250C ENC",
-      "6305 2RS 250C ENC",
-      "6308 2RS 250C ENC",
-      "6208 2RS 250C ENC",
-      "6005 2RS 250C ENC",
-      "6204 2RS 250ºC ENC",
-      "6205 2RS 250ºC ENC"
-    ],
-    "images": [
-      "/products/scraped/بلي-حراري-ستة-الافات-zz-6000-0.png"
-    ],
-    "featured": true
-  },
-  {
     "slug": "بلي-استانلس-ss6000-stainless",
     "modelNumber": "SS6000 STAINLESS",
     "topCategory": "bearings",
