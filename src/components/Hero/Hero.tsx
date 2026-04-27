@@ -75,7 +75,13 @@ export function Hero({ locale, dict }: HeroProps) {
           <p className={styles.subtitle}>{dict.company.slogan}</p>
           <p className={styles.description}>{slide.body}</p>
           <div className={styles.ctaRow}>
-            <Link href={`/${locale}/products`} className={styles.ctaPrimary}>{slide.cta}</Link>
+            <Link href={`/${locale}/products`} className={styles.ctaPrimary}>
+              <span>{slide.cta}</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={styles.ctaIcon} aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </Link>
             <Link href={`/${locale}/contact`} className={styles.ctaSecondary}>{dict.nav.contact}</Link>
           </div>
           <div className={styles.trustRow} aria-label="Trusted brands">
