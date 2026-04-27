@@ -38,6 +38,7 @@ export async function generateLocaleMetadata(
       locale: ogLocale,
       type: "website",
       url: `${BASE_URL}/${locale}`,
+      images: [{ url: `${BASE_URL}/logo.png`, width: 512, height: 512, alt: dict.meta.siteName }],
     },
     twitter: {
       card: "summary_large_image",

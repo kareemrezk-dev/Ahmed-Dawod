@@ -39,6 +39,7 @@
 .productImage {
   object-fit: contain; width: 100% !important; height: 100% !important;
   transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  mix-blend-mode: multiply;
 }
 .card:hover .productImage { transform: scale(1.05); }
 

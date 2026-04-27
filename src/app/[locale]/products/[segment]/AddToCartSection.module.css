@@ -83,6 +83,22 @@
   transform: scale(0.98);
 }
 
+.successBtn {
+  background-color: #16a34a !important;
+  color: white !important;
+  pointer-events: none;
+}
+
+.toastIcon {
+  animation: scaleBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes scaleBounce {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 .hint {
   font-size: 0.85rem;
   color: var(--color-muted);

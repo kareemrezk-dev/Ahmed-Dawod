@@ -57,6 +57,7 @@ export function SizeSelector({
               const next = selected === size ? null : size;
               setSelected(next);
               window.dispatchEvent(new CustomEvent("modelSelected", { detail: next ?? basePartNumber }));
+              window.dispatchEvent(new CustomEvent("sizeSelected", { detail: next }));
             }}
             aria-pressed={selected === size}
           >

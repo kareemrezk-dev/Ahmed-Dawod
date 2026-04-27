@@ -1,14 +1,24 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useCart } from "@/lib/CartContext";
 import styles from "./CartIcon.module.css";
 
 export function CartIcon() {
   const { totalItems, setIsCartOpen } = useCart();
+  const [isBouncing, setIsBouncing] = useState(false);
+
+  useEffect(() => {
+    if (totalItems > 0) {
+      setIsBouncing(true);
+      const timer = setTimeout(() => setIsBouncing(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [totalItems]);
 
   return (
     <button 
-      className={styles.cartIconWrapper} 
+      className={`${styles.cartIconWrapper} ${isBouncing ? styles.bounce : ''}`} 
       onClick={() => setIsCartOpen(true)}
       aria-label="Open Cart"
     >

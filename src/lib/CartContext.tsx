@@ -8,11 +8,12 @@ export interface CartItem {
   product: Product;
   quantity: number;
   basePrice: number | null; // null if unpriced
+  variant?: string;
 }
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (product: Product, quantity: number, basePrice: number | null) => void;
+  addToCart: (product: Product, quantity: number, basePrice: number | null, variant?: string) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -51,17 +52,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [items, isLoaded]);
 
-  const addToCart = (product: Product, quantity: number, basePrice: number | null) => {
+  const addToCart = (product: Product, quantity: number, basePrice: number | null, variant?: string) => {
     setItems((prev) => {
-      const existing = prev.find((item) => item.product.slug === product.slug);
+      const id = variant ? `${product.slug}-${variant}` : product.slug;
+      const existing = prev.find((item) => item.id === id);
       if (existing) {
         return prev.map((item) =>
-          item.product.slug === product.slug
+          item.id === id
             ? { ...item, quantity: item.quantity + quantity, basePrice }
             : item
         );
       }
-      return [...prev, { id: product.slug, product, quantity, basePrice }];
+      return [...prev, { id, product, quantity, basePrice, variant }];
     });
     setIsCartOpen(true); // Auto open cart when adding
   };

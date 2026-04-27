@@ -89,6 +89,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         type: "website",
         siteName: "Ahmed Dawod Bearings",
         url: `${BASE}/${locale}/products/${segment}`,
+        images: [{ url: `${BASE}${getProductImagePath(product)}`, width: 600, height: 600, alt: title }],
       },
       twitter: { card: "summary_large_image", title, description },
       robots: { index: true, follow: true },
@@ -167,20 +168,31 @@ async function ProductDetailView({ product, locale }: { product: Product; locale
     { label: model },
   ];
   const BASE = "https://ahmeddawod.com";
-  const productSchema = {
+  const productPricing = pricingOverrides[product.slug] ?? null;
+  const { finalPrice } = (() => {
+    try {
+      const { getPricingDetails } = require("@/lib/pricing");
+      return getPricingDetails(product, productPricing);
+    } catch { return { finalPrice: null }; }
+  })();
+  const productSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name,
+    name: `${product.brand} ${model} ${name}`,
     description: getProductDescription(product, locale),
     brand: { "@type": "Brand", name: product.brand },
     sku: model,
+    mpn: product.modelNumber,
     model: model,
     category: product.category,
     image: `${BASE}${getProductImagePath(product)}`,
+    manufacturer: { "@type": "Organization", name: product.brand },
     offers: {
       "@type": "Offer",
+      url: `${BASE}/${locale}/products/${product.slug}`,
       availability: "https://schema.org/InStock",
       areaServed: "EG",
+      ...(finalPrice !== null ? { priceCurrency: "EGP", price: finalPrice } : {}),
       seller: {
         "@type": "Organization",
         name: "Ahmed Dawod Bearings",
