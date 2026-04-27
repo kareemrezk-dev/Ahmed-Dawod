@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
 import { getRelatedProducts, type Product } from "@/lib/products";
+import type { PricingOverrides } from "@/lib/pricing";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import styles from "./RelatedProducts.module.css";
 
@@ -9,9 +10,10 @@ interface RelatedProductsProps {
   product: Product;
   locale: Locale;
   dict: Dictionary;
+  pricingOverrides: PricingOverrides;
 }
 
-export function RelatedProducts({ product, locale, dict }: RelatedProductsProps) {
+export function RelatedProducts({ product, locale, dict, pricingOverrides }: RelatedProductsProps) {
   const related = getRelatedProducts(product, 4);
   if (related.length === 0) return null;
 
@@ -32,7 +34,14 @@ export function RelatedProducts({ product, locale, dict }: RelatedProductsProps)
       </div>
       <div className={styles.grid}>
         {related.map((p, i) => (
-          <ProductCard key={p.slug} product={p} locale={locale} animationDelay={i * 60} whatsapp={dict.company.whatsappIntl} />
+          <ProductCard
+            key={p.slug}
+            product={p}
+            locale={locale}
+            animationDelay={i * 60}
+            whatsapp={dict.company.whatsappIntl}
+            pricing={pricingOverrides[p.slug] ?? null}
+          />
         ))}
       </div>
     </section>

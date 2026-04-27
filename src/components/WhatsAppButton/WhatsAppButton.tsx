@@ -8,7 +8,7 @@ interface WhatsAppButtonProps {
   message?: string;
 }
 
-const SCROLL_THRESHOLD = 100;
+const SCROLL_THRESHOLD = 600; // Show after scrolling past hero section
 
 export function WhatsAppButton({ whatsappNumber, label, message }: WhatsAppButtonProps) {
   const [visible, setVisible] = useState(false);
@@ -19,11 +19,10 @@ export function WhatsAppButton({ whatsappNumber, label, message }: WhatsAppButto
       setVisible(window.scrollY > SCROLL_THRESHOLD);
     }
     window.addEventListener("scroll", onScroll, { passive: true });
-    // Show after a short delay even without scrolling
-    const timer = setTimeout(() => setVisible(true), 1500);
+    // Check initial position (e.g. page refresh mid-scroll)
+    onScroll();
     return () => {
       window.removeEventListener("scroll", onScroll);
-      clearTimeout(timer);
     };
   }, []);
 

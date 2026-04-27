@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
 import { getFeaturedProducts, shuffleProducts } from "@/lib/products";
+import { getPricingOverrides } from "@/lib/pricing.server";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import styles from "./FeaturedProducts.module.css";
 
@@ -22,8 +23,9 @@ function ArrowIcon({ dir }: { dir: string }) {
   );
 }
 
-export function FeaturedProducts({ locale, dict }: FeaturedProductsProps) {
+export async function FeaturedProducts({ locale, dict }: FeaturedProductsProps) {
   const dir = locale === "ar" ? "rtl" : "ltr";
+  const pricingOverrides = await getPricingOverrides();
   // Server-side shuffle on every request — guaranteed no duplicates
   const featured = shuffleProducts(getFeaturedProducts()).slice(0, 8);
   const sectionEyebrow = locale === "ar" ? "منتجات مختارة" : "Featured";
@@ -56,6 +58,7 @@ export function FeaturedProducts({ locale, dict }: FeaturedProductsProps) {
               locale={locale}
               animationDelay={i * 40}
               whatsapp={dict.company.whatsappIntl}
+              pricing={pricingOverrides[product.slug] ?? null}
             />
           ))}
         </div>

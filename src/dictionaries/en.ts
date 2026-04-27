@@ -17,7 +17,7 @@ export const en: Dictionary = {
     phoneIntl: "+201069994050",
     whatsapp: "01065445000",
     whatsappIntl: "201065445000",
-    email: "placeholder@example.com",
+    email: "Ahmed@ahmeddawod.com",
     facebook: "https://facebook.com/ahmedda3od",
     instagram: "https://instagram.com/ahmedda3od",
   },

@@ -8,16 +8,46 @@ import {
   getAllCategories,
   getAllBrands,
   getCategoryLabel,
+  searchProducts,
   type CategoryName,
+  type Product,
 } from "@/lib/products";
 import { getDictionary } from "@/lib/getDictionary";
+import { getPricingOverrides } from "@/lib/pricing.server";
 import { Breadcrumb } from "@/components/Breadcrumb/Breadcrumb";
 import styles from "./page.module.css";
 import { TopCategoriesNav } from "@/components/TopCategoriesNav/TopCategoriesNav";
 import { ProductsClient } from "./ProductsClient";
 import { FAQ } from "@/components/FAQ/FAQ";
 
+export const revalidate = 60;
+
 const PAGE_SIZE = 12;
+
+function firstParam(value: string | string[] | undefined): string | null {
+  if (Array.isArray(value)) return value[0] ?? null;
+  return value ?? null;
+}
+
+function matchesSize(product: Product, size: string): boolean {
+  const needle = size.toLowerCase();
+  return product.sizes?.some((s) => s.toLowerCase().includes(needle)) ?? false;
+}
+
+function applyFilters(
+  products: Product[],
+  filters: { q: string | null; category: CategoryName | null; brand: string | null; size: string | null }
+): Product[] {
+  const searchMatches = filters.q ? new Set(searchProducts(filters.q).map((p) => p.slug)) : null;
+
+  return products.filter((product) => {
+    if (searchMatches && !searchMatches.has(product.slug)) return false;
+    if (filters.category && product.category !== filters.category) return false;
+    if (filters.brand && product.brand.toLowerCase() !== filters.brand.toLowerCase()) return false;
+    if (filters.size && !matchesSize(product, filters.size)) return false;
+    return true;
+  });
+}
 
 interface PageProps {
   params: { locale: Locale };
@@ -38,21 +68,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ProductsPage({ params, searchParams }: PageProps) {
   const { locale } = params;
   const dict = await getDictionary(locale);
+  const pricingOverrides = await getPricingOverrides();
 
   const allProducts = getAllProducts();
   const allCategories = getAllCategories();
   const allBrands = getAllBrands();
 
   const searchParamsObj = searchParams || {};
-  const rawCategoryString = searchParamsObj.category;
-  const rawCategory = Array.isArray(rawCategoryString) ? rawCategoryString[0] : rawCategoryString;
-  const rawBrandString = searchParamsObj.brand;
-  const rawBrand = Array.isArray(rawBrandString) ? rawBrandString[0] : rawBrandString;
-  const rawSizeString = searchParamsObj.size;
-  const rawSize = Array.isArray(rawSizeString) ? rawSizeString[0] : rawSizeString;
+  const rawQuery = firstParam(searchParamsObj.q)?.trim() || null;
+  const rawCategory = firstParam(searchParamsObj.subcategory) ?? firstParam(searchParamsObj.category);
+  const rawBrand = firstParam(searchParamsObj.brand);
+  const rawSize = firstParam(searchParamsObj.size)?.trim() || null;
   
-  const pageString = searchParamsObj.page;
-  const pageVal = Array.isArray(pageString) ? pageString[0] : pageString;
+  const pageVal = firstParam(searchParamsObj.page);
   const currentPage = Math.max(1, parseInt(pageVal ?? "1", 10));
 
   const activeCategory: CategoryName | null =
@@ -65,19 +93,15 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
       ? allBrands.find((b) => b.toLowerCase() === rawBrand.toLowerCase()) ?? null
       : null;
 
-  let filtered = allProducts;
-  if (activeCategory) filtered = filtered.filter((p) => p.category === activeCategory);
-  if (activeBrand) filtered = filtered.filter((p) => p.brand.toLowerCase() === activeBrand.toLowerCase());
-  if (rawSize) filtered = filtered.filter((p) => p.sizes?.some((s) => s.toLowerCase().includes(rawSize.toLowerCase())));
+  const filters = { q: rawQuery, category: activeCategory, brand: activeBrand, size: rawSize };
+  const filtered = applyFilters(allProducts, filters);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const safePage = Math.min(currentPage, Math.max(1, totalPages));
   const paginatedProducts = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const categoryOptions = allCategories.map((cat) => {
-    let base = allProducts;
-    if (activeBrand) base = base.filter((p) => p.brand.toLowerCase() === activeBrand.toLowerCase());
-    if (rawSize) base = base.filter((p) => p.sizes?.some((s) => s.toLowerCase().includes(rawSize.toLowerCase())));
+    const base = applyFilters(allProducts, { ...filters, category: null });
     return {
       value: cat,
       label: getCategoryLabel(cat, locale),
@@ -86,9 +110,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   }).filter((o) => o.count > 0);
 
   const brandOptions = allBrands.map((brand) => {
-    let base = allProducts;
-    if (activeCategory) base = base.filter((p) => p.category === activeCategory);
-    if (rawSize) base = base.filter((p) => p.sizes?.some((s) => s.toLowerCase().includes(rawSize.toLowerCase())));
+    const base = applyFilters(allProducts, { ...filters, brand: null });
     return {
       value: brand,
       label: brand,
@@ -96,13 +118,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
     };
   }).filter((o) => o.count > 0);
 
-  const sizeBase = activeCategory
-    ? activeBrand
-      ? allProducts.filter((p) => p.category === activeCategory && p.brand.toLowerCase() === activeBrand.toLowerCase())
-      : allProducts.filter((p) => p.category === activeCategory)
-    : activeBrand
-    ? allProducts.filter((p) => p.brand.toLowerCase() === activeBrand.toLowerCase())
-    : allProducts;
+  const sizeBase = applyFilters(allProducts, { ...filters, size: null });
 
   const allSizes = [...new Set(sizeBase.flatMap((p) => p.sizes ?? []))].sort();
   const sizeOptions = allSizes.map((size) => ({
@@ -150,6 +166,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
             activeCategory={activeCategory}
             activeBrand={activeBrand}
             activeSize={rawSize || null}
+            pricingOverrides={pricingOverrides}
           />
         </Suspense>
 

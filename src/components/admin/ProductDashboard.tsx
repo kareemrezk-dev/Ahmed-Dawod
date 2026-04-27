@@ -43,26 +43,13 @@ const CAT_INFO: Record<string, { modelL: string; modelP: string; brandL: string;
 };
 
 // ─── Auth helper ──────────────────────────────────────────────────────────────
-// ⚠️ تنبيه أمني: الـ auth ده client-side فقط — مش بديل لحماية server-side حقيقية.
-// الـ hash ظاهر في الـ client bundle لأن الموقع static export.
+// ✅ Server-side auth: الباسورد يتفحص على السيرفر فقط.
+// الـ hash مخزن في ADMIN_HASH (بدون NEXT_PUBLIC_) فلا يظهر في الـ client bundle.
 //
 // عشان تضبط الباسورد:
 //   1. اعمل SHA-256 للباسورد: https://emn178.github.io/online-tools/sha256.html
-//   2. حط الـ hash في .env.local كـ NEXT_PUBLIC_ADMIN_HASH=<hash>
-//   3. اعمل rebuild للمشروع
-//
-// مهم: لو ما حطيتش hash في .env.local الـ dashboard مش هيفتح خالص.
-const ADMIN_HASH = process.env.NEXT_PUBLIC_ADMIN_HASH ?? "";
-
-async function checkPassword(pw: string): Promise<boolean> {
-  if (!ADMIN_HASH) return false; // مفيش hash متضبط — الدخول مقفول
-  const encoder = new TextEncoder();
-  const data = encoder.encode(pw);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-  return hashHex === ADMIN_HASH;
-}
+//   2. حط الـ hash في .env.local كـ ADMIN_HASH=<hash>
+//   3. اعمل restart للسيرفر (مش محتاج rebuild)
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Spec { labelAr: string; labelEn: string; value: string; }
@@ -126,15 +113,22 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState(false);
   const [checking, setChecking] = useState(false);
-  const hashMissing = !ADMIN_HASH;
 
   const submit = async () => {
-    if (checking || hashMissing) return;
+    if (checking) return;
     setChecking(true);
-    const ok = await checkPassword(pw);
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: pw }),
+      });
+      if (res.ok) { onLogin(); }
+      else { setError(true); setTimeout(() => setError(false), 1500); }
+    } catch {
+      setError(true); setTimeout(() => setError(false), 1500);
+    }
     setChecking(false);
-    if (ok) { onLogin(); }
-    else { setError(true); setTimeout(() => setError(false), 1500); }
   };
 
   return (
@@ -149,17 +143,7 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
         </div>
         <h1 className={styles.loginTitle}>أحمد داود</h1>
         <p className={styles.loginSub}>لوحة التحكم</p>
-        {hashMissing ? (
-          <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 8, padding: "12px 16px", marginTop: 12, fontSize: 13, lineHeight: 1.7, color: "#fca5a5", textAlign: "start" }}>
-            <strong style={{ color: "#f87171" }}>⚠ الـ Dashboard مقفول</strong><br/>
-            لازم تضبط <code style={{ background: "rgba(255,255,255,0.08)", padding: "2px 6px", borderRadius: 4 }}>NEXT_PUBLIC_ADMIN_HASH</code> في ملف <code style={{ background: "rgba(255,255,255,0.08)", padding: "2px 6px", borderRadius: 4 }}>.env.local</code><br/>
-            1. اعمل SHA-256 للباسورد من <a href="https://emn178.github.io/online-tools/sha256.html" target="_blank" rel="noopener" style={{ color: "#60a5fa" }}>هنا</a><br/>
-            2. حط الـ hash في <code style={{ background: "rgba(255,255,255,0.08)", padding: "2px 6px", borderRadius: 4 }}>.env.local</code><br/>
-            3. اعمل rebuild
-          </div>
-        ) : (
-          <>
-            <div style={{ position: "relative", width: "100%" }}>
+        <div style={{ position: "relative", width: "100%" }}>
               <input
                 className={`${styles.loginInput} ${error ? styles.loginInputError : ""}`}
                 type={showPw ? "text" : "password"} placeholder="كلمة المرور"
@@ -198,8 +182,6 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
             </div>
             {error && <p className={styles.loginError}>كلمة المرور غلط</p>}
             <button className={styles.loginBtn} onClick={submit} disabled={checking}>{checking ? "..." : "دخول"}</button>
-          </>
-        )}
       </div>
     </div>
   );

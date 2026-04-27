@@ -113,6 +113,7 @@ export interface Product {
   /** WebP image path under /public */
   image?: string;
   images?: string[];
+  price?: number;
 }
 
 // ─── Scraped Data Type Assertion ──────────────────────────────────────────────

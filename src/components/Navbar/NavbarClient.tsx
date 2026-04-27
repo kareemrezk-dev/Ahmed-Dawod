@@ -9,6 +9,8 @@ import { LocaleSwitcher } from "@/components/LocaleSwitcher/LocaleSwitcher";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
 import { searchProducts, getProductName, getProductImagePath, getProductImageAlt } from "@/lib/products";
+import { CartIcon } from "@/components/Cart/CartIcon";
+import { CartSidebar } from "@/components/Cart/CartSidebar";
 
 interface NavbarClientProps {
   locale: Locale;
@@ -413,7 +415,6 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
             <Link href={`/${locale}/about`} className={[styles.navLink, pathname.startsWith("/" + locale + "/about") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.about}</Link>
             <Link href={`/${locale}/contact`} className={[styles.navLink, pathname.startsWith("/" + locale + "/contact") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.contact}</Link>
           </div>
-
           {/* Right cluster */}
           <div className={styles.rightCluster}>
             <LocaleSwitcher locale={locale} />
@@ -423,6 +424,7 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
               dict={dict}
               onOpen={(q) => { setSearchInitialQuery(q); setSearchOpen(true); }}
             />
+            <CartIcon />
             <button
               className={styles.menuButton}
               onClick={() => setMobileOpen((p) => !p)}
@@ -434,6 +436,8 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
             </button>
           </div>
         </div>
+
+        <CartSidebar locale={locale} dict={dict} />
 
         {/* ── Mega Menu ────────────────────────────────────── */}
         {megaOpen && (

@@ -9,6 +9,7 @@ import {
   getCategoryLabel,
   type TopCategory, type Product, type CategoryName,
 } from "@/lib/products";
+import type { PricingOverrides } from "@/lib/pricing";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import { ProductsFilter } from "@/components/ProductsFilter/ProductsFilter";
 import { Pagination } from "@/components/Pagination/Pagination";
@@ -20,9 +21,10 @@ interface CategoryListClientProps {
   locale: Locale;
   dict: Dictionary;
   topCat: TopCategory;
+  pricingOverrides: PricingOverrides;
 }
 
-function CategoryListInner({ locale, dict, topCat }: CategoryListClientProps) {
+function CategoryListInner({ locale, dict, topCat, pricingOverrides }: CategoryListClientProps) {
   const searchParams = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -31,7 +33,7 @@ function CategoryListInner({ locale, dict, topCat }: CategoryListClientProps) {
   const allCatProducts = getProductsByTopCategory(topCat);
   const allBrands = getAllBrands();
 
-  const rawSub = searchParams.get("category") ?? null;
+  const rawSub = searchParams.get("subcategory") ?? searchParams.get("category") ?? null;
   const rawBrand = searchParams.get("brand") ?? null;
   const rawSize = searchParams.get("size") ?? null;
   const currentPage = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10));
@@ -102,7 +104,16 @@ function CategoryListInner({ locale, dict, topCat }: CategoryListClientProps) {
           <div className={listStyles.grid}>
             {paginated.length === 0
               ? <p className={listStyles.empty}>{dict.products.empty}</p>
-              : paginated.map((product, i) => <ProductCard key={product.slug} product={product} locale={locale} animationDelay={i * 40} whatsapp={dict.company.whatsappIntl} />)
+              : paginated.map((product, i) => (
+                <ProductCard
+                  key={product.slug}
+                  product={product}
+                  locale={locale}
+                  animationDelay={i * 40}
+                  whatsapp={dict.company.whatsappIntl}
+                  pricing={pricingOverrides[product.slug] ?? null}
+                />
+              ))
             }
           </div>
           <Pagination locale={locale} dict={dict} currentPage={safePage} totalPages={totalPages} />

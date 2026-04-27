@@ -163,6 +163,9 @@ export function ProductsFilter({
       } else {
         p.delete(key);
       }
+      if (key === "subcategory") {
+        p.delete("category");
+      }
       // Reset page to 1 when filters change
       p.delete('page');
       router.push(`${pathname}?${p.toString()}`, { scroll: false });
@@ -208,7 +211,7 @@ export function ProductsFilter({
           title={dict.products.filterCategory}
           options={categoryOptions}
           activeValue={activeCategory}
-          onSelect={(val) => updateParam('category', val)}
+          onSelect={(val) => updateParam('subcategory', val)}
           allLabel={dict.products.filterAll}
         />
       )}

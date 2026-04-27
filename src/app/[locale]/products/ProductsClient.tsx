@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
 import { getCategoryLabel, type CategoryName, type Product } from "@/lib/products";
+import type { PricingOverrides } from "@/lib/pricing";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import { ProductsFilter } from "@/components/ProductsFilter/ProductsFilter";
 import { Pagination } from "@/components/Pagination/Pagination";
@@ -27,6 +28,7 @@ interface ProductsClientProps {
   activeCategory: CategoryName | null;
   activeBrand: string | null;
   activeSize: string | null;
+  pricingOverrides: PricingOverrides;
 }
 
 export function ProductsClient({
@@ -42,6 +44,7 @@ export function ProductsClient({
   activeCategory,
   activeBrand,
   activeSize,
+  pricingOverrides,
 }: ProductsClientProps) {
   const [filterOpen, setFilterOpen] = useState(false);
 
@@ -114,6 +117,7 @@ export function ProductsClient({
                 locale={locale}
                 animationDelay={i * 40}
                 whatsapp={dict.company.whatsappIntl}
+                pricing={pricingOverrides[product.slug] ?? null}
               />
             ))
           )}
@@ -129,4 +133,3 @@ export function ProductsClient({
     </div>
   );
 }
-

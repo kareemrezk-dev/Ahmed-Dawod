@@ -1,8 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Product } from "@/lib/products";
-import { getProductImagePath, getProductImageAlt, getProductName, getProductModelNumber, getCategoryLabel } from "@/lib/products";
+import { getProductImagePath, getProductImageAlt, getProductName, getProductModelNumber } from "@/lib/products";
 import type { Locale } from "@/lib/i18n";
+import type { ProductPricing } from "@/lib/pricing";
+import { formatPrice, getPricingDetails } from "@/lib/pricing";
 import styles from "./ProductCard.module.css";
 
 /** Quick specs labels per locale */
@@ -38,33 +40,36 @@ function QuickSpecs({ specs, locale }: { specs: Product["specs"]; locale: Locale
 }
 
 export function ProductCard({
-  product, locale, animationDelay = 0, whatsapp,
+  product, locale, animationDelay = 0, whatsapp, pricing,
 }: {
-  product: Product; locale: Locale; animationDelay?: number; whatsapp: string;
+  product: Product; locale: Locale; animationDelay?: number; whatsapp: string; pricing?: ProductPricing | null;
 }) {
   const dir = locale === "ar" ? "rtl" : "ltr";
   const name = getProductName(product, locale);
   const model = getProductModelNumber(product, locale);
   const imageSrc = getProductImagePath(product);
   const imageAlt = getProductImageAlt(product);
-  
-  const categoryLabel = getCategoryLabel(product.category, locale);
+
+  const { basePrice, finalPrice, hasDiscount } = getPricingDetails(product, pricing);
+
+  // WhatsApp Order Flow
   const waMsg =
-    locale === "ar" ? `السلام عليكم، أرغب في الاستفسار عن ${categoryLabel} موديل: ${model}` :
-    `Hello, I'd like to inquire about ${categoryLabel} model: ${model}`;
+    locale === "ar" 
+      ? `السلام عليكم، أرغب في طلب المنتج:\n- الموديل: ${model}\n- السعر: ${finalPrice !== null ? finalPrice + " جنيه" : "غير محدد"}\n- كود الخصم (إن وجد): \n- طريقة الدفع المفضلة (كاش / انستا باي / فودافون كاش): ` 
+      : `Hello, I'd like to order:\n- Model: ${model}\n- Price: ${finalPrice !== null ? finalPrice + " EGP" : "N/A"}\n- Coupon Code (if any): \n- Preferred Payment (COD / InstaPay / VF Cash): `;
+  
   const waUrl = `https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(waMsg)}`;
 
   const viewLabel = locale === "ar" ? "عرض التفاصيل" : "View Details";
-  const waLabel   = locale === "ar" ? "واتساب" : "WhatsApp";
+  const waLabel   = locale === "ar" ? "اطلب عبر واتساب" : "Order via WhatsApp";
 
   return (
     <div
       className={styles.card}
       style={{ animationDelay: `${animationDelay}ms` } as React.CSSProperties}
     >
-      {/* ── Image area: 240px height ── */}
-      <Link href={`/${locale}/products/${product.slug}`} className={styles.imageArea}
-        tabIndex={-1} aria-hidden="true">
+      {/* ── Image area ── */}
+      <Link href={`/${locale}/products/${product.slug}`} className={styles.imageArea} tabIndex={-1} aria-hidden="true">
         <div className={styles.imageBox}>
           <Image
             src={imageSrc}
@@ -81,9 +86,14 @@ export function ProductCard({
             {locale === "ar" ? "مميز" : "Featured"}
           </span>
         )}
+        {hasDiscount && (
+          <span className={styles.discountBadge}>
+            {locale === "ar" ? "خصم" : "Sale"}
+          </span>
+        )}
       </Link>
 
-      {/* ── Text area: ~45% ── */}
+      {/* ── Text area ── */}
       <div className={styles.textArea}>
         {name.toLowerCase() !== model.toLowerCase() && (
           <span className={styles.modelNumber}>{model}</span>
@@ -92,6 +102,16 @@ export function ProductCard({
           {name}
         </Link>
         <QuickSpecs specs={product.specs} locale={locale} />
+        
+        {finalPrice !== null && (
+          <div className={styles.priceContainer}>
+            <span className={styles.currentPrice}>{formatPrice(finalPrice, locale)}</span>
+            {hasDiscount && basePrice !== null && (
+              <span className={styles.oldPrice}>{formatPrice(basePrice, locale)}</span>
+            )}
+          </div>
+        )}
+
         <Link href={`/${locale}/products/${product.slug}`} className={styles.detailsBtn}>
           {viewLabel}
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"
@@ -109,3 +129,4 @@ export function ProductCard({
     </div>
   );
 }
+
