@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useCart } from "@/lib/CartContext";
 import type { Product } from "@/lib/products";
 import type { Locale } from "@/lib/i18n";
@@ -46,11 +47,20 @@ export function AddToCartSection({
           <button type="button" aria-label="Increase quantity" onClick={() => setQuantity(quantity + 1)}>+</button>
         </div>
 
-        <button className={`${styles.addBtn} ${showToast ? styles.successBtn : ''}`} onClick={handleAdd}>
+        <motion.button 
+          className={`${styles.addBtn} ${showToast ? styles.successBtn : ''}`} 
+          onClick={handleAdd}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
           {showToast ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.toastIcon}>
+            <motion.svg 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.toastIcon}>
               <path d="M20 6L9 17l-5-5"/>
-            </svg>
+            </motion.svg>
           ) : (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="9" cy="21" r="1" />
@@ -59,7 +69,7 @@ export function AddToCartSection({
             </svg>
           )}
           {showToast ? (isAr ? "تمت الإضافة!" : "Added!") : (isAr ? "أضف لعرض السعر" : "Add to Quote")}
-        </button>
+        </motion.button>
       </div>
       <p className={styles.hint}>
         {isAr 

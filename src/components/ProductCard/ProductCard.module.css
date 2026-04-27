@@ -28,8 +28,8 @@
 /* ── Image area: 240px / ~55% ── */
 .imageArea {
   display: block; position: relative; aspect-ratio: 1 / 1;
-  background-color: #ffffff;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.11); /* Very visible line separator */
+  background-color: #f8fafc; /* Slightly off-white/grey to blend with product backgrounds */
+  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
   text-decoration: none; overflow: hidden; flex-shrink: 0;
 }
 .imageBox {
@@ -39,7 +39,8 @@
 .productImage {
   object-fit: contain; width: 100% !important; height: 100% !important;
   transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
-  mix-blend-mode: multiply;
+  mix-blend-mode: darken; /* Darken makes light grey transparent against a similar background */
+  filter: contrast(1.05) brightness(1.02); /* Slight boost to make the bearings pop more and push light grey to white */
 }
 .card:hover .productImage { transform: scale(1.05); }
 
