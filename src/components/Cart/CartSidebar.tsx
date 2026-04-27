@@ -10,8 +10,6 @@ import { getProductImagePath, getProductImageAlt, getProductName } from "@/lib/p
 
 export function CartSidebar({ locale, dict }: { locale: Locale; dict: any }) {
   const { items, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, totalItems, totalBasePrice, discountPercentage, totalAfterDiscount, clearCart } = useCart();
-  const [companyName, setCompanyName] = useState("");
-  const [orderNotes, setOrderNotes] = useState("");
   const isAr = locale === "ar";
   const waNumber = dict.company.whatsappIntl.replace(/\D/g, "");
 
@@ -19,9 +17,6 @@ export function CartSidebar({ locale, dict }: { locale: Locale; dict: any }) {
 
   const generateMessage = () => {
     let msg = isAr ? `*طلب عرض سعر (كميات/شركات)*\n` : `*Request for Quote (Wholesale/B2B)*\n`;
-    if (companyName) {
-      msg += isAr ? `الشركة: ${companyName}\n\n` : `Company: ${companyName}\n\n`;
-    }
     
     msg += isAr ? `*المنتجات:*\n` : `*Products:*\n`;
     
@@ -42,9 +37,6 @@ export function CartSidebar({ locale, dict }: { locale: Locale; dict: any }) {
       msg += isAr ? `*الإجمالي النهائي:* ${formatPrice(totalAfterDiscount, locale)}\n` : `*Final Total:* ${formatPrice(totalAfterDiscount, locale)}\n`;
     }
 
-    if (orderNotes) {
-      msg += `\n*${isAr ? "ملاحظات إضافية:" : "Additional Notes:"}*\n${orderNotes}\n`;
-    }
     return msg;
   };
 
@@ -65,10 +57,6 @@ export function CartSidebar({ locale, dict }: { locale: Locale; dict: any }) {
       clearCart();
     }
   };
-
-  const nextTier = discountPercentage === 0 ? 20 : discountPercentage === 0.05 ? 50 : 0;
-  const itemsNeeded = nextTier - totalItems;
-  const progressPercent = nextTier > 0 ? Math.min(100, Math.max(0, (totalItems / nextTier) * 100)) : 100;
 
   return (
     <>
@@ -103,19 +91,6 @@ export function CartSidebar({ locale, dict }: { locale: Locale; dict: any }) {
             </div>
           ) : (
             <>
-              {nextTier > 0 && (
-                <div className={styles.gamificationBox}>
-                  <p className={styles.gamiText}>
-                    {isAr 
-                      ? `أضف ${itemsNeeded} قطعة إضافية للحصول على خصم ${nextTier === 20 ? '5%' : '10%'}!` 
-                      : `Add ${itemsNeeded} more items to get a ${nextTier === 20 ? '5%' : '10%'} discount!`}
-                  </p>
-                  <div className={styles.progressTrack}>
-                    <div className={styles.progressBar} style={{ width: `${progressPercent}%` }} />
-                  </div>
-                </div>
-              )}
-
               <div className={styles.itemsList}>
                 {items.map((item) => (
                   <div key={item.id} className={styles.cartItem}>
@@ -160,27 +135,6 @@ export function CartSidebar({ locale, dict }: { locale: Locale; dict: any }) {
               </div>
 
               <div className={styles.summarySection}>
-                <div className={styles.companyInput}>
-                  <label>{isAr ? "اسم الشركة (اختياري)" : "Company Name (Optional)"}</label>
-                  <input 
-                    type="text" 
-                    value={companyName} 
-                    onChange={(e) => setCompanyName(e.target.value)} 
-                    placeholder={isAr ? "أدخل اسم الشركة" : "Enter company name"}
-                  />
-                </div>
-
-                <div className={styles.companyInput}>
-                  <label>{isAr ? "ملاحظات إضافية (اختياري)" : "Order Notes (Optional)"}</label>
-                  <textarea 
-                    value={orderNotes} 
-                    onChange={(e) => setOrderNotes(e.target.value)} 
-                    placeholder={isAr ? "أي متطلبات خاصة أو ملاحظات..." : "Any special requirements or notes..."}
-                    rows={2}
-                    className={styles.notesInput}
-                  />
-                </div>
-
                 <div className={styles.summaryBox}>
                   <div className={styles.summaryRow}>
                     <span>{isAr ? "إجمالي الكمية:" : "Total Quantity:"}</span>
