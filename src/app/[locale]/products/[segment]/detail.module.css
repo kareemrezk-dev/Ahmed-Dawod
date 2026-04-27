@@ -3,7 +3,7 @@
 .breadcrumbRow { margin-bottom: 2rem; }
 .productLayout { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3.5rem; align-items: start; }
 .visualPanel { position: sticky; top: calc(72px + 1.5rem); display: flex; flex-direction: column; gap: 0.75rem; }
-.visualCard { background: linear-gradient(135deg, #eff6ff 0%, #e8f0fe 100%); border-radius: 16px; overflow: hidden; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; }
+.visualCard { background: #ffffff; border-radius: 16px; overflow: hidden; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; }
 .visualSvg { opacity: 0.32; }
 .visualOverlay { position: absolute; inset: 0; background: radial-gradient(ellipse at 65% 35%, rgba(42,88,149,0.1) 0%, transparent 65%); pointer-events: none; }
 .modelBadge { position: absolute; bottom: 1.5rem; inset-inline-start: 1.5rem; background-color: rgba(15,17,21,0.88); border: 1px solid rgba(42,88,149,0.3); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 9px; padding: 0.7rem 1.1rem; display: flex; flex-direction: column; gap: 0.15rem; z-index: 2; }
@@ -74,7 +74,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+  background: #ffffff;
   border-radius: 12px;
   overflow: hidden;
   padding: 2rem;
@@ -110,7 +110,7 @@
   height: 72px;
   border-radius: 12px;
   border: 2px solid transparent;
-  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+  background: #ffffff;
   padding: 0.4rem;
   cursor: pointer;
   transition: all 0.2s ease;
