@@ -35,14 +35,13 @@ export function BrandsSlider({ locale, dict }: BrandsSliderProps) {
         <div className={styles.rail}>
           {repeated.map((brand, i) => (
             <div key={`${brand.name}-${i}`} className={styles.logoCard}>
-              <div className={styles.logoInner}>
+              <div className={styles.logoInner} style={brand.scale ? { transform: `scale(${brand.scale})` } : undefined}>
                 <Image
                   src={brand.src}
                   alt={brand.name}
                   width={120}
                   height={40}
                   className={styles.logoImg}
-                  style={brand.scale ? { transform: `scale(${brand.scale})` } : undefined}
                   unoptimized
                 />
               </div>
