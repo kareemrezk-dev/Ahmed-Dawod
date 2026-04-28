@@ -53,6 +53,7 @@ export interface Dictionary {
   nav: {
     home: string;
     products: string;
+    sizeFinder: string;
     about: string;
     contact: string;
     search: string;

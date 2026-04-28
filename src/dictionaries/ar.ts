@@ -33,6 +33,7 @@ export const ar: Dictionary = {
   nav: {
     home: "الرئيسية",
     products: "المنتجات",
+    sizeFinder: "البحث بالمقاس",
     about: "من نحن",
     contact: "اتصل بنا",
     search: "بحث",

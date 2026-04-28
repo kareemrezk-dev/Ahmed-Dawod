@@ -368,6 +368,7 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
 
   const navLinks = [
     { href: `/${locale}`, label: dict.nav.home },
+    { href: `/${locale}/configurator`, label: dict.nav.sizeFinder },
     { href: `/${locale}/about`, label: dict.nav.about },
     { href: `/${locale}/contact`, label: dict.nav.contact },
   ];
@@ -412,6 +413,7 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
               </Link>
             </div>
 
+            <Link href={`/${locale}/configurator`} className={[styles.navLink, pathname.startsWith("/" + locale + "/configurator") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.sizeFinder}</Link>
             <Link href={`/${locale}/about`} className={[styles.navLink, pathname.startsWith("/" + locale + "/about") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.about}</Link>
             <Link href={`/${locale}/contact`} className={[styles.navLink, pathname.startsWith("/" + locale + "/contact") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.contact}</Link>
           </div>

@@ -33,6 +33,7 @@ export const en: Dictionary = {
   nav: {
     home: "Home",
     products: "Products",
+    sizeFinder: "Size Finder",
     about: "About",
     contact: "Contact",
     search: "Search",
