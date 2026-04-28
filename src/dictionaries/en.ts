@@ -95,13 +95,13 @@ export const en: Dictionary = {
     ],
   },
   search: {
-    placeholder: "Search by model, name, or brand…",
+    placeholder: "Search by model, size (20x47x14), or brand…",
     noResults: "No results found",
     resultsFor: "Results for",
     resultsCount: "result(s)",
     viewAll: "View All",
     close: "Close",
-    hint: "Type a model number, product name, or brand…",
+    hint: "Type a model number, dimensions (e.g. 20x47x14), or brand…",
   },
   products: {
     title: "Products",

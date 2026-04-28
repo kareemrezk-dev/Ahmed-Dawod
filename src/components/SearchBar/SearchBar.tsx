@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { searchProducts, getProductName, getCategoryLabel, getProductImagePath, getProductImageAlt, type Product } from "@/lib/products";
+import { smartSearch, getProductName, getCategoryLabel, getProductImagePath, getProductImageAlt, type Product } from "@/lib/products";
 import type { Dictionary } from "@/dictionaries/types";
 import type { Locale } from "@/lib/i18n";
 import styles from "./SearchBar.module.css";
@@ -25,11 +25,12 @@ export function SearchBar({ locale, dict }: SearchBarProps) {
   useEffect(() => {
     if (query.trim().length < 1) { setResults([]); setOpen(false); return; }
     const t = setTimeout(() => {
-      const res = searchProducts(query).slice(0, 6);
+      const result = smartSearch(query);
+      const res = result.products.slice(0, 6);
       setResults(res);
       setOpen(res.length > 0);
       setActiveIdx(-1);
-    }, 120);
+    }, 180);
     return () => clearTimeout(t);
   }, [query]);
 

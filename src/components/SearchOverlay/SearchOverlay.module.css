@@ -255,6 +255,38 @@
 .viewAllBtn:hover {
   background: #eff6ff;
 }
+/* ── Dimension badge ── */
+.dimensionBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: linear-gradient(135deg, rgba(42, 88, 149, 0.08), rgba(42, 88, 149, 0.04));
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--color-primary, #2A5895);
+  animation: fadeIn 0.2s ease;
+}
+
+.dimensionBadge svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.dimensionBadge strong {
+  font-family: "SF Mono", "Fira Code", monospace;
+  letter-spacing: 0.03em;
+}
+
+/* ── Suggestions ── */
+.suggestionsLabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  padding: 0 0.25rem;
+}
+
 .noResults {
   padding: 2rem 1.25rem;
   text-align: center;

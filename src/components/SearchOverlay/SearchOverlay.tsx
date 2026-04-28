@@ -6,8 +6,8 @@ import Image from "next/image";
 import styles from "./SearchOverlay.module.css";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
-import { searchProducts, getCategoryLabel, getProductName, getProductImagePath, getProductImageAlt } from "@/lib/products";
-import type { Product } from "@/lib/products";
+import { smartSearch, getCategoryLabel, getProductName, getProductImagePath, getProductImageAlt } from "@/lib/products";
+import type { Product, SmartSearchResult } from "@/lib/products";
 
 interface SearchOverlayProps {
   locale: Locale;
@@ -42,18 +42,22 @@ function HighlightMatch({ text, query }: { text: string; query: string }) {
 export function SearchOverlay({ locale, dict, isOpen, onClose, initialQuery = "" }: SearchOverlayProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Product[]>([]);
+  const [searchMeta, setSearchMeta] = useState<SmartSearchResult | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const debouncedQuery = useDebounce(query, 220);
+  const debouncedQuery = useDebounce(query, 300);
 
-  // Run search whenever debounced query changes
+  // Run smart search whenever debounced query changes
   useEffect(() => {
     if (debouncedQuery.trim().length < 1) {
       setResults([]);
+      setSearchMeta(null);
       return;
     }
-    setResults(searchProducts(debouncedQuery).slice(0, 8));
+    const result = smartSearch(debouncedQuery);
+    setResults(result.products.slice(0, 8));
+    setSearchMeta(result);
   }, [debouncedQuery]);
 
   // Focus input when opened — and seed with initialQuery if provided
@@ -64,6 +68,7 @@ export function SearchOverlay({ locale, dict, isOpen, onClose, initialQuery = ""
     } else {
       setQuery("");
       setResults([]);
+      setSearchMeta(null);
     }
   }, [isOpen, initialQuery]);
 
@@ -143,8 +148,58 @@ export function SearchOverlay({ locale, dict, isOpen, onClose, initialQuery = ""
 
         {/* Results */}
         <div className={styles.results}>
-          {debouncedQuery.trim().length >= 1 && results.length === 0 && (
+          {/* Dimension badge */}
+          {searchMeta?.isDimensionSearch && searchMeta.dimensions && (
+            <div className={styles.dimensionBadge}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              </svg>
+              <span>
+                {locale === 'ar' ? 'بحث بالمقاس:' : 'Size search:'}{' '}
+                <strong>{searchMeta.dimensions.inner} × {searchMeta.dimensions.outer} × {searchMeta.dimensions.width} mm</strong>
+              </span>
+            </div>
+          )}
+
+          {debouncedQuery.trim().length >= 1 && results.length === 0 && !searchMeta?.suggestions?.length && (
             <p className={styles.noResults}>{dict.search.noResults}</p>
+          )}
+
+          {/* No exact match but has suggestions */}
+          {debouncedQuery.trim().length >= 1 && results.length === 0 && searchMeta?.suggestions && searchMeta.suggestions.length > 0 && (
+            <div className={styles.resultsInner}>
+              <p className={styles.noResults}>{dict.search.noResults}</p>
+              <p className={styles.suggestionsLabel}>
+                {locale === 'ar' ? 'مقاسات قريبة:' : 'Close sizes:'}
+              </p>
+              <ul className={styles.groupList} role="listbox">
+                {searchMeta.suggestions.map((p) => (
+                  <li key={p.slug} role="option" aria-selected="false">
+                    <Link
+                      href={`/${locale}/products/${p.slug}`}
+                      className={styles.resultItem}
+                      onClick={onClose}
+                    >
+                      <span className={styles.resultThumb}>
+                        <Image
+                          src={getProductImagePath(p)}
+                          alt={getProductImageAlt(p)}
+                          width={40}
+                          height={40}
+                          className={styles.resultThumbImg}
+                          unoptimized={getProductImagePath(p).endsWith(".svg")}
+                        />
+                      </span>
+                      <span className={styles.resultTextCol}>
+                        <span className={styles.resultModel}>{p.brand} {p.modelNumber}</span>
+                        <span className={styles.resultName}>{getProductName(p, locale)}</span>
+                      </span>
+                      <span className={styles.resultCategory}>{getCategoryLabel(p.category, locale)}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
 
           {results.length > 0 && (

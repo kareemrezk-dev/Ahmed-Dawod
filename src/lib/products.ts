@@ -1,4 +1,5 @@
 import scrapedProductsData from "./scraped-products.json";
+import { findModelsByDimensions, findCloseModels } from "./bearing-dimensions";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -612,6 +613,115 @@ export const categoryDescriptions: Record<TopCategory, { ar: string[]; en: strin
     ],
   },
 };
+
+// ─── Smart Search ─────────────────────────────────────────────────────────────
+
+export interface ParsedDimensions {
+  inner: number;
+  outer: number;
+  width: number;
+}
+
+/**
+ * Parse a search query for bearing dimensions.
+ * Supports formats: "20x47x14", "20×47×14", "20-47-14", "20 47 14", "20/47/14"
+ * Returns null if no dimension pattern is found.
+ */
+export function parseSearch(text: string): ParsedDimensions | null {
+  const trimmed = text.trim();
+  // Match 3 numbers separated by x, ×, -, /, or spaces
+  const match = trimmed.match(
+    /^(\d+(?:\.\d+)?)\s*[xX×\-\/\s]\s*(\d+(?:\.\d+)?)\s*[xX×\-\/\s]\s*(\d+(?:\.\d+)?)$/
+  );
+  if (!match) return null;
+  const inner = parseFloat(match[1]);
+  const outer = parseFloat(match[2]);
+  const width = parseFloat(match[3]);
+  if (inner <= 0 || outer <= 0 || width <= 0) return null;
+  if (inner >= outer) return null; // inner must be smaller than outer
+  return { inner, outer, width };
+}
+
+export interface SmartSearchResult {
+  /** Products matching the query */
+  products: Product[];
+  /** True if the search was dimension-based */
+  isDimensionSearch: boolean;
+  /** The parsed dimensions (if dimension-based) */
+  dimensions: ParsedDimensions | null;
+  /** Suggested close-match products (when exact dimension match fails) */
+  suggestions: Product[];
+}
+
+/**
+ * Smart search: parses dimension queries and falls back to normal text search.
+ * - If input matches a dimension pattern (e.g. "20x47x14"), finds bearings by size
+ * - Otherwise, performs normal text search
+ */
+export function smartSearch(query: string): SmartSearchResult {
+  const dims = parseSearch(query);
+
+  if (dims) {
+    // Dimension-based search
+    const exactModels = findModelsByDimensions(dims.inner, dims.outer, dims.width);
+
+    // Find products whose model number contains any of the matched models
+    const exactProducts: Product[] = [];
+    for (const model of exactModels) {
+      const matches = products.filter((p) => {
+        const m = p.modelNumber.toUpperCase();
+        // Match the model base number (e.g. "6204" in "SKF 6204 2RS")
+        return new RegExp(`\\b${model}\\b`, "i").test(m) ||
+          new RegExp(`\\b${model}\\b`, "i").test(p.slug) ||
+          new RegExp(`\\b${model}\\b`, "i").test(p.nameEn);
+      });
+      exactProducts.push(...matches);
+    }
+
+    // Deduplicate
+    const seen = new Set<string>();
+    const uniqueExact = exactProducts.filter((p) => {
+      if (seen.has(p.slug)) return false;
+      seen.add(p.slug);
+      return true;
+    });
+
+    // If no exact match, find close sizes
+    let suggestions: Product[] = [];
+    if (uniqueExact.length === 0) {
+      const closeModels = findCloseModels(dims.inner, dims.outer, dims.width);
+      for (const model of closeModels) {
+        const matches = products.filter(
+          (p) =>
+            new RegExp(`\\b${model}\\b`, "i").test(p.modelNumber) ||
+            new RegExp(`\\b${model}\\b`, "i").test(p.slug)
+        );
+        suggestions.push(...matches);
+      }
+      const seenSugg = new Set<string>();
+      suggestions = suggestions.filter((p) => {
+        if (seenSugg.has(p.slug)) return false;
+        seenSugg.add(p.slug);
+        return true;
+      });
+    }
+
+    return {
+      products: uniqueExact,
+      isDimensionSearch: true,
+      dimensions: dims,
+      suggestions: suggestions.slice(0, 6),
+    };
+  }
+
+  // Normal text search fallback
+  return {
+    products: searchProducts(query),
+    isDimensionSearch: false,
+    dimensions: null,
+    suggestions: [],
+  };
+}
 
 // ─── WhatsApp URL helper ──────────────────────────────────────────────────────
 /** Strips non-digits and returns a ready-to-use wa.me URL */

@@ -95,13 +95,13 @@ export const ar: Dictionary = {
     ],
   },
   search: {
-    placeholder: "ابحث بالموديل أو الاسم أو الماركة…",
+    placeholder: "ابحث بالموديل أو المقاس (20x47x14) أو الماركة…",
     noResults: "لا توجد نتائج",
     resultsFor: "نتائج البحث عن",
     resultsCount: "نتيجة",
     viewAll: "عرض الكل",
     close: "إغلاق",
-    hint: "اكتب رقم الموديل أو اسم المنتج أو الماركة…",
+    hint: "اكتب رقم الموديل أو المقاس (مثلاً 20x47x14) أو الماركة…",
   },
   products: {
     title: "المنتجات",
