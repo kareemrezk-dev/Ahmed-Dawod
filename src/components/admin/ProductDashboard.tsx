@@ -59,6 +59,7 @@ interface ProductForm {
   descriptionAr: string; descriptionEn: string;
   specs: Spec[]; tags: string; sizes: string; featured: boolean;
   imagesList: { preview: string; name: string; ext: string }[];
+  price: string; innerDia: string; outerDia: string; widthDia: string;
 }
 
 const EMPTY_SPEC: Spec = { labelAr: "", labelEn: "", value: "" };
@@ -69,6 +70,7 @@ const EMPTY_PRODUCT: ProductForm = {
   specs: [{ ...EMPTY_SPEC }],
   tags: "", sizes: "", featured: false,
   imagesList: [],
+  price: "", innerDia: "", outerDia: "", widthDia: "",
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -103,7 +105,7 @@ function generateProductCode(p: ProductForm): string {
     specs: [
 ${specs.map(s => `      { labelAr: "${s.labelAr}", labelEn: "${s.labelEn}", value: "${s.value}" },`).join("\n")}
     ],
-    tags: [${tags.map((t: string) => `"${t}"`).join(", ")}],${sizes.length ? `\n    sizes: [${sizes.map((s: string) => `"${s}"`).join(", ")}],` : ""}${p.featured ? "\n    featured: true," : ""}
+    tags: [${tags.map((t: string) => `"${t}"`).join(", ")}],${sizes.length ? `\n    sizes: [${sizes.map((s: string) => `"${s}"`).join(", ")}],` : ""}${p.featured ? "\n    featured: true," : ""}${p.price ? `\n    price: ${p.price},` : ""}${p.innerDia && p.outerDia && p.widthDia ? `\n    dimensions: { inner: ${p.innerDia}, outer: ${p.outerDia}, width: ${p.widthDia} },` : ""}
   },`;
 }
 
@@ -631,6 +633,32 @@ export function ProductDashboard() {
                 </div>
               </div>
 
+
+              {/* Price */}
+              <p className={styles.groupLabel} style={{ marginTop: 24 }}>السعر</p>
+              <div className={styles.formGrid} style={{ gridTemplateColumns: "1fr 2fr" }}>
+                <div className={styles.field}>
+                  <label>السعر (اختياري) — بالجنيه</label>
+                  <input type="number" value={form.price} onChange={e => setField("price", e.target.value)} placeholder="مثال: 150" style={{ direction: "ltr" }} min="0" step="any" />
+                </div>
+              </div>
+
+              {/* Bearing Dimensions */}
+              <p className={styles.groupLabel} style={{ marginTop: 24 }}>أبعاد البلية (اختياري — للبحث بالمقاس)</p>
+              <div className={styles.formGrid} style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
+                <div className={styles.field}>
+                  <label>القطر الداخلي d (mm)</label>
+                  <input type="number" value={form.innerDia} onChange={e => setField("innerDia", e.target.value)} placeholder="20" style={{ direction: "ltr" }} min="0" step="any" />
+                </div>
+                <div className={styles.field}>
+                  <label>القطر الخارجي D (mm)</label>
+                  <input type="number" value={form.outerDia} onChange={e => setField("outerDia", e.target.value)} placeholder="47" style={{ direction: "ltr" }} min="0" step="any" />
+                </div>
+                <div className={styles.field}>
+                  <label>العرض B (mm)</label>
+                  <input type="number" value={form.widthDia} onChange={e => setField("widthDia", e.target.value)} placeholder="14" style={{ direction: "ltr" }} min="0" step="any" />
+                </div>
+              </div>
 
               {/* Tags & Sizes */}
               <p className={styles.groupLabel} style={{ marginTop: 24 }}>Tags والمقاسات</p>
