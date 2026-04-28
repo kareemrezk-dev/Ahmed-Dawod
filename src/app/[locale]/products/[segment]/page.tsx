@@ -15,6 +15,7 @@ import {
   type TopCategory, type Product,
 } from "@/lib/products";
 import { getPricingOverrides } from "@/lib/pricing.server";
+import { formatPrice, getPricingDetails } from "@/lib/pricing";
 import { Breadcrumb } from "@/components/Breadcrumb/Breadcrumb";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import { ProductsFilter } from "@/components/ProductsFilter/ProductsFilter";
@@ -169,12 +170,8 @@ async function ProductDetailView({ product, locale }: { product: Product; locale
   ];
   const BASE = "https://ahmeddawod.com";
   const productPricing = pricingOverrides[product.slug] ?? null;
-  const { finalPrice } = (() => {
-    try {
-      const { getPricingDetails } = require("@/lib/pricing");
-      return getPricingDetails(product, productPricing);
-    } catch { return { finalPrice: null }; }
-  })();
+  const { finalPrice } = getPricingDetails(product, productPricing);
+  
   const productSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -249,6 +246,12 @@ async function ProductDetailView({ product, locale }: { product: Product; locale
                     <span className={detailStyles.modelChip}>{model}</span>
                   )}
                 </div>
+                {finalPrice !== null && (
+                  <div className={detailStyles.priceDisplay}>
+                    <span className={detailStyles.priceLabel}>{locale === "ar" ? "السعر:" : "Price:"}</span>
+                    <span className={detailStyles.currentPrice}>{formatPrice(finalPrice, locale)}</span>
+                  </div>
+                )}
                 <p className={detailStyles.productDescription}>{description}</p>
                 <div className={detailStyles.shareRow}>
                   <ShareButton title={`${product.brand} ${model} | ${locale === "ar" ? "أحمد داود" : "Ahmed Dawod"}`} locale={locale} />

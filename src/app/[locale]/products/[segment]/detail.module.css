@@ -20,6 +20,9 @@
 .metaRow { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
 .brandPill { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; background-color: rgba(42,88,149,0.08); border: 1px solid rgba(42,88,149,0.22); border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.04em; }
 .modelChip { font-size: 0.78rem; font-weight: 700; font-family: "SF Mono", "Fira Code", monospace; color: var(--text-muted); background-color: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.25rem 0.65rem; }
+.priceDisplay { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem; background: linear-gradient(135deg, rgba(42, 88, 149, 0.03) 0%, rgba(42, 88, 149, 0.08) 100%); border-radius: 12px; border: 1px solid rgba(42, 88, 149, 0.15); margin-top: 0.2rem; }
+.priceLabel { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
+.currentPrice { font-size: 2.2rem; font-weight: 900; color: var(--color-primary); line-height: 1; letter-spacing: -0.02em; }
 .productDescription { font-size: 0.935rem; color: var(--text-muted); line-height: 1.85; max-width: 60ch; }
 .sizeBlock { display: flex; flex-direction: column; gap: 0.65rem; }
 .sizeBlockLabel { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
