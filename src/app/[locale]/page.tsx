@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import type { Locale } from "@/lib/i18n";
 import { locales } from "@/lib/i18n";
 import { generateLocaleMetadata } from "@/lib/generateMetadata";
@@ -21,16 +22,24 @@ export default async function LocalePage({ params }: { params: { locale: Locale 
   const dict = await getDictionary(locale);
   return (
     <>
-      {/* 1. Hero */}
+      {/* 1. Hero — above the fold, renders immediately */}
       <Hero locale={locale} dict={dict} />
-      {/* 2. Categories */}
-      <CategoriesGrid locale={locale} />
+      {/* 2. Categories — below fold, streamed */}
+      <Suspense fallback={null}>
+        <CategoriesGrid locale={locale} />
+      </Suspense>
       {/* 3. Brands */}
-      <BrandsSlider locale={locale} dict={dict} />
+      <Suspense fallback={null}>
+        <BrandsSlider locale={locale} dict={dict} />
+      </Suspense>
       {/* 4. Featured Products */}
-      <FeaturedProducts locale={locale} dict={dict} />
+      <Suspense fallback={null}>
+        <FeaturedProducts locale={locale} dict={dict} />
+      </Suspense>
       {/* 5. About */}
-      <AboutSection locale={locale} dict={dict} />
+      <Suspense fallback={null}>
+        <AboutSection locale={locale} dict={dict} />
+      </Suspense>
       {/* 6. Footer rendered in layout.tsx */}
     </>
   );

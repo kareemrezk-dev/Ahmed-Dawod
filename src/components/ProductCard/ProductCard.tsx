@@ -69,14 +69,15 @@ export function ProductCard({
       style={{ animationDelay: `${animationDelay}ms` } as React.CSSProperties}
     >
       {/* ── Image area ── */}
-      <Link href={`/${locale}/products/${product.slug}`} className={styles.imageArea} tabIndex={-1} aria-hidden="true">
+      <Link href={`/${locale}/products/${product.slug}`} className={styles.imageArea} prefetch={false} tabIndex={-1} aria-hidden="true">
         <div className={styles.imageBox}>
           <Image
             src={imageSrc}
             alt={imageAlt}
             width={400} height={400}
             className={styles.productImage}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+            loading="lazy"
             unoptimized={imageSrc.endsWith(".svg")}
           />
         </div>
@@ -98,7 +99,7 @@ export function ProductCard({
         {name.toLowerCase() !== model.toLowerCase() && (
           <span className={styles.modelNumber}>{model}</span>
         )}
-        <Link href={`/${locale}/products/${product.slug}`} className={styles.productName}>
+        <Link href={`/${locale}/products/${product.slug}`} prefetch={false} className={styles.productName}>
           {name}
         </Link>
         <QuickSpecs specs={product.specs} locale={locale} />
@@ -112,7 +113,7 @@ export function ProductCard({
           </div>
         )}
 
-        <Link href={`/${locale}/products/${product.slug}`} className={styles.detailsBtn}>
+        <Link href={`/${locale}/products/${product.slug}`} prefetch={false} className={styles.detailsBtn}>
           {viewLabel}
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"
             style={{ transform: dir === "rtl" ? "scaleX(-1)" : "none" }}>

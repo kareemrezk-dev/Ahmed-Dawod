@@ -118,7 +118,8 @@ export function AboutSection({ locale, dict }: AboutSectionProps) {
               alt="أحمد داود لتجارة رولمان البلي"
               fill
               style={{ objectFit: "cover" }}
-              unoptimized
+              sizes="(max-width: 900px) 100vw, 50vw"
+              loading="lazy"
             />
           </div>
         </div>

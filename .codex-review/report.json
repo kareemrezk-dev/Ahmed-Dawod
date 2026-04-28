@@ -1,0 +1,216 @@
+[
+  {
+    "name": "home-desktop",
+    "status": 200,
+    "ms": 11015,
+    "consoleErrors": [],
+    "failed": [
+      {
+        "url": "http://localhost:3001/ar/configurator?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/about?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/contact?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/en?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      }
+    ],
+    "metrics": {
+      "title": "أحمد داود لتجارة رولمان البلي",
+      "h1": "أحمد داود",
+      "bodyText": "🎉 اطلب الآن عبر الواتساب واستخدم كود الخصم DAWOD10 للحصول على خصم 10%!\n\nالرئيسية\nالمنتجات\nالبحث بالمقاس\nمن نحن\nاتصل بنا\nAR\nEN\nرولمان البلي الأصلي\nأحمد داود\n\nدقة في الحركة… ثبات في الأداء\n\nمتخصصون في توريد جميع أنواع ومقاسات رولمان البلي الأصلي بأفضل الماركات العالمية.\n\nتصفح المنتجات\nاتصل بنا\nSKF\nNSK\nNTN\nFAG\nTIMKEN\nما نقدمه\nتصفح الفئات\n01\n413 منتج\nبلي\nعرض المنتجات\nتصفح\n02\n63 منتج\nلينير\nعرض المنتجات\nتصفح\n03\n19 منتج\nبول سكرو\nعرض المنتجات\nتصفح\n04\n48 منتج\nهارد كروم\nعرض المنتجات\nتصفح\n05\n5 منتج\nليد سك",
+      "scrollHeight": 5320,
+      "links": 71,
+      "inputs": 2,
+      "buttons": 7
+    },
+    "screenshot": "H:\\01-Project\\Website\\AHMED DAWOD\\ahmed-dawod\\.codex-review\\home-desktop.png"
+  },
+  {
+    "name": "products-desktop",
+    "status": 200,
+    "ms": 15272,
+    "consoleErrors": [],
+    "failed": [
+      {
+        "url": "http://localhost:3001/ar/contact?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/en/products?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/bearings?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/linear?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/ball-screw?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/hard-chrome?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/lead-screw?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/fasteners?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      }
+    ],
+    "metrics": {
+      "title": "المنتجات | أحمد داود لتجارة رولمان البلي",
+      "h1": "المنتجات",
+      "bodyText": "🎉 اطلب الآن عبر الواتساب واستخدم كود الخصم DAWOD10 للحصول على خصم 10%!\n\nالرئيسية\nالمنتجات\nالبحث بالمقاس\nمن نحن\nاتصل بنا\nAR\nEN\nالرئيسية\nالمنتجات\nالمنتجات\n\nجميع أنواع ومقاسات الرولمان الأصلي بأفضل الماركات العالمية\n\nبلي\nلينير\nبول سكرو\nهارد كروم\nليد سكرو\nتثبيتات\nكراسي\nجلب\nمنتجات متنوعة\nتصفية النتائج\nالفئة\nالكل\n589\nبلي 6000\n6\nبلي إبري\n249\nبلي اتجاه واحد\n5\nبلي كامه\n13\nبلي حراري واستانلس\n4\nبلي اسطمبات\n20\nبلي سرعات اسبندل\n3\nبلي Miniature\n11\nبلي متنوع\n41\nبلي لينير\n63\nبول سكرو عواميد\n1\nبول سكرو بلي\n18\nب",
+      "scrollHeight": 3749,
+      "links": 88,
+      "inputs": 4,
+      "buttons": 58
+    },
+    "screenshot": "H:\\01-Project\\Website\\AHMED DAWOD\\ahmed-dawod\\.codex-review\\products-desktop.png"
+  },
+  {
+    "name": "contact-desktop",
+    "status": 200,
+    "ms": 1934,
+    "consoleErrors": [],
+    "failed": [
+      {
+        "url": "http://localhost:3001/ar/configurator?_rsc=1rdjn",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/about?_rsc=1rdjn",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products?_rsc=1rdjn",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar?_rsc=1rdjn",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/en/contact?_rsc=1rdjn",
+        "failure": "net::ERR_ABORTED"
+      }
+    ],
+    "metrics": {
+      "title": "اتصل بنا | أحمد داود لتجارة رولمان البلي",
+      "h1": "تواصل معنا",
+      "bodyText": "🎉 اطلب الآن عبر الواتساب واستخدم كود الخصم DAWOD10 للحصول على خصم 10%!\n\nالرئيسية\nالمنتجات\nالبحث بالمقاس\nمن نحن\nاتصل بنا\nAR\nEN\nالرئيسية\nتواصل معنا\nتواصل معنا\nتواصل معنا\n\nنحن هنا للإجابة على جميع استفساراتك وتلبية احتياجاتك من رولمان البلي الأصلي.\n\nأحمد داود\n\nدقة في الحركة… ثبات في الأداء\n\nمنذ 2015\nهاتف\n01069994050\nواتساب\n01065445000\nالبريد الإلكتروني\nAhmed@ahmeddawod.com\nالعنوان\nمحافظة الشرقية، العاشر من رمضان، مول المصرية سنتر 1، محل رقم 30 و 86\nتابعنا\n\nمحافظة الشرقية، العاشر من رمضان، مول المص",
+      "scrollHeight": 1737,
+      "links": 38,
+      "inputs": 4,
+      "buttons": 8
+    },
+    "screenshot": "H:\\01-Project\\Website\\AHMED DAWOD\\ahmed-dawod\\.codex-review\\contact-desktop.png"
+  },
+  {
+    "name": "home-mobile",
+    "status": 200,
+    "ms": 3973,
+    "consoleErrors": [],
+    "failed": [
+      {
+        "url": "http://localhost:3001/ar/contact?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/bearings?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/linear?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/en?_rsc=h3tr8",
+        "failure": "net::ERR_ABORTED"
+      }
+    ],
+    "metrics": {
+      "title": "أحمد داود لتجارة رولمان البلي",
+      "h1": "أحمد داود",
+      "bodyText": "🎉 اطلب الآن عبر الواتساب واستخدم كود الخصم DAWOD10 للحصول على خصم 10%!\n\nAR\nEN\nرولمان البلي الأصلي\nأحمد داود\n\nدقة في الحركة… ثبات في الأداء\n\nمتخصصون في توريد جميع أنواع ومقاسات رولمان البلي الأصلي بأفضل الماركات العالمية.\n\nتصفح المنتجات\nاتصل بنا\nSKF\nNSK\nNTN\nFAG\nTIMKEN\nما نقدمه\nتصفح الفئات\n01\n413 منتج\nبلي\nعرض المنتجات\nتصفح\n02\n63 منتج\nلينير\nعرض المنتجات\nتصفح\n03\n19 منتج\nبول سكرو\nعرض المنتجات\nتصفح\n04\n48 منتج\nهارد كروم\nعرض المنتجات\nتصفح\n05\n5 منتج\nليد سكرو\nعرض المنتجات\nتصفح\n06\n5 منتج\nتثبيتات\nعرض المنت",
+      "scrollHeight": 6872,
+      "links": 71,
+      "inputs": 2,
+      "buttons": 7
+    },
+    "screenshot": "H:\\01-Project\\Website\\AHMED DAWOD\\ahmed-dawod\\.codex-review\\home-mobile.png"
+  },
+  {
+    "name": "products-mobile",
+    "status": 200,
+    "ms": 1911,
+    "consoleErrors": [],
+    "failed": [
+      {
+        "url": "http://localhost:3001/ar/products/bearings?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/hard-chrome?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/linear?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/ball-screw?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/lead-screw?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/%D8%A8%D9%84%D9%8A-%D8%A7%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-ss6000-stainless?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/%D8%A8%D9%84%D9%8A-%D9%83%D8%B1%D9%88%D9%8A-%D8%B3%D8%AA%D8%A9-%D8%A7%D9%84%D8%A7%D9%81%D8%A7%D8%AA-zz-6000?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3001/ar/products/%D8%A8%D9%84%D9%8A-%D9%83%D8%B1%D9%88%D9%8A-%D8%B3%D8%AA%D8%A9-%D8%A7%D9%84%D8%A7%D9%81%D8%A7%D8%AA-skf-6000-zz-copy?_rsc=1715h",
+        "failure": "net::ERR_ABORTED"
+      }
+    ],
+    "metrics": {
+      "title": "المنتجات | أحمد داود لتجارة رولمان البلي",
+      "h1": "المنتجات",
+      "bodyText": "🎉 اطلب الآن عبر الواتساب واستخدم كود الخصم DAWOD10 للحصول على خصم 10%!\n\nAR\nEN\nالرئيسية\nالمنتجات\nالمنتجات\n\nجميع أنواع ومقاسات الرولمان الأصلي بأفضل الماركات العالمية\n\nبلي\nلينير\nبول سكرو\nهارد كروم\nليد سكرو\nتثبيتات\nكراسي\nجلب\nمنتجات متنوعة\nتصفية النتائج\nالفئة\nالكل\n589\nبلي 6000\n6\nبلي إبري\n249\nبلي اتجاه واحد\n5\nبلي كامه\n13\nبلي حراري واستانلس\n4\nبلي اسطمبات\n20\nبلي سرعات اسبندل\n3\nبلي Miniature\n11\nبلي متنوع\n41\nبلي لينير\n63\nبول سكرو عواميد\n1\nبول سكرو بلي\n18\nبلي هارد كروم\n44\nعواميد هارد كروم\n4\nليد سكرو\n5\nكر",
+      "scrollHeight": 4673,
+      "links": 88,
+      "inputs": 4,
+      "buttons": 58
+    },
+    "screenshot": "H:\\01-Project\\Website\\AHMED DAWOD\\ahmed-dawod\\.codex-review\\products-mobile.png"
+  }
+]

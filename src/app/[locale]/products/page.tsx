@@ -100,31 +100,27 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   const safePage = Math.min(currentPage, Math.max(1, totalPages));
   const paginatedProducts = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
-  const categoryOptions = allCategories.map((cat) => {
-    const base = applyFilters(allProducts, { ...filters, category: null });
-    return {
-      value: cat,
-      label: getCategoryLabel(cat, locale),
-      count: base.filter((p) => p.category === cat).length,
-    };
-  }).filter((o) => o.count > 0);
+  // ── Optimized: compute each base set ONCE, not per-option ──
+  const baseForCategory = applyFilters(allProducts, { ...filters, category: null });
+  const categoryOptions = allCategories.map((cat) => ({
+    value: cat,
+    label: getCategoryLabel(cat, locale),
+    count: baseForCategory.filter((p) => p.category === cat).length,
+  })).filter((o) => o.count > 0);
 
-  const brandOptions = allBrands.map((brand) => {
-    const base = applyFilters(allProducts, { ...filters, brand: null });
-    return {
-      value: brand,
-      label: brand,
-      count: base.filter((p) => p.brand.toLowerCase() === brand.toLowerCase()).length,
-    };
-  }).filter((o) => o.count > 0);
+  const baseForBrand = applyFilters(allProducts, { ...filters, brand: null });
+  const brandOptions = allBrands.map((brand) => ({
+    value: brand,
+    label: brand,
+    count: baseForBrand.filter((p) => p.brand.toLowerCase() === brand.toLowerCase()).length,
+  })).filter((o) => o.count > 0);
 
-  const sizeBase = applyFilters(allProducts, { ...filters, size: null });
-
-  const allSizes = [...new Set(sizeBase.flatMap((p) => p.sizes ?? []))].sort();
+  const baseForSize = applyFilters(allProducts, { ...filters, size: null });
+  const allSizes = [...new Set(baseForSize.flatMap((p) => p.sizes ?? []))].sort();
   const sizeOptions = allSizes.map((size) => ({
     value: size,
     label: size,
-    count: sizeBase.filter((p) => p.sizes?.includes(size)).length,
+    count: baseForSize.filter((p) => p.sizes?.includes(size)).length,
   }));
 
   const resultsCount = filtered.length;

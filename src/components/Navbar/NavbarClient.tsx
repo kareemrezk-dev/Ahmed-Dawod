@@ -413,9 +413,9 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
               </Link>
             </div>
 
-            <Link href={`/${locale}/configurator`} className={[styles.navLink, pathname.startsWith("/" + locale + "/configurator") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.sizeFinder}</Link>
-            <Link href={`/${locale}/about`} className={[styles.navLink, pathname.startsWith("/" + locale + "/about") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.about}</Link>
-            <Link href={`/${locale}/contact`} className={[styles.navLink, pathname.startsWith("/" + locale + "/contact") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.contact}</Link>
+            <Link href={`/${locale}/configurator`} prefetch={false} className={[styles.navLink, pathname.startsWith("/" + locale + "/configurator") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.sizeFinder}</Link>
+            <Link href={`/${locale}/about`} prefetch={false} className={[styles.navLink, pathname.startsWith("/" + locale + "/about") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.about}</Link>
+            <Link href={`/${locale}/contact`} prefetch={false} className={[styles.navLink, pathname.startsWith("/" + locale + "/contact") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.contact}</Link>
           </div>
           {/* Right cluster */}
           <div className={styles.rightCluster}>
@@ -454,6 +454,7 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
                     key={cat.href}
                     href={`/${locale}/${cat.href}`}
                     className={styles.megaCard}
+                    prefetch={false}
                     onClick={closeMega}
                   >
                     <span className={styles.megaCardIcon}>
@@ -494,6 +495,7 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
                     key={cat.href}
                     href={`/${locale}/${cat.href}`}
                     className={styles.mobileMegaItem}
+                    prefetch={false}
                     onClick={() => { setMobileOpen(false); setMegaOpen(false); }}
                   >
                     <span className={styles.mobileMegaIcon}><CategoryIconSvg type={cat.icon} /></span>
@@ -505,7 +507,7 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
           </div>
 
           {navLinks.slice(1).map((link) => (
-            <Link key={link.href} href={link.href} className={styles.mobileNavLink} onClick={() => setMobileOpen(false)}>
+            <Link key={link.href} href={link.href} prefetch={false} className={styles.mobileNavLink} onClick={() => setMobileOpen(false)}>
               {link.label}
             </Link>
           ))}

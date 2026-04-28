@@ -168,6 +168,7 @@ export async function CategoriesGrid({ locale }: { locale: Locale }) {
                 key={topCat}
                 href={`/${locale}/products/${topCat}`}
                 className={styles.card}
+                prefetch={false}
                 style={{ animationDelay: `${index * 55}ms` } as React.CSSProperties}
               >
                 <div className={styles.cardVisual} style={{ position: "relative" }}>
@@ -177,7 +178,7 @@ export async function CategoriesGrid({ locale }: { locale: Locale }) {
                     fill
                     sizes="(max-width: 640px) 50vw, 33vw"
                     style={{ objectFit: "cover" }}
-                    unoptimized={CAT_IMAGE_EXT[topCat] === "png"}
+                    loading="lazy"
                   />
                   <div className={styles.cardVisualOverlay}>
                     <span className={styles.cardBadge} aria-hidden="true">

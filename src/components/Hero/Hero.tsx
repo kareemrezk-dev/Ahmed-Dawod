@@ -20,8 +20,11 @@ export function Hero({ locale, dict }: HeroProps) {
           alt="Industrial Bearings Background"
           fill
           priority
-          quality={90}
+          quality={75}
+          sizes="100vw"
           className={styles.bgImage}
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsM"
         />
         <div className={styles.bgOverlay} />
       </div>
