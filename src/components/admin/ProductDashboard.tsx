@@ -53,7 +53,16 @@ const CAT_INFO: Record<string, { modelL: string; modelP: string; brandL: string;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Spec { labelAr: string; labelEn: string; value: string; }
+interface DBProduct {
+  id: string; slug: string; model_number: string; top_category: string; category: string;
+  brand: string; name_ar: string; name_en: string;
+  description_ar: string; description_en: string;
+  specs: Spec[]; tags: string[]; sizes: string[]; featured: boolean;
+  image: string | null; images: string[]; price: number | null; is_active: boolean;
+  created_at: string; updated_at: string;
+}
 interface ProductForm {
+  id?: string;
   slug: string; modelNumber: string; topCategory: string; category: string;
   brand: string; nameAr: string; nameEn: string;
   descriptionAr: string; descriptionEn: string;
@@ -192,6 +201,11 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 export function ProductDashboard() {
   const [authed, setAuthed] = useState(false);
+  const [dbProducts, setDbProducts] = useState<DBProduct[]>([]);
+  const [dbTotal, setDbTotal] = useState(0);
+  const [dbPage, setDbPage] = useState(1);
+  const [dbSearch, setDbSearch] = useState("");
+  const [dbLoading, setDbLoading] = useState(false);
   const [products, setProducts] = useState<ProductForm[]>([]);
   const [form, setForm] = useState<ProductForm>({ ...EMPTY_PRODUCT, specs: [{ ...EMPTY_SPEC }] });
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
@@ -199,6 +213,7 @@ export function ProductDashboard() {
   const [filterCat, setFilterCat] = useState("all");
   const [copied, setCopied] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const [brands, setBrands] = useState<string[]>(DEFAULT_BRANDS);
   const [showBrandManager, setShowBrandManager] = useState(false);
@@ -223,6 +238,28 @@ export function ProductDashboard() {
       }
     } catch {}
   }, []);
+
+  // ── Fetch products from Supabase ──
+  const fetchProducts = async (page = 1, search = "", topCat = "") => {
+    setDbLoading(true);
+    try {
+      const params = new URLSearchParams({ page: String(page), limit: "50" });
+      if (search) params.set("search", search);
+      if (topCat && topCat !== "all") params.set("topCategory", topCat);
+      const res = await fetch(`/api/admin/products?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        setDbProducts(data.products || []);
+        setDbTotal(data.total || 0);
+        setDbPage(page);
+      }
+    } catch {}
+    setDbLoading(false);
+  };
+
+  useEffect(() => {
+    if (authed) fetchProducts(1, "", "");
+  }, [authed]);
 
   const updateBrands = (newBrands: string[]) => {
     setBrands(newBrands);
@@ -365,7 +402,7 @@ export function ProductDashboard() {
     return { ...f, imagesList: newList };
   });
 
-  const saveProduct = () => {
+  const saveProduct = async () => {
     const info = CAT_INFO[form.topCategory] || CAT_INFO.bearings;
     const reqModel = info.modelL.startsWith("*");
 
@@ -374,22 +411,116 @@ export function ProductDashboard() {
       return;
     }
     const finalSlug = form.slug || toSlug(form.modelNumber || form.nameEn || "product-" + Date.now().toString().slice(-4));
-    const product = { ...form, slug: finalSlug };
-    if (editingIdx !== null) {
-      setProducts(p => p.map((x, i) => i === editingIdx ? product : x));
-      showToast("✓ تم تعديل المنتج");
-    } else {
-      setProducts(p => [...p, product]);
-      showToast("✓ تم إضافة المنتج");
+    const tags = form.tags.split(",").map(s => s.trim()).filter(Boolean);
+    const sizes = form.sizes.split(",").map(s => s.trim()).filter(Boolean);
+    const specs = form.specs.filter(s => s.labelAr && s.value);
+
+    const dbRow = {
+      slug: finalSlug,
+      model_number: form.modelNumber,
+      top_category: form.topCategory,
+      category: form.category,
+      brand: form.brand,
+      name_ar: form.nameAr,
+      name_en: form.nameEn,
+      description_ar: form.descriptionAr,
+      description_en: form.descriptionEn,
+      specs,
+      tags,
+      sizes,
+      featured: form.featured,
+      image: null,
+      images: [],
+      price: form.price ? parseFloat(form.price) : null,
+    };
+
+    setSaving(true);
+    try {
+      if (form.id) {
+        // Update existing
+        const res = await fetch("/api/admin/products", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: form.id, ...dbRow }),
+        });
+        if (res.ok) {
+          showToast("✓ تم تعديل المنتج في قاعدة البيانات");
+        } else {
+          const err = await res.json();
+          showToast(`❌ خطأ: ${err.error}`);
+          setSaving(false);
+          return;
+        }
+      } else {
+        // Create new
+        const res = await fetch("/api/admin/products", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dbRow),
+        });
+        if (res.ok) {
+          showToast("✓ تم إضافة المنتج في قاعدة البيانات");
+        } else {
+          const err = await res.json();
+          showToast(`❌ خطأ: ${err.error}`);
+          setSaving(false);
+          return;
+        }
+      }
+      resetForm();
+      setActiveTab("list");
+      fetchProducts(dbPage, dbSearch, filterCat);
+    } catch {
+      showToast("❌ خطأ في الاتصال");
     }
-    resetForm();
-    setActiveTab("list");
+    setSaving(false);
+  };
+
+  const editDbProduct = (p: DBProduct) => {
+    setForm({
+      id: p.id,
+      slug: p.slug,
+      modelNumber: p.model_number,
+      topCategory: p.top_category,
+      category: p.category,
+      brand: p.brand,
+      nameAr: p.name_ar,
+      nameEn: p.name_en,
+      descriptionAr: p.description_ar,
+      descriptionEn: p.description_en,
+      specs: p.specs?.length ? p.specs : [{ ...EMPTY_SPEC }],
+      tags: (p.tags || []).join(", "),
+      sizes: (p.sizes || []).join(", "),
+      featured: p.featured,
+      imagesList: [],
+      price: p.price ? String(p.price) : "",
+      innerDia: "",
+      outerDia: "",
+      widthDia: "",
+    });
+    setEditingIdx(0);
+    setActiveTab("form");
   };
 
   const editProduct = (i: number) => {
     setForm({ ...products[i] });
     setEditingIdx(i);
     setActiveTab("form");
+  };
+
+  const deleteDbProduct = async (id: string) => {
+    if (!window.confirm("هل أنت متأكد من حذف هذا المنتج؟")) return;
+    try {
+      const res = await fetch(`/api/admin/products?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        showToast("✓ تم حذف المنتج");
+        fetchProducts(dbPage, dbSearch, filterCat);
+      } else {
+        showToast("❌ خطأ في الحذف");
+      }
+    } catch {
+      showToast("❌ خطأ في الاتصال");
+    }
   };
 
   const deleteProduct = (i: number) => {
@@ -429,11 +560,13 @@ export function ProductDashboard() {
           AHMED DAWOD — لوحة التحكم
         </div>
         <div className={styles.headerRight}>
-          <span className={styles.headerBadge}>{products.length} منتج</span>
+          <span className={styles.headerBadge}>{dbTotal} منتج في DB</span>
           <button className={`${styles.btn} ${styles.btnPrimary}`} style={{ padding: "6px 16px", fontSize: 12 }}
-            onClick={() => { resetForm(); setActiveTab("form"); }}>
+            onClick={() => { resetForm(); setEditingIdx(null); setActiveTab("form"); }}>
             + منتج جديد
           </button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} style={{ padding: "6px 14px", fontSize: 12 }}
+            onClick={() => fetchProducts(1, "", filterCat)}>🔄 تحديث</button>
           <a href="/ar" className={`${styles.btn} ${styles.btnSecondary}`} style={{ padding: "6px 14px", fontSize: 12, textDecoration: "none" }}>
             ← الموقع
           </a>
@@ -458,16 +591,15 @@ export function ProductDashboard() {
 
           <div className={styles.sidebarLabel}>الفئات</div>
           <button className={`${styles.navBtn} ${filterCat === "all" ? styles.navBtnActive : ""}`}
-            onClick={() => { setFilterCat("all"); setActiveTab("list"); }}>
+            onClick={() => { setFilterCat("all"); fetchProducts(1, dbSearch, ""); setActiveTab("list"); }}>
             <span>الكل</span>
-            <span className={styles.count}>{products.length}</span>
+            <span className={styles.count}>{dbTotal}</span>
           </button>
           {Object.entries(TOP_LABELS).map(([key, label]) => (
             <button key={key}
               className={`${styles.navBtn} ${filterCat === key && activeTab === "list" ? styles.navBtnActive : ""}`}
-              onClick={() => { setFilterCat(key); setActiveTab("list"); }}>
+              onClick={() => { setFilterCat(key); fetchProducts(1, dbSearch, key); setActiveTab("list"); }}>
               <span>{label}</span>
-              <span className={styles.count}>{catCounts[key] || 0}</span>
             </button>
           ))}
         </aside>
@@ -715,14 +847,14 @@ export function ProductDashboard() {
 
               {/* Actions */}
               <div className={styles.actions}>
-                <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={saveProduct}>
+                <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={saveProduct} disabled={saving}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M2 7l4 4 6-6"/></svg>
-                  {editingIdx !== null ? "حفظ التعديلات" : "إضافة المنتج"}
+                  {saving ? "جاري الحفظ..." : (form.id ? "حفظ التعديلات في DB" : "إضافة المنتج في DB")}
                 </button>
-                <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={resetForm}>إلغاء</button>
-                {editingIdx !== null && (
-                  <button className={`${styles.btn} ${styles.btnDanger}`} onClick={() => { deleteProduct(editingIdx!); resetForm(); }}>
-                    حذف المنتج
+                <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => { resetForm(); setEditingIdx(null); }}>إلغاء</button>
+                {form.id && (
+                  <button className={`${styles.btn} ${styles.btnDanger}`} onClick={() => { deleteDbProduct(form.id!); resetForm(); setEditingIdx(null); }}>
+                    حذف من DB
                   </button>
                 )}
               </div>
@@ -732,41 +864,54 @@ export function ProductDashboard() {
           {/* ── LIST TAB ── */}
           {activeTab === "list" && (
             <div>
-              <div className={styles.sectionTitle}>
-                {filterCat === "all" ? "جميع المنتجات" : TOP_LABELS[filterCat]}
+              <div className={styles.sectionTitle} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span>{filterCat === "all" ? "جميع المنتجات" : TOP_LABELS[filterCat]} ({dbProducts.length} من {dbTotal})</span>
+                <input
+                  type="text" placeholder="🔍 بحث بالاسم أو الموديل..."
+                  value={dbSearch} onChange={e => setDbSearch(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && fetchProducts(1, dbSearch, filterCat === "all" ? "" : filterCat)}
+                  style={{ width: 280, padding: "8px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "white", fontSize: 13 }}
+                />
               </div>
-              {filteredProducts.length === 0 ? (
+              {dbLoading ? (
+                <div className={styles.empty}><p>جاري التحميل...</p></div>
+              ) : dbProducts.length === 0 ? (
                 <div className={styles.empty}>
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
                     <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>
                   </svg>
-                  <p>لا توجد منتجات بعد — ابدأ بإضافة منتجك الأول</p>
+                  <p>لا توجد منتجات — ابدأ بإضافة منتجك الأول</p>
                 </div>
               ) : (
-                <div className={styles.productList}>
-                  {filteredProducts.map((p, i) => {
-                    const realIdx = products.indexOf(p);
-                    return (
-                      <div key={i} className={styles.productItem}>
-                        {p.imagesList && p.imagesList.length > 0 && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={p.imagesList[0].preview} alt="" className={styles.productThumb} style={{ objectFit: "cover", background: "#1a1b1f" }} />
-                        )}
+                <>
+                  <div className={styles.productList}>
+                    {dbProducts.map((p) => (
+                      <div key={p.id} className={styles.productItem}>
                         <div className={styles.productInfo}>
-                          <span className={styles.productModel}>{p.modelNumber}</span>
-                          <span className={styles.productName}>{p.nameAr}</span>
-                          <span className={styles.productMeta}>{p.brand} · {p.category}{p.featured ? " · ★ مميز" : ""}</span>
+                          <span className={styles.productModel}>{p.model_number}</span>
+                          <span className={styles.productName}>{p.name_ar}</span>
+                          <span className={styles.productMeta}>{p.brand} · {p.category}{p.featured ? " · ★ مميز" : ""}{p.price ? ` · ${p.price} ج` : ""}</span>
                         </div>
                         <div className={styles.productActions}>
                           <button className={`${styles.btn} ${styles.btnSecondary}`} style={{ padding: "6px 14px", fontSize: 12 }}
-                            onClick={() => editProduct(realIdx)}>تعديل</button>
+                            onClick={() => editDbProduct(p)}>تعديل</button>
                           <button className={`${styles.btn} ${styles.btnDanger}`} style={{ padding: "6px 14px", fontSize: 12 }}
-                            onClick={() => deleteProduct(realIdx)}>حذف</button>
+                            onClick={() => deleteDbProduct(p.id)}>حذف</button>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+                    ))}
+                  </div>
+                  {/* Pagination */}
+                  {dbTotal > 50 && (
+                    <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 16 }}>
+                      <button disabled={dbPage <= 1} className={`${styles.btn} ${styles.btnSecondary}`}
+                        onClick={() => fetchProducts(dbPage - 1, dbSearch, filterCat === "all" ? "" : filterCat)}>← السابق</button>
+                      <span style={{ padding: "8px 16px", fontSize: 13 }}>صفحة {dbPage} من {Math.ceil(dbTotal / 50)}</span>
+                      <button disabled={dbPage >= Math.ceil(dbTotal / 50)} className={`${styles.btn} ${styles.btnSecondary}`}
+                        onClick={() => fetchProducts(dbPage + 1, dbSearch, filterCat === "all" ? "" : filterCat)}>التالي →</button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
