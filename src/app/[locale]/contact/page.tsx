@@ -57,7 +57,7 @@ export default async function ContactPage({ params }: { params: { locale: Locale
               </div>
             </div>
             <a
-              href="https://maps.google.com/?q=Ahmed+Dawod+Bearings+Egypt"
+              href="https://maps.app.goo.gl/9RNp9aWWJEsAVoPA9"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.mapBlock}
