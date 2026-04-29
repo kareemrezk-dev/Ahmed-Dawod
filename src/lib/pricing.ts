@@ -9,9 +9,16 @@ export interface ProductPricing {
 }
 
 export interface Coupon {
+  id: string;
   code: string;
-  discount_percentage: number;
+  type: "percentage" | "fixed";
+  value: number;
+  min_order: number | null;
+  max_uses: number | null;
+  used_count: number;
   is_active: boolean;
+  expires_at: string | null;
+  created_at: string;
 }
 
 export type PricingOverrides = Record<string, ProductPricing>;

@@ -24,6 +24,8 @@ export function OrderSection({
   const [quantity, setQuantity] = useState(1);
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [couponStatus, setCouponStatus] = useState<"idle" | "valid" | "invalid">("idle");
+  const [couponType, setCouponType] = useState<"percentage" | "fixed">("percentage");
+  const [isValidating, setIsValidating] = useState(false);
 
   const model = getProductModelNumber(product, locale);
   const { finalPrice } = getPricingDetails(product, pricing);
@@ -35,25 +37,47 @@ export function OrderSection({
     return `#ORD-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
   };
 
-  const handleApplyCoupon = () => {
+  const handleApplyCoupon = async () => {
     const code = couponCode.trim().toUpperCase();
     if (!code) {
       setCouponStatus("idle");
       setCouponDiscount(0);
       return;
     }
-    // Hardcoded logic for DAWOD10 (10% off)
-    if (code === "DAWOD10") {
-      setCouponStatus("valid");
-      setCouponDiscount(0.10);
-    } else {
+
+    setIsValidating(true);
+    try {
+      const res = await fetch("/api/coupons/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+
+      if (data.valid && data.coupon) {
+        setCouponStatus("valid");
+        setCouponType(data.coupon.type);
+        if (data.coupon.type === "percentage") {
+          setCouponDiscount(data.coupon.value / 100);
+        } else {
+          setCouponDiscount(data.coupon.value);
+        }
+      } else {
+        setCouponStatus("invalid");
+        setCouponDiscount(0);
+      }
+    } catch {
       setCouponStatus("invalid");
       setCouponDiscount(0);
+    } finally {
+      setIsValidating(false);
     }
   };
 
   const totalBeforeDiscount = finalPrice !== null ? finalPrice * quantity : 0;
-  const discountAmount = totalBeforeDiscount * couponDiscount;
+  const discountAmount = couponType === "percentage"
+    ? totalBeforeDiscount * couponDiscount
+    : Math.min(couponDiscount, totalBeforeDiscount);
   const totalAfterDiscount = totalBeforeDiscount - discountAmount;
 
   const handleOrder = () => {
@@ -118,11 +142,18 @@ export function OrderSection({
                     placeholder={isAr ? "أدخل الكود هنا" : "Enter code"}
                     className={`${styles.couponInput} ${couponStatus === 'valid' ? styles.couponValid : ''} ${couponStatus === 'invalid' ? styles.couponInvalid : ''}`}
                   />
-                  <button type="button" className={styles.couponBtn} onClick={handleApplyCoupon}>
-                    {isAr ? "تطبيق" : "Apply"}
+                  <button type="button" className={styles.couponBtn} onClick={handleApplyCoupon} disabled={isValidating}>
+                    {isValidating ? "..." : (isAr ? "تطبيق" : "Apply")}
                   </button>
                 </div>
-                {couponStatus === "valid" && <span className={styles.couponSuccessMsg}>{isAr ? `تم تفعيل الخصم (${couponDiscount * 100}%) 🎉` : `Discount applied (${couponDiscount * 100}%) 🎉`}</span>}
+                {couponStatus === "valid" && (
+                  <span className={styles.couponSuccessMsg}>
+                    {couponType === "percentage"
+                      ? (isAr ? `تم تفعيل الخصم (${couponDiscount * 100}%) 🎉` : `Discount applied (${couponDiscount * 100}%) 🎉`)
+                      : (isAr ? `تم تفعيل خصم ${couponDiscount} جنيه 🎉` : `${couponDiscount} EGP discount applied 🎉`)
+                    }
+                  </span>
+                )}
                 {couponStatus === "invalid" && <span className={styles.couponErrorMsg}>{isAr ? "كود الخصم غير صحيح" : "Invalid coupon code"}</span>}
               </div>
 
