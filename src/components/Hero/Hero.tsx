@@ -16,7 +16,7 @@ export function Hero({ locale, dict }: HeroProps) {
       {/* Background Image Setup */}
       <div className={styles.bgWrapper}>
         <video
-          src="https://videos.pexels.com/video-files/3205797/3205797-uhd_2560_1440_25fps.mp4"
+          src="/videos/hero-bg.mp4"
           autoPlay
           loop
           muted
