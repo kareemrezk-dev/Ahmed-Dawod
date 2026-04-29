@@ -12,6 +12,7 @@ import { SearchBar } from "@/components/SearchBar/SearchBar";
 import { Footer } from "@/components/Footer/Footer";
 import { BackToTop } from "@/components/BackToTop/BackToTop";
 import { WhatsAppButton } from "@/components/WhatsAppButton/WhatsAppButton";
+import { AiAssistant } from "@/components/AiAssistant/AiAssistant";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cairo = Cairo({ subsets: ["arabic", "latin"], variable: "--font-cairo" });
@@ -67,8 +68,10 @@ export default async function LocaleLayout({
                 : "Hello, I have an inquiry about your products."
             }
           />
+          <AiAssistant locale={locale} dict={dict} />
         </CartProvider>
       </body>
     </html>
   );
 }
+

@@ -171,4 +171,24 @@ export const en: Dictionary = {
       { question: "What's the difference between genuine and counterfeit bearings?", answer: "Genuine bearings feature superior manufacturing precision and last 3-5 times longer. Counterfeit bearings can cause frequent breakdowns and damage to machinery. All our products are 100% genuine with manufacturer certificates." },
     ],
   },
+  aiAssistant: {
+    title: "Ahmed Dawod Assistant",
+    subtitle: "Your smart industrial products advisor",
+    welcomeMessage: "Hello! 👋 I'm Ahmed Dawod's AI assistant.\n\nI can help you find the right product — whether bearings, linear motion, ball screws, or any spare part.\n\nYou can also upload a photo and I'll identify the product! 📷",
+    inputPlaceholder: "Type your question here…",
+    send: "Send",
+    uploadImage: "Upload image to search",
+    imageUploaded: "📷 Image uploaded for analysis",
+    imageTooLarge: "Image is too large! Maximum size is 10MB.",
+    dropImage: "Drop image here",
+    errorMessage: "Sorry, something went wrong. Try again or contact us on WhatsApp 01065445000",
+    poweredBy: "Powered by AI ✨",
+    suggestions: [
+      "I need a 6205 bearing",
+      "What's the difference between SKF and NSK?",
+      "Do you have linear bearings?",
+      "I need bearings for a CNC machine",
+    ],
+  },
 };
+

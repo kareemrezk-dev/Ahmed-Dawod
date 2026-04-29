@@ -137,4 +137,18 @@ export interface Dictionary {
     title: string;
     items: { question: string; answer: string }[];
   };
+  aiAssistant: {
+    title: string;
+    subtitle: string;
+    welcomeMessage: string;
+    inputPlaceholder: string;
+    send: string;
+    uploadImage: string;
+    imageUploaded: string;
+    imageTooLarge: string;
+    dropImage: string;
+    errorMessage: string;
+    poweredBy: string;
+    suggestions: string[];
+  };
 }
