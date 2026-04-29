@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter, Cairo } from "next/font/google";
 import { notFound } from "next/navigation";
+import dynamic from "next/dynamic";
+import Script from "next/script";
 import { locales, localeConfig, type Locale } from "@/lib/i18n";
+import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { generateLocaleMetadata } from "@/lib/generateMetadata";
 import { OrganizationJsonLd } from "@/lib/OrganizationJsonLd";
 import { getDictionary } from "@/lib/getDictionary";
@@ -10,14 +13,24 @@ import { PromoBanner } from "@/components/PromoBanner/PromoBanner";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { SearchBar } from "@/components/SearchBar/SearchBar";
 import { Footer } from "@/components/Footer/Footer";
-import { BackToTop } from "@/components/BackToTop/BackToTop";
-import { WhatsAppButton } from "@/components/WhatsAppButton/WhatsAppButton";
-import { AiAssistant } from "@/components/AiAssistant/AiAssistant";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const cairo = Cairo({ subsets: ["arabic", "latin"], variable: "--font-cairo" });
-
 import { CartProvider } from "@/lib/CartContext";
+
+// ── Lazy-loaded client-only components (not needed for first paint) ──────────
+const BackToTop = dynamic(
+  () => import("@/components/BackToTop/BackToTop").then((m) => m.BackToTop),
+  { ssr: false }
+);
+const WhatsAppButton = dynamic(
+  () => import("@/components/WhatsAppButton/WhatsAppButton").then((m) => m.WhatsAppButton),
+  { ssr: false }
+);
+const AiAssistant = dynamic(
+  () => import("@/components/AiAssistant/AiAssistant").then((m) => m.AiAssistant),
+  { ssr: false }
+);
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const cairo = Cairo({ subsets: ["arabic", "latin"], variable: "--font-cairo", display: "swap" });
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -49,21 +62,27 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir}>
       <head>
+        <meta name="theme-color" content="#2A5895" />
+        <meta name="color-scheme" content="light" />
         <OrganizationJsonLd locale={locale} />
         <link rel="help" href="/llms.txt" type="text/plain" title="LLM Site Info" />
         <link rel="alternate" href="/llms-full.txt" type="text/plain" title="Full Product Catalog for AI" />
         <link rel="author" href="/.well-known/ai-plugin.json" type="application/json" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js');
-                });
-              }
-            `,
-          }}
+        {/* Google Analytics 4 */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
         />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
       </head>
       <body className={`${inter.variable} ${cairo.variable}`}>
         <CartProvider>
@@ -84,6 +103,13 @@ export default async function LocaleLayout({
           />
           <AiAssistant locale={locale} dict={dict} />
         </CartProvider>
+        <Script
+          id="sw-register"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}`,
+          }}
+        />
       </body>
     </html>
   );

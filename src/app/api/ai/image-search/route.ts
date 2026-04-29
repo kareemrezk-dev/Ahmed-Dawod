@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import {
   products,
   getCategoryLabel,
@@ -167,6 +168,9 @@ function findMatchingProducts(analysis: {
 
 // ─── Route handler ────────────────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, RATE_LIMITS.imageSearch);
+  if (limited) return limited;
+
   try {
     const { image, locale = "ar" } = await request.json();
 

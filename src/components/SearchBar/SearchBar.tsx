@@ -5,6 +5,7 @@ import Image from "next/image";
 import { smartSearch, getProductName, getCategoryLabel, getProductImagePath, getProductImageAlt, type Product } from "@/lib/products";
 import type { Dictionary } from "@/dictionaries/types";
 import type { Locale } from "@/lib/i18n";
+import { trackSearch } from "@/lib/analytics";
 import styles from "./SearchBar.module.css";
 
 interface SearchBarProps {
@@ -30,6 +31,7 @@ export function SearchBar({ locale, dict }: SearchBarProps) {
       setResults(res);
       setOpen(res.length > 0);
       setActiveIdx(-1);
+      if (res.length > 0) trackSearch(query, res.length);
     }, 180);
     return () => clearTimeout(t);
   }, [query]);

@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, RATE_LIMITS.adminLogin);
+  if (limited) return limited;
+
   try {
     const { password } = await request.json();
     if (!password) {

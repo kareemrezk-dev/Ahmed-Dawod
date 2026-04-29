@@ -11,7 +11,7 @@ interface OrderNotificationData {
   orderNumber: string;
   customerName: string;
   customerPhone: string;
-  governorate: string;
+
   address: string;
   paymentMethod: string;
   items: Array<{
@@ -55,7 +55,7 @@ export async function sendOrderNotification(data: OrderNotificationData): Promis
         <table style="width:100%;font-size:14px;margin-bottom:20px">
           <tr><td style="padding:4px 0;color:#6b7280;width:100px">الاسم:</td><td style="padding:4px 0;font-weight:600">${data.customerName}</td></tr>
           <tr><td style="padding:4px 0;color:#6b7280">التليفون:</td><td style="padding:4px 0;font-weight:600;direction:ltr;text-align:right"><a href="tel:${data.customerPhone}" style="color:#2A5895">${data.customerPhone}</a></td></tr>
-          ${data.governorate ? `<tr><td style="padding:4px 0;color:#6b7280">المحافظة:</td><td style="padding:4px 0">${data.governorate}</td></tr>` : ""}
+
           ${data.address ? `<tr><td style="padding:4px 0;color:#6b7280">العنوان:</td><td style="padding:4px 0">${data.address}</td></tr>` : ""}
           <tr><td style="padding:4px 0;color:#6b7280">الدفع:</td><td style="padding:4px 0">${data.paymentMethod}</td></tr>
         </table>

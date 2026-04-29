@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { validateCoupon } from "@/lib/pricing.server";
 
 export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, RATE_LIMITS.coupons);
+  if (limited) return limited;
+
   try {
     const { code } = await request.json();
 

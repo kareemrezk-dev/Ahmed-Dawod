@@ -42,7 +42,7 @@ export function BrandsSlider({ locale, dict }: BrandsSliderProps) {
                   width={120}
                   height={40}
                   className={styles.logoImg}
-                  unoptimized
+                  loading="lazy"
                 />
               </div>
             </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Product } from "@/lib/products";
 import type { Locale } from "@/lib/i18n";
 import { formatPrice, getPricingDetails, type ProductPricing } from "@/lib/pricing";
+import { trackOrderModalOpen, trackOrderSubmit, trackCouponApply, trackWhatsAppClick } from "@/lib/analytics";
 import styles from "./OrderSection.module.css";
 import { getProductModelNumber } from "@/lib/products";
 
@@ -30,7 +31,7 @@ export function OrderSection({
   // Customer info
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
-  const [customerGov, setCustomerGov] = useState("");
+
   const [customerAddress, setCustomerAddress] = useState("");
 
   // Order state
@@ -63,6 +64,7 @@ export function OrderSection({
       if (data.valid && data.coupon) {
         setCouponStatus("valid");
         setCouponType(data.coupon.type);
+        trackCouponApply(code, true);
         if (data.coupon.type === "percentage") {
           setCouponDiscount(data.coupon.value / 100);
         } else {
@@ -71,6 +73,7 @@ export function OrderSection({
       } else {
         setCouponStatus("invalid");
         setCouponDiscount(0);
+        trackCouponApply(code, false);
       }
     } catch {
       setCouponStatus("invalid");
@@ -115,11 +118,7 @@ export function OrderSection({
         payment_method: paymentMethod,
         coupon_code: couponStatus === "valid" ? couponCode : null,
         discount_amount: discountAmount,
-        shipping_cost: 0,
-        shipping: {
-          governorate: customerGov,
-          address: customerAddress,
-        },
+        address: customerAddress,
       };
 
       const res = await fetch("/api/orders", {
@@ -132,6 +131,7 @@ export function OrderSection({
 
       if (res.ok && data.success) {
         setOrderResult({ order_number: data.order_number, total: data.total });
+        trackOrderSubmit(data.order_number, data.total, paymentMethod);
 
         // Send to WhatsApp with order number
         let totalMsg = isAr ? "غير محدد" : "N/A";
@@ -142,11 +142,12 @@ export function OrderSection({
         }
 
         const waMsg = isAr
-          ? `السلام عليكم، أرغب في تأكيد طلبي:\n📋 رقم الطلب: ${data.order_number}\n🔧 الموديل: ${model}\n📦 الكمية: ${quantity}\n💰 الإجمالي: ${totalMsg}\n${couponStatus === "valid" ? `🎟 كود الخصم: ${couponCode} (مفعل)\n` : ""}💳 الدفع: ${paymentMethod}\n👤 الاسم: ${customerName}\n📞 التليفون: ${customerPhone}${customerGov ? `\n📍 المحافظة: ${customerGov}` : ""}${customerAddress ? `\n🏠 العنوان: ${customerAddress}` : ""}`
+          ? `السلام عليكم، أرغب في تأكيد طلبي:\n📋 رقم الطلب: ${data.order_number}\n🔧 الموديل: ${model}\n📦 الكمية: ${quantity}\n💰 الإجمالي: ${totalMsg}\n${couponStatus === "valid" ? `🎟 كود الخصم: ${couponCode} (مفعل)\n` : ""}💳 الدفع: ${paymentMethod}\n👤 الاسم: ${customerName}\n📞 التليفون: ${customerPhone}${customerAddress ? `\n🏠 العنوان: ${customerAddress}` : ""}`
           : `Hello, I'd like to confirm my order:\n📋 Order: ${data.order_number}\n🔧 Model: ${model}\n📦 Qty: ${quantity}\n💰 Total: ${totalMsg}\n${couponStatus === "valid" ? `🎟 Coupon: ${couponCode} (Applied)\n` : ""}💳 Payment: ${paymentMethod}\n👤 Name: ${customerName}\n📞 Phone: ${customerPhone}`;
 
         const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMsg)}`;
         window.open(waUrl, "_blank");
+        trackWhatsAppClick("order_form");
       } else {
         alert(data.error || (isAr ? "حدث خطأ في إنشاء الطلب" : "Error creating order"));
       }
@@ -164,7 +165,7 @@ export function OrderSection({
 
   return (
     <div className={styles.orderSection}>
-      <button className={styles.orderBtn} onClick={() => setIsModalOpen(true)}>
+      <button className={styles.orderBtn} onClick={() => { setIsModalOpen(true); trackOrderModalOpen(product.slug); }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
         </svg>
@@ -236,16 +237,6 @@ export function OrderSection({
                     />
                   </div>
 
-                  <div className={styles.inputGroup}>
-                    <label>{isAr ? "المحافظة" : "Governorate"}</label>
-                    <input
-                      type="text"
-                      value={customerGov}
-                      onChange={(e) => setCustomerGov(e.target.value)}
-                      placeholder={isAr ? "مثال: القاهرة" : "e.g. Cairo"}
-                      className={styles.textInput}
-                    />
-                  </div>
 
                   <div className={styles.inputGroup}>
                     <label>{isAr ? "العنوان بالتفصيل" : "Detailed Address"}</label>

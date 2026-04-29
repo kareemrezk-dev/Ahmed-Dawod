@@ -1,0 +1,377 @@
+/* ─── Admin Dashboard Overview ──────────────────────────────────────────────── */
+
+.dashWrap {
+  padding: 0;
+  animation: dashFadeIn 0.4s ease both;
+}
+
+@keyframes dashFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Stats Grid ── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.statCard {
+  background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.statCard:hover {
+  border-color: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
+}
+
+.statCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  opacity: 0.06;
+  filter: blur(20px);
+}
+
+.statCardBlue::before { background: #3b82f6; }
+.statCardGreen::before { background: #10b981; }
+.statCardAmber::before { background: #f59e0b; }
+.statCardPurple::before { background: #8b5cf6; }
+
+.statIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statIconBlue { background: rgba(59,130,246,0.15); color: #60a5fa; }
+.statIconGreen { background: rgba(16,185,129,0.15); color: #34d399; }
+.statIconAmber { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.statIconPurple { background: rgba(139,92,246,0.15); color: #a78bfa; }
+
+.statLabel {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.statValue {
+  font-size: 26px;
+  font-weight: 800;
+  color: #f0f0f0;
+  letter-spacing: -0.5px;
+  font-family: 'IBM Plex Mono', 'Cairo', monospace;
+}
+
+.statSub {
+  font-size: 11px;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statSubGreen { color: #10b981; }
+
+/* ── Section Title ── */
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #d1d5db;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionTitle svg { opacity: 0.5; }
+
+/* ── Two Column Layout ── */
+.twoCol {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+/* ── Chart ── */
+.chartCard {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.chartBars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 140px;
+  padding-top: 10px;
+}
+
+.chartBar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.chartBarFill {
+  width: 100%;
+  min-height: 4px;
+  background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.4s ease;
+  position: relative;
+}
+
+.chartBarFill:hover {
+  opacity: 0.85;
+}
+
+.chartBarLabel {
+  font-size: 9px;
+  color: #4b5563;
+  white-space: nowrap;
+}
+
+.chartBarValue {
+  font-size: 9px;
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+/* ── Mini cards (payment, status) ── */
+.miniCard {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.miniList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.miniRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.miniRow:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.miniLabel {
+  font-size: 13px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.miniValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e5e7eb;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.statusPending { background: #f59e0b; }
+.statusConfirmed { background: #3b82f6; }
+.statusShipped { background: #8b5cf6; }
+.statusDelivered { background: #10b981; }
+.statusCancelled { background: #ef4444; }
+
+/* ── Top Products ── */
+.topProductsCard {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 28px;
+}
+
+.topTable {
+  width: 100%;
+  font-size: 13px;
+  border-collapse: collapse;
+}
+
+.topTable th {
+  text-align: right;
+  padding: 8px 12px;
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.topTable td {
+  padding: 10px 12px;
+  color: #d1d5db;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.topTable tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+.topRank {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(59,130,246,0.1);
+  color: #60a5fa;
+}
+
+.topRank1 { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.topRank2 { background: rgba(156,163,175,0.15); color: #9ca3af; }
+.topRank3 { background: rgba(180,83,9,0.15); color: #d97706; }
+
+/* ── Recent Orders ── */
+.recentCard {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.recentTable {
+  width: 100%;
+  font-size: 13px;
+  border-collapse: collapse;
+}
+
+.recentTable th {
+  text-align: right;
+  padding: 8px 12px;
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.recentTable td {
+  padding: 10px 12px;
+  color: #d1d5db;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.recentTable tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+.orderNum {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.statusBadgePending { background: rgba(245,158,11,0.12); color: #fbbf24; }
+.statusBadgeConfirmed { background: rgba(59,130,246,0.12); color: #60a5fa; }
+.statusBadgeShipped { background: rgba(139,92,246,0.12); color: #a78bfa; }
+.statusBadgeDelivered { background: rgba(16,185,129,0.12); color: #34d399; }
+.statusBadgeCancelled { background: rgba(239,68,68,0.12); color: #f87171; }
+
+.totalBadge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+
+.timeAgo {
+  font-size: 11px;
+  color: #4b5563;
+}
+
+/* ── Loading ── */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+  gap: 16px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255,255,255,0.08);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .twoCol { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .statsGrid { grid-template-columns: 1fr; }
+}

@@ -7,6 +7,7 @@
 }
 
 :root {
+  color-scheme: light;
   --color-background:    #ffffff;
   --color-section:       #f0f4ff;
   --color-primary:       #2A5895;
@@ -31,6 +32,16 @@
 }
 
 html { scroll-behavior: smooth; }
+
+/* ── Keyboard Accessibility ──────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
 
 body {
   background-color: var(--color-background);

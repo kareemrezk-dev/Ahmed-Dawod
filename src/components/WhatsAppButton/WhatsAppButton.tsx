@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { trackWhatsAppClick } from "@/lib/analytics";
 import styles from "./WhatsAppButton.module.css";
 
 interface WhatsAppButtonProps {
@@ -46,6 +47,7 @@ export function WhatsAppButton({ whatsappNumber, label, message }: WhatsAppButto
       className={`${styles.btn} ${visible ? styles.visible : ""} ${pulse ? styles.pulse : ""}`}
       aria-label={label ?? "WhatsApp"}
       title={label ?? "WhatsApp"}
+      onClick={() => trackWhatsAppClick("floating_button")}
     >
       <svg
         className={styles.icon}

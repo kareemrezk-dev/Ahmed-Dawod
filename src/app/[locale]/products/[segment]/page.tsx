@@ -90,7 +90,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         type: "website",
         siteName: "Ahmed Dawod Bearings",
         url: `${BASE}/${locale}/products/${segment}`,
-        images: [{ url: `${BASE}${getProductImagePath(product)}`, width: 600, height: 600, alt: title }],
+        images: [{ url: (() => { const img = getProductImagePath(product); return img.startsWith("http") ? img : `${BASE}${img}`; })(), width: 600, height: 600, alt: title }],
       },
       twitter: { card: "summary_large_image", title, description },
       robots: { index: true, follow: true },
@@ -171,7 +171,29 @@ async function ProductDetailView({ product, locale }: { product: Product; locale
   const BASE = "https://ahmeddawod.com";
   const productPricing = pricingOverrides[product.slug] ?? null;
   const { finalPrice } = getPricingDetails(product, productPricing);
-  
+
+  // ── JSON-LD: Product Schema ──────────────────────────────────────────────
+  const productImageUrl = (() => {
+    const img = getProductImagePath(product);
+    // Supabase URLs are already absolute
+    if (img.startsWith("http")) return img;
+    return `${BASE}${img}`;
+  })();
+
+  const allImageUrls = (product.images && product.images.length > 0
+    ? product.images
+    : [getProductImagePath(product)]
+  ).map((img) => (img.startsWith("http") ? img : `${BASE}${img}`));
+
+  // Extract key specs for additionalProperty
+  const specProperties = product.specs
+    .filter((s) => s.value && s.value.trim())
+    .map((s) => ({
+      "@type": "PropertyValue",
+      name: s.labelEn,
+      value: s.value,
+    }));
+
   const productSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -181,22 +203,39 @@ async function ProductDetailView({ product, locale }: { product: Product; locale
     sku: model,
     mpn: product.modelNumber,
     model: model,
-    category: product.category,
-    image: `${BASE}${getProductImagePath(product)}`,
+    category: getCategoryLabel(product.category, "en"),
+    image: allImageUrls,
+    url: `${BASE}/${locale}/products/${product.slug}`,
     manufacturer: { "@type": "Organization", name: product.brand },
+    itemCondition: "https://schema.org/NewCondition",
+    ...(specProperties.length > 0
+      ? { additionalProperty: specProperties }
+      : {}),
     offers: {
       "@type": "Offer",
       url: `${BASE}/${locale}/products/${product.slug}`,
       availability: "https://schema.org/InStock",
-      areaServed: "EG",
-      ...(finalPrice !== null ? { priceCurrency: "EGP", price: finalPrice } : {}),
+      itemCondition: "https://schema.org/NewCondition",
+      areaServed: { "@type": "Country", name: "EG" },
       seller: {
         "@type": "Organization",
         name: "Ahmed Dawod Bearings",
-        url: "https://ahmeddawod.com",
+        url: BASE,
       },
+      ...(finalPrice !== null
+        ? {
+            priceCurrency: "EGP",
+            price: finalPrice,
+            priceValidUntil: new Date(
+              Date.now() + 90 * 24 * 60 * 60 * 1000
+            )
+              .toISOString()
+              .split("T")[0],
+          }
+        : {}),
     },
   };
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -207,6 +246,7 @@ async function ProductDetailView({ product, locale }: { product: Product; locale
       ...(item.href ? { item: `${BASE}${item.href}` } : {}),
     })),
   };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />

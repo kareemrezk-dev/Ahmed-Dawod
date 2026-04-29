@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import {
   products,
   searchProducts,
@@ -280,6 +281,9 @@ function localFallback(userMessage: string, locale: string): string {
 
 // ─── Route handler ────────────────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, RATE_LIMITS.ai);
+  if (limited) return limited;
+
   try {
     const { messages, locale = "ar" } = await request.json();
 

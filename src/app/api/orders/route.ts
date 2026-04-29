@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { createClient } from "@supabase/supabase-js";
 import { sendOrderNotification } from "@/lib/email";
 
@@ -18,12 +19,15 @@ function generateOrderNumber(): string {
 }
 
 export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, RATE_LIMITS.orders);
+  if (limited) return limited;
+
   try {
     const body = await request.json();
     const supabase = getServiceClient();
 
     // Validate required fields
-    const { customer, items, payment_method, coupon_code, notes, shipping } = body;
+    const { customer, items, payment_method, coupon_code, notes, address } = body;
 
     if (!customer?.name || !customer?.phone) {
       return NextResponse.json(
@@ -54,9 +58,7 @@ export async function POST(request: NextRequest) {
         .from("customers")
         .update({
           name: customer.name,
-          governorate: shipping?.governorate || "",
-          city: shipping?.city || "",
-          address: shipping?.address || "",
+          address: address || "",
         })
         .eq("id", existingCustomer.id);
       customerId = existingCustomer.id;
@@ -68,9 +70,7 @@ export async function POST(request: NextRequest) {
           name: customer.name,
           phone: customer.phone,
           email: customer.email || "",
-          governorate: shipping?.governorate || "",
-          city: shipping?.city || "",
-          address: shipping?.address || "",
+          address: address || "",
         })
         .select("id")
         .single();
@@ -91,8 +91,7 @@ export async function POST(request: NextRequest) {
       0
     );
     const discountAmount = body.discount_amount || 0;
-    const shippingCost = body.shipping_cost || 0;
-    const total = subtotal - discountAmount + shippingCost;
+    const total = subtotal - discountAmount;
 
     // 3. Create order
     const orderNumber = generateOrderNumber();
@@ -105,13 +104,10 @@ export async function POST(request: NextRequest) {
         payment_method: payment_method || "الدفع عند الاستلام",
         payment_status: "pending",
         subtotal,
-        shipping_cost: shippingCost,
         discount_amount: discountAmount,
         coupon_code: coupon_code || null,
         total,
-        shipping_governorate: shipping?.governorate || "",
-        shipping_city: shipping?.city || "",
-        shipping_address: shipping?.address || "",
+        shipping_address: address || "",
         shipping_phone: customer.phone,
         notes: notes || "",
       })
@@ -164,8 +160,7 @@ export async function POST(request: NextRequest) {
       orderNumber: order.order_number,
       customerName: customer.name,
       customerPhone: customer.phone,
-      governorate: shipping?.governorate || "",
-      address: shipping?.address || "",
+      address: address || "",
       paymentMethod: payment_method || "الدفع عند الاستلام",
       items: items.map((item: { product_name_ar: string; quantity: number; unit_price: number }) => ({
         name: item.product_name_ar,
