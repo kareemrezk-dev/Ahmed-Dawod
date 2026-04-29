@@ -27,15 +27,21 @@ export function OrderSection({
   const [couponType, setCouponType] = useState<"percentage" | "fixed">("percentage");
   const [isValidating, setIsValidating] = useState(false);
 
+  // Customer info
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [customerGov, setCustomerGov] = useState("");
+  const [customerAddress, setCustomerAddress] = useState("");
+
+  // Order state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderResult, setOrderResult] = useState<{ order_number: string; total: number } | null>(null);
+
   const model = getProductModelNumber(product, locale);
   const { finalPrice } = getPricingDetails(product, pricing);
 
   const isAr = locale === "ar";
   const waNumber = dict.company.whatsappIntl.replace(/\D/g, "");
-
-  const generateOrderId = () => {
-    return `#ORD-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
-  };
 
   const handleApplyCoupon = async () => {
     const code = couponCode.trim().toUpperCase();
@@ -80,25 +86,80 @@ export function OrderSection({
     : Math.min(couponDiscount, totalBeforeDiscount);
   const totalAfterDiscount = totalBeforeDiscount - discountAmount;
 
-  const handleOrder = () => {
-    const orderId = generateOrderId();
-    
-    let totalMsg = isAr ? "غير محدد" : "N/A";
-    if (finalPrice !== null) {
-      if (couponDiscount > 0) {
-        totalMsg = `${formatPrice(totalAfterDiscount, locale)} (${isAr ? "بعد الخصم" : "after discount"})`;
-      } else {
-        totalMsg = formatPrice(totalBeforeDiscount, locale);
-      }
+  const handleOrder = async () => {
+    // Validate customer info
+    if (!customerName.trim() || !customerPhone.trim()) {
+      alert(isAr ? "الرجاء إدخال الاسم ورقم التليفون" : "Please enter name and phone number");
+      return;
     }
 
-    const waMsg = isAr
-      ? `السلام عليكم، أرغب في طلب المنتج:\n- رقم الطلب: ${orderId}\n- الموديل: ${model}\n- الكمية: ${quantity}\n- الإجمالي: ${totalMsg}\n- كود الخصم: ${couponStatus === 'valid' ? couponCode + " (مفعل)" : "لا يوجد"}\n- طريقة الدفع: ${paymentMethod}`
-      : `Hello, I'd like to order:\n- Order ID: ${orderId}\n- Model: ${model}\n- Quantity: ${quantity}\n- Total: ${totalMsg}\n- Coupon: ${couponStatus === 'valid' ? couponCode + " (Applied)" : "None"}\n- Payment: ${paymentMethod}`;
+    setIsSubmitting(true);
 
-    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMsg)}`;
-    window.open(waUrl, "_blank");
+    try {
+      // Save order to database
+      const orderPayload = {
+        customer: {
+          name: customerName.trim(),
+          phone: customerPhone.trim(),
+        },
+        items: [
+          {
+            product_slug: product.slug,
+            product_name_ar: product.nameAr,
+            product_name_en: product.nameEn,
+            product_brand: product.brand,
+            quantity,
+            unit_price: finalPrice || 0,
+          },
+        ],
+        payment_method: paymentMethod,
+        coupon_code: couponStatus === "valid" ? couponCode : null,
+        discount_amount: discountAmount,
+        shipping_cost: 0,
+        shipping: {
+          governorate: customerGov,
+          address: customerAddress,
+        },
+      };
+
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderPayload),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setOrderResult({ order_number: data.order_number, total: data.total });
+
+        // Send to WhatsApp with order number
+        let totalMsg = isAr ? "غير محدد" : "N/A";
+        if (finalPrice !== null) {
+          totalMsg = couponDiscount > 0
+            ? `${formatPrice(totalAfterDiscount, locale)} (${isAr ? "بعد الخصم" : "after discount"})`
+            : formatPrice(totalBeforeDiscount, locale);
+        }
+
+        const waMsg = isAr
+          ? `السلام عليكم، أرغب في تأكيد طلبي:\n📋 رقم الطلب: ${data.order_number}\n🔧 الموديل: ${model}\n📦 الكمية: ${quantity}\n💰 الإجمالي: ${totalMsg}\n${couponStatus === "valid" ? `🎟 كود الخصم: ${couponCode} (مفعل)\n` : ""}💳 الدفع: ${paymentMethod}\n👤 الاسم: ${customerName}\n📞 التليفون: ${customerPhone}${customerGov ? `\n📍 المحافظة: ${customerGov}` : ""}${customerAddress ? `\n🏠 العنوان: ${customerAddress}` : ""}`
+          : `Hello, I'd like to confirm my order:\n📋 Order: ${data.order_number}\n🔧 Model: ${model}\n📦 Qty: ${quantity}\n💰 Total: ${totalMsg}\n${couponStatus === "valid" ? `🎟 Coupon: ${couponCode} (Applied)\n` : ""}💳 Payment: ${paymentMethod}\n👤 Name: ${customerName}\n📞 Phone: ${customerPhone}`;
+
+        const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMsg)}`;
+        window.open(waUrl, "_blank");
+      } else {
+        alert(data.error || (isAr ? "حدث خطأ في إنشاء الطلب" : "Error creating order"));
+      }
+    } catch {
+      alert(isAr ? "خطأ في الاتصال بالسيرفر" : "Server connection error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const closeAndReset = () => {
     setIsModalOpen(false);
+    setOrderResult(null);
   };
 
   return (
@@ -111,96 +172,182 @@ export function OrderSection({
       </button>
 
       {isModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
+        <div className={styles.modalOverlay} onClick={closeAndReset}>
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h3>{isAr ? "إكمال الطلب عبر واتساب" : "Complete WhatsApp Order"}</h3>
-              <button className={styles.closeModal} onClick={() => setIsModalOpen(false)}>✕</button>
-            </div>
             
-            <div className={styles.modalBody}>
-              <div className={styles.inputGroup}>
-                <label>{isAr ? "الكمية المطلوبة" : "Quantity"}</label>
-                <div className={styles.quantitySelector}>
-                  <button type="button" aria-label="Decrease quantity" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                  <span className={styles.quantityValue}>{quantity}</span>
-                  <button type="button" aria-label="Increase quantity" onClick={() => setQuantity(quantity + 1)}>+</button>
+            {/* Success screen */}
+            {orderResult ? (
+              <>
+                <div className={styles.modalHeader}>
+                  <h3>{isAr ? "تم إنشاء الطلب بنجاح! ✅" : "Order Created! ✅"}</h3>
+                  <button className={styles.closeModal} onClick={closeAndReset}>✕</button>
                 </div>
-              </div>
-
-              <div className={styles.inputGroup}>
-                <label>{isAr ? "كود الخصم (إن وجد)" : "Coupon Code (Optional)"}</label>
-                <div className={styles.couponRow}>
-                  <input 
-                    type="text" 
-                    value={couponCode} 
-                    onChange={(e) => {
-                      setCouponCode(e.target.value.toUpperCase());
-                      setCouponStatus("idle");
-                      setCouponDiscount(0);
-                    }} 
-                    placeholder={isAr ? "أدخل الكود هنا" : "Enter code"}
-                    className={`${styles.couponInput} ${couponStatus === 'valid' ? styles.couponValid : ''} ${couponStatus === 'invalid' ? styles.couponInvalid : ''}`}
-                  />
-                  <button type="button" className={styles.couponBtn} onClick={handleApplyCoupon} disabled={isValidating}>
-                    {isValidating ? "..." : (isAr ? "تطبيق" : "Apply")}
+                <div className={styles.modalBody}>
+                  <div className={styles.orderSuccessBox}>
+                    <div className={styles.orderSuccessIcon}>🎉</div>
+                    <p className={styles.orderSuccessNumber}>
+                      {isAr ? "رقم الطلب:" : "Order Number:"} <strong>{orderResult.order_number}</strong>
+                    </p>
+                    <p className={styles.orderSuccessTotal}>
+                      {isAr ? "الإجمالي:" : "Total:"} <strong>{formatPrice(orderResult.total, locale)}</strong>
+                    </p>
+                    <p className={styles.orderSuccessNote}>
+                      {isAr
+                        ? "تم فتح واتساب لتأكيد الطلب. إذا لم يفتح، اضغط الزر أسفل."
+                        : "WhatsApp was opened to confirm. If not, click below."}
+                    </p>
+                  </div>
+                </div>
+                <div className={styles.modalFooter}>
+                  <button className={styles.confirmBtn} onClick={closeAndReset}>
+                    {isAr ? "إغلاق" : "Close"}
                   </button>
                 </div>
-                {couponStatus === "valid" && (
-                  <span className={styles.couponSuccessMsg}>
-                    {couponType === "percentage"
-                      ? (isAr ? `تم تفعيل الخصم (${couponDiscount * 100}%) 🎉` : `Discount applied (${couponDiscount * 100}%) 🎉`)
-                      : (isAr ? `تم تفعيل خصم ${couponDiscount} جنيه 🎉` : `${couponDiscount} EGP discount applied 🎉`)
-                    }
-                  </span>
-                )}
-                {couponStatus === "invalid" && <span className={styles.couponErrorMsg}>{isAr ? "كود الخصم غير صحيح" : "Invalid coupon code"}</span>}
-              </div>
-
-              <div className={styles.inputGroup}>
-                <label>{isAr ? "طريقة الدفع" : "Payment Method"}</label>
-                <div className={styles.radioGroup}>
-                  <label className={styles.radioLabel}>
-                    <input type="radio" name="payment" value={isAr ? "الدفع عند الاستلام" : "Cash on Delivery"} checked={paymentMethod === (isAr ? "الدفع عند الاستلام" : "Cash on Delivery")} onChange={(e) => setPaymentMethod(e.target.value)} />
-                    {isAr ? "الدفع عند الاستلام 💵" : "Cash on Delivery 💵"}
-                  </label>
-                  <label className={styles.radioLabel}>
-                    <input type="radio" name="payment" value={isAr ? "إنستا باي" : "InstaPay"} checked={paymentMethod === (isAr ? "إنستا باي" : "InstaPay")} onChange={(e) => setPaymentMethod(e.target.value)} />
-                    {isAr ? "إنستا باي ⚡" : "InstaPay ⚡"}
-                  </label>
-                  <label className={styles.radioLabel}>
-                    <input type="radio" name="payment" value={isAr ? "فودافون كاش" : "Vodafone Cash"} checked={paymentMethod === (isAr ? "فودافون كاش" : "Vodafone Cash")} onChange={(e) => setPaymentMethod(e.target.value)} />
-                    {isAr ? "فودافون كاش 📱" : "Vodafone Cash 📱"}
-                  </label>
+              </>
+            ) : (
+              <>
+                <div className={styles.modalHeader}>
+                  <h3>{isAr ? "إكمال الطلب عبر واتساب" : "Complete WhatsApp Order"}</h3>
+                  <button className={styles.closeModal} onClick={closeAndReset}>✕</button>
                 </div>
-              </div>
-
-              {/* Order Summary inside Modal */}
-              {finalPrice !== null && (
-                <div className={styles.orderSummaryBox}>
-                  <div className={styles.summaryRow}>
-                    <span>{isAr ? "السعر الأساسي:" : "Base Price:"}</span>
-                    <span>{formatPrice(totalBeforeDiscount, locale)}</span>
+            
+                <div className={styles.modalBody}>
+                  {/* Customer Info */}
+                  <div className={styles.inputGroup}>
+                    <label>{isAr ? "الاسم *" : "Name *"}</label>
+                    <input
+                      type="text"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      placeholder={isAr ? "أدخل اسمك" : "Enter your name"}
+                      className={styles.textInput}
+                    />
                   </div>
-                  {couponDiscount > 0 && (
-                    <div className={styles.summaryRowDiscount}>
-                      <span>{isAr ? "قيمة الخصم:" : "Discount:"}</span>
-                      <span dir="ltr">-{formatPrice(discountAmount, locale)}</span>
+
+                  <div className={styles.inputGroup}>
+                    <label>{isAr ? "رقم التليفون *" : "Phone Number *"}</label>
+                    <input
+                      type="tel"
+                      value={customerPhone}
+                      onChange={(e) => setCustomerPhone(e.target.value)}
+                      placeholder={isAr ? "01xxxxxxxxx" : "01xxxxxxxxx"}
+                      className={styles.textInput}
+                      dir="ltr"
+                    />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label>{isAr ? "المحافظة" : "Governorate"}</label>
+                    <input
+                      type="text"
+                      value={customerGov}
+                      onChange={(e) => setCustomerGov(e.target.value)}
+                      placeholder={isAr ? "مثال: القاهرة" : "e.g. Cairo"}
+                      className={styles.textInput}
+                    />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label>{isAr ? "العنوان بالتفصيل" : "Detailed Address"}</label>
+                    <input
+                      type="text"
+                      value={customerAddress}
+                      onChange={(e) => setCustomerAddress(e.target.value)}
+                      placeholder={isAr ? "الشارع، المبنى، الدور..." : "Street, building..."}
+                      className={styles.textInput}
+                    />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label>{isAr ? "الكمية المطلوبة" : "Quantity"}</label>
+                    <div className={styles.quantitySelector}>
+                      <button type="button" aria-label="Decrease quantity" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                      <span className={styles.quantityValue}>{quantity}</span>
+                      <button type="button" aria-label="Increase quantity" onClick={() => setQuantity(quantity + 1)}>+</button>
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label>{isAr ? "كود الخصم (إن وجد)" : "Coupon Code (Optional)"}</label>
+                    <div className={styles.couponRow}>
+                      <input 
+                        type="text" 
+                        value={couponCode} 
+                        onChange={(e) => {
+                          setCouponCode(e.target.value.toUpperCase());
+                          setCouponStatus("idle");
+                          setCouponDiscount(0);
+                        }} 
+                        placeholder={isAr ? "أدخل الكود هنا" : "Enter code"}
+                        className={`${styles.couponInput} ${couponStatus === 'valid' ? styles.couponValid : ''} ${couponStatus === 'invalid' ? styles.couponInvalid : ''}`}
+                      />
+                      <button type="button" className={styles.couponBtn} onClick={handleApplyCoupon} disabled={isValidating}>
+                        {isValidating ? "..." : (isAr ? "تطبيق" : "Apply")}
+                      </button>
+                    </div>
+                    {couponStatus === "valid" && (
+                      <span className={styles.couponSuccessMsg}>
+                        {couponType === "percentage"
+                          ? (isAr ? `تم تفعيل الخصم (${couponDiscount * 100}%) 🎉` : `Discount applied (${couponDiscount * 100}%) 🎉`)
+                          : (isAr ? `تم تفعيل خصم ${couponDiscount} جنيه 🎉` : `${couponDiscount} EGP discount applied 🎉`)
+                        }
+                      </span>
+                    )}
+                    {couponStatus === "invalid" && <span className={styles.couponErrorMsg}>{isAr ? "كود الخصم غير صحيح" : "Invalid coupon code"}</span>}
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label>{isAr ? "طريقة الدفع" : "Payment Method"}</label>
+                    <div className={styles.radioGroup}>
+                      <label className={styles.radioLabel}>
+                        <input type="radio" name="payment" value="الدفع عند الاستلام" checked={paymentMethod === "الدفع عند الاستلام"} onChange={(e) => setPaymentMethod(e.target.value)} />
+                        {isAr ? "الدفع عند الاستلام 💵" : "Cash on Delivery 💵"}
+                      </label>
+                      <label className={styles.radioLabel}>
+                        <input type="radio" name="payment" value="إنستا باي" checked={paymentMethod === "إنستا باي"} onChange={(e) => setPaymentMethod(e.target.value)} />
+                        {isAr ? "إنستا باي ⚡" : "InstaPay ⚡"}
+                      </label>
+                      <label className={styles.radioLabel}>
+                        <input type="radio" name="payment" value="فودافون كاش" checked={paymentMethod === "فودافون كاش"} onChange={(e) => setPaymentMethod(e.target.value)} />
+                        {isAr ? "فودافون كاش 📱" : "Vodafone Cash 📱"}
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Order Summary */}
+                  {finalPrice !== null && (
+                    <div className={styles.orderSummaryBox}>
+                      <div className={styles.summaryRow}>
+                        <span>{isAr ? "السعر الأساسي:" : "Base Price:"}</span>
+                        <span>{formatPrice(totalBeforeDiscount, locale)}</span>
+                      </div>
+                      {couponDiscount > 0 && (
+                        <div className={styles.summaryRowDiscount}>
+                          <span>{isAr ? "قيمة الخصم:" : "Discount:"}</span>
+                          <span dir="ltr">-{formatPrice(discountAmount, locale)}</span>
+                        </div>
+                      )}
+                      <div className={styles.summaryRowTotal}>
+                        <span>{isAr ? "الإجمالي:" : "Total:"}</span>
+                        <span>{formatPrice(totalAfterDiscount, locale)}</span>
+                      </div>
                     </div>
                   )}
-                  <div className={styles.summaryRowTotal}>
-                    <span>{isAr ? "الإجمالي:" : "Total:"}</span>
-                    <span>{formatPrice(totalAfterDiscount, locale)}</span>
-                  </div>
                 </div>
-              )}
-            </div>
 
-            <div className={styles.modalFooter}>
-              <button className={styles.confirmBtn} onClick={handleOrder}>
-                {isAr ? "تأكيد وإرسال للواتساب" : "Confirm & Send"}
-              </button>
-            </div>
+                <div className={styles.modalFooter}>
+                  <button
+                    className={styles.confirmBtn}
+                    onClick={handleOrder}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting
+                      ? (isAr ? "جاري الإرسال..." : "Submitting...")
+                      : (isAr ? "تأكيد وإرسال للواتساب" : "Confirm & Send")}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

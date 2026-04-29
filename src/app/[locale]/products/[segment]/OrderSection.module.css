@@ -319,3 +319,74 @@
 .confirmBtn:hover {
   background-color: #15803d;
 }
+
+.confirmBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Text input (shared for name, phone, address) */
+.textInput {
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--card);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.textInput:focus {
+  border-color: var(--color-primary);
+}
+
+/* Success screen */
+.orderSuccessBox {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.orderSuccessIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.orderSuccessNumber {
+  font-size: 1.1rem;
+  color: var(--color-text);
+  margin: 0.5rem 0;
+}
+
+.orderSuccessNumber strong {
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+}
+
+.orderSuccessTotal {
+  font-size: 1rem;
+  color: var(--color-text);
+  margin: 0.5rem 0;
+}
+
+.orderSuccessTotal strong {
+  color: #16a34a;
+  font-size: 1.2rem;
+}
+
+.orderSuccessNote {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+/* Scrollable modal body for mobile */
+@media (max-height: 700px) {
+  .modalBody {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
