@@ -31,12 +31,13 @@
   width: 42px;
   height: 42px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #2a5895, #1e4070);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #f59e0b;
   position: relative;
+  box-shadow: 0 4px 12px rgba(42, 88, 149, 0.4);
 }
 
 .headerDot {
@@ -126,13 +127,14 @@
   width: 72px;
   height: 72px;
   border-radius: 24px;
-  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15));
-  border: 1px solid rgba(59,130,246,0.2);
+  background: linear-gradient(135deg, rgba(42, 88, 149, 0.15), rgba(30, 64, 112, 0.15));
+  border: 1px solid rgba(42, 88, 149, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px;
-  color: #60a5fa;
+  color: #f59e0b;
+  box-shadow: 0 8px 32px rgba(42, 88, 149, 0.15);
 }
 
 .welcomeTitle {
@@ -252,11 +254,12 @@
   width: 34px;
   height: 34px;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15));
+  background: linear-gradient(135deg, rgba(42, 88, 149, 0.15), rgba(30, 64, 112, 0.15));
+  border: 1px solid rgba(42, 88, 149, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #60a5fa;
+  color: #f59e0b;
   flex-shrink: 0;
   margin-top: 4px;
 }
@@ -279,9 +282,10 @@
 }
 
 .msgUser .msgBubble {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #2a5895, #1e4070);
   color: #ffffff;
   border-end-end-radius: 4px;
+  box-shadow: 0 4px 12px rgba(42, 88, 149, 0.2);
 }
 
 /* Message image */
@@ -450,8 +454,8 @@
 }
 
 .inputBar:focus-within {
-  border-color: rgba(59,130,246,0.4);
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.08);
+  border-color: rgba(42, 88, 149, 0.6);
+  box-shadow: 0 0 0 3px rgba(42, 88, 149, 0.15);
 }
 
 .inputBarBtn {
@@ -505,7 +509,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #2a5895, #1e4070);
   color: #fff;
   cursor: pointer;
   transition: all 0.2s;
@@ -515,7 +519,7 @@
 
 .sendBtn:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(59,130,246,0.3);
+  box-shadow: 0 4px 16px rgba(42, 88, 149, 0.4);
 }
 
 .sendBtn:disabled {
