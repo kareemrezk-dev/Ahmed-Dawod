@@ -420,10 +420,19 @@ export function AiAssistant({ locale, dict }: AiAssistantProps) {
               <div className={styles.headerLeft}>
                 <div className={styles.avatarWrap}>
                   <svg
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 1.5l1.6 4.8c.4 1.2 1.4 2.2 2.6 2.6l4.8 1.6-4.8 1.6c-1.2.4-2.2 1.4-2.6 2.6L12 19.5l-1.6-4.8c-.4-1.2-1.4-2.2-2.6-2.6L3 10.5l4.8-1.6c1.2-.4 2.2-1.4 2.6-2.6L12 1.5z"/>
-            <path d="M19 15l.7 2.1c.2.6.7 1.1 1.3 1.3L23 19l-2.1.7c-.6.2-1.1.7-1.3 1.3L19 23l-.7-2.1c-.2-.6-.7-1.1-1.3-1.3L15 19l2.1-.7c.6-.2 1.1-.7 1.3-1.3L19 15z"/>
-          </svg>
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z" />
+                    <circle cx="10" cy="9" r="1" fill="currentColor" />
+                    <circle cx="14" cy="9" r="1" fill="currentColor" />
+                  </svg>
                   <span className={styles.onlineDot} />
                 </div>
                 <div className={styles.headerText}>
@@ -496,9 +505,17 @@ export function AiAssistant({ locale, dict }: AiAssistantProps) {
                 >
                   {msg.role === "assistant" && (
                     <div className={styles.msgAvatar}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 1.5l1.6 4.8c.4 1.2 1.4 2.2 2.6 2.6l4.8 1.6-4.8 1.6c-1.2.4-2.2 1.4-2.6 2.6L12 19.5l-1.6-4.8c-.4-1.2-1.4-2.2-2.6-2.6L3 10.5l4.8-1.6c1.2-.4 2.2-1.4 2.6-2.6L12 1.5z"/>
-                        <path d="M19 15l.7 2.1c.2.6.7 1.1 1.3 1.3L23 19l-2.1.7c-.6.2-1.1.7-1.3 1.3L19 23l-.7-2.1c-.2-.6-.7-1.1-1.3-1.3L15 19l2.1-.7c.6-.2 1.1-.7 1.3-1.3L19 15z"/>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z" />
                       </svg>
                     </div>
                   )}
@@ -616,9 +633,17 @@ export function AiAssistant({ locale, dict }: AiAssistantProps) {
               {isLoading && (
                 <div className={`${styles.msgRow} ${styles.msgAssistant}`}>
                   <div className={styles.msgAvatar}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 1.5l1.6 4.8c.4 1.2 1.4 2.2 2.6 2.6l4.8 1.6-4.8 1.6c-1.2.4-2.2 1.4-2.6 2.6L12 19.5l-1.6-4.8c-.4-1.2-1.4-2.2-2.6-2.6L3 10.5l4.8-1.6c1.2-.4 2.2-1.4 2.6-2.6L12 1.5z"/>
-                      <path d="M19 15l.7 2.1c.2.6.7 1.1 1.3 1.3L23 19l-2.1.7c-.6.2-1.1.7-1.3 1.3L19 23l-.7-2.1c-.2-.6-.7-1.1-1.3-1.3L15 19l2.1-.7c.6-.2 1.1-.7 1.3-1.3L19 15z"/>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z" />
                     </svg>
                   </div>
                   <div className={`${styles.msgBubble} ${styles.typingBubble}`}>
