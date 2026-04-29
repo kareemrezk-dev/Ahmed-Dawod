@@ -644,20 +644,20 @@
 
 /* ── AI Link ── */
 .aiLink {
-  background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08));
+  background: linear-gradient(135deg, rgba(42, 88, 149, 0.08), rgba(42, 88, 149, 0.12));
   border-radius: 8px;
-  color: #3b82f6 !important;
-  font-weight: 600 !important;
+  color: var(--color-primary) !important;
+  font-weight: 700 !important;
 }
 
 .aiLink:hover {
-  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15));
-  color: #2563eb !important;
+  background: linear-gradient(135deg, rgba(42, 88, 149, 0.15), rgba(42, 88, 149, 0.2));
+  color: var(--color-primary-hover) !important;
 }
 
 .aiMobileLink {
-  color: #3b82f6 !important;
-  font-weight: 600;
+  color: var(--color-primary) !important;
+  font-weight: 700 !important;
   display: flex;
   align-items: center;
   gap: 0.35rem;
