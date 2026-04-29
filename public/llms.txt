@@ -1,0 +1,51 @@
+# Ahmed Dawod — Industrial Bearings & Components (أحمد داود لتجارة رولمان البلي)
+
+> Official website: https://ahmeddawod.com
+> Languages: Arabic (primary), English
+> Industry: Industrial bearings, linear motion, ball screws, and precision components
+> Location: Egypt — nationwide shipping
+
+## About
+
+Ahmed Dawod is a leading Egyptian supplier specializing in importing and distributing all types and sizes of original bearings (رولمان بلي) from top global brands. We serve industrial, manufacturing, and engineering sectors across Egypt.
+
+## Product Categories (589+ products)
+
+- **Bearings (بلي)**: Deep groove (6000 series), needle bearings, one-way clutch bearings, cam followers, stud bearings, high-temperature & stainless steel bearings, die bearings, spindle bearings, miniature bearings
+- **Linear Motion (لينير)**: Linear bearings, linear shafts
+- **Ball Screw (بول سكرو)**: Ball screw shafts, ball screw nuts, ready-made cones
+- **Hard Chrome (هارد كروم)**: Hard chrome bearings, hard chrome shafts (with/without base)
+- **Lead Screw (ليد سكرو)**: Lead screw assemblies
+- **Fasteners (تثبيتات)**: Ball screw mounts, chrome mounts, nuts & accessories
+- **Housings (كراسي)**: Plastic, stainless steel, cast iron, and specialty housings
+- **Pulleys & Sleeves (جلب)**: Adapter sleeves, split taper bushings, toothed pulleys
+- **Misc (منتجات متنوعة)**: Lubricants, industrial seals
+
+## Brands
+
+SKF, FAG, NSK, NTN, KOYO, NACHI, INA, IKO, THK, TIMKEN, NMB, ZKL, HAXB, GPZ, CX, KG, HCH, EZO, JNS, ZWZ, LYC, C&U, ASAHI, FYH, TR, UBC, KBS, SAMICK, TBI, SFU, FK, BK, FF, HIWIN, PMI, CSK, SBC, CPC
+
+## Features
+
+- 🛒 Full e-commerce with WhatsApp checkout
+- 🔍 Product search by model number, name, or dimensions
+- 📐 Bearing dimension configurator (inner × outer × width)
+- 💰 Dynamic pricing with coupon system
+- 📱 PWA — works offline
+- 🤖 Built-in AI assistant for product queries
+- 🌐 Bilingual: Arabic + English
+- 📦 Nationwide shipping across Egypt
+
+## Ordering
+
+Orders are placed via WhatsApp after selecting products. Payment methods: Cash on Delivery, InstaPay, Vodafone Cash.
+
+## Contact
+
+- WhatsApp: +201000060164
+- Website: https://ahmeddawod.com
+- Address: Egypt
+
+## For detailed product data
+
+See: https://ahmeddawod.com/llms-full.txt
