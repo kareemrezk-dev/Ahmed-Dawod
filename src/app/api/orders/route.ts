@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { sendOrderNotification } from "@/lib/email";
 
 function getServiceClient() {
   return createClient(
@@ -157,6 +158,25 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // 5. Send email notification (non-blocking)
+    sendOrderNotification({
+      orderNumber: order.order_number,
+      customerName: customer.name,
+      customerPhone: customer.phone,
+      governorate: shipping?.governorate || "",
+      address: shipping?.address || "",
+      paymentMethod: payment_method || "الدفع عند الاستلام",
+      items: items.map((item: { product_name_ar: string; quantity: number; unit_price: number }) => ({
+        name: item.product_name_ar,
+        quantity: item.quantity,
+        unitPrice: item.unit_price,
+      })),
+      subtotal,
+      discount: discountAmount,
+      couponCode: coupon_code || null,
+      total,
+    }).catch(() => {}); // Fire and forget
 
     return NextResponse.json(
       {

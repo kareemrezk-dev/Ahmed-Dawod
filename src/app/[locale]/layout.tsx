@@ -50,6 +50,17 @@ export default async function LocaleLayout({
     <html lang={locale} dir={dir}>
       <head>
         <OrganizationJsonLd locale={locale} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js');
+                });
+              }
+            `,
+          }}
+        />
       </head>
       <body className={`${inter.variable} ${cairo.variable}`}>
         <CartProvider>
