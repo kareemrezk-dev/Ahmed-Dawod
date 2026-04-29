@@ -15,16 +15,13 @@ export function Hero({ locale, dict }: HeroProps) {
     <section className={styles.hero} aria-label={dict.company.name}>
       {/* Background Image Setup */}
       <div className={styles.bgWrapper}>
-        <Image
-          src="/images/hero-bg.png"
-          alt="Industrial Bearings Background"
-          fill
-          priority
-          quality={75}
-          sizes="100vw"
-          className={styles.bgImage}
-          placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsM"
+        <video
+          src="https://videos.pexels.com/video-files/3205797/3205797-uhd_2560_1440_25fps.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={styles.bgVideo}
         />
         <div className={styles.bgOverlay} />
       </div>
