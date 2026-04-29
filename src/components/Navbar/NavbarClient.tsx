@@ -416,6 +416,13 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
             <Link href={`/${locale}/configurator`} prefetch={false} className={[styles.navLink, pathname.startsWith("/" + locale + "/configurator") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.sizeFinder}</Link>
             <Link href={`/${locale}/about`} prefetch={false} className={[styles.navLink, pathname.startsWith("/" + locale + "/about") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.about}</Link>
             <Link href={`/${locale}/contact`} prefetch={false} className={[styles.navLink, pathname.startsWith("/" + locale + "/contact") ? styles.navLinkActive : ""].join(" ")}>{dict.nav.contact}</Link>
+            <Link href={`/${locale}/ai`} prefetch={false} className={[styles.navLink, styles.aiLink, pathname.startsWith("/" + locale + "/ai") ? styles.navLinkActive : ""].join(" ")}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{marginInlineEnd: 4}}>
+                <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z" />
+                <circle cx="10" cy="9" r="1" fill="currentColor" /><circle cx="14" cy="9" r="1" fill="currentColor" />
+              </svg>
+              {locale === "ar" ? "المساعد الذكي" : "AI Assistant"}
+            </Link>
           </div>
           {/* Right cluster */}
           <div className={styles.rightCluster}>
@@ -511,6 +518,14 @@ export function NavbarClient({ locale, dict }: NavbarClientProps) {
               {link.label}
             </Link>
           ))}
+
+          <Link href={`/${locale}/ai`} prefetch={false} className={`${styles.mobileNavLink} ${styles.aiMobileLink}`} onClick={() => setMobileOpen(false)}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{marginInlineEnd: 6}}>
+              <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z" />
+              <circle cx="10" cy="9" r="1" fill="currentColor" /><circle cx="14" cy="9" r="1" fill="currentColor" />
+            </svg>
+            {locale === "ar" ? "المساعد الذكي" : "AI Assistant"}
+          </Link>
 
           <div className={styles.mobileBottom}>
             <button className={styles.mobileSearchBtn} onClick={() => { setMobileOpen(false); setSearchOpen(true); }}>

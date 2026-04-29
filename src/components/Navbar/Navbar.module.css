@@ -641,3 +641,24 @@
     max-width: 180px;
   }
 }
+
+/* ── AI Link ── */
+.aiLink {
+  background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08));
+  border-radius: 8px;
+  color: #3b82f6 !important;
+  font-weight: 600 !important;
+}
+
+.aiLink:hover {
+  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15));
+  color: #2563eb !important;
+}
+
+.aiMobileLink {
+  color: #3b82f6 !important;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
