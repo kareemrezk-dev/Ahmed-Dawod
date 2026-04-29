@@ -4,14 +4,12 @@ import type { Locale } from "@/lib/i18n";
 import { locales } from "@/lib/i18n";
 import { generateLocaleMetadata } from "@/lib/generateMetadata";
 import {
-  getAllProducts,
   getAllCategories,
   getAllBrands,
   getCategoryLabel,
-  searchProducts,
   type CategoryName,
-  type Product,
 } from "@/lib/products";
+import { getProductsPaginated } from "@/lib/products.server";
 import { getDictionary } from "@/lib/getDictionary";
 import { getPricingOverrides } from "@/lib/pricing.server";
 import { Breadcrumb } from "@/components/Breadcrumb/Breadcrumb";
@@ -22,32 +20,14 @@ import { FAQ } from "@/components/FAQ/FAQ";
 
 export const revalidate = 60;
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 24;
 
 function firstParam(value: string | string[] | undefined): string | null {
   if (Array.isArray(value)) return value[0] ?? null;
   return value ?? null;
 }
 
-function matchesSize(product: Product, size: string): boolean {
-  const needle = size.toLowerCase();
-  return product.sizes?.some((s) => s.toLowerCase().includes(needle)) ?? false;
-}
 
-function applyFilters(
-  products: Product[],
-  filters: { q: string | null; category: CategoryName | null; brand: string | null; size: string | null }
-): Product[] {
-  const searchMatches = filters.q ? new Set(searchProducts(filters.q).map((p) => p.slug)) : null;
-
-  return products.filter((product) => {
-    if (searchMatches && !searchMatches.has(product.slug)) return false;
-    if (filters.category && product.category !== filters.category) return false;
-    if (filters.brand && product.brand.toLowerCase() !== filters.brand.toLowerCase()) return false;
-    if (filters.size && !matchesSize(product, filters.size)) return false;
-    return true;
-  });
-}
 
 interface PageProps {
   params: { locale: Locale };
@@ -70,7 +50,6 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   const dict = await getDictionary(locale);
   const pricingOverrides = await getPricingOverrides();
 
-  const allProducts = getAllProducts();
   const allCategories = getAllCategories();
   const allBrands = getAllBrands();
 
@@ -78,7 +57,6 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   const rawQuery = firstParam(searchParamsObj.q)?.trim() || null;
   const rawCategory = firstParam(searchParamsObj.subcategory) ?? firstParam(searchParamsObj.category);
   const rawBrand = firstParam(searchParamsObj.brand);
-  const rawSize = firstParam(searchParamsObj.size)?.trim() || null;
   
   const pageVal = firstParam(searchParamsObj.page);
   const currentPage = Math.max(1, parseInt(pageVal ?? "1", 10));
@@ -93,37 +71,33 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
       ? allBrands.find((b) => b.toLowerCase() === rawBrand.toLowerCase()) ?? null
       : null;
 
-  const filters = { q: rawQuery, category: activeCategory, brand: activeBrand, size: rawSize };
-  const filtered = applyFilters(allProducts, filters);
+  // Server-side pagination from Supabase
+  const { products: paginatedProducts, total: resultsCount, totalPages } = await getProductsPaginated(
+    currentPage,
+    PAGE_SIZE,
+    {
+      search: rawQuery || undefined,
+      category: activeCategory || undefined,
+      brand: activeBrand || undefined,
+    }
+  );
 
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const safePage = Math.min(currentPage, Math.max(1, totalPages));
-  const paginatedProducts = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
-  // ── Optimized: compute each base set ONCE, not per-option ──
-  const baseForCategory = applyFilters(allProducts, { ...filters, category: null });
+  // Category/brand options for filters (lightweight — just names, no counts from full scan)
   const categoryOptions = allCategories.map((cat) => ({
     value: cat,
     label: getCategoryLabel(cat, locale),
-    count: baseForCategory.filter((p) => p.category === cat).length,
-  })).filter((o) => o.count > 0);
+    count: 0,
+  }));
 
-  const baseForBrand = applyFilters(allProducts, { ...filters, brand: null });
   const brandOptions = allBrands.map((brand) => ({
     value: brand,
     label: brand,
-    count: baseForBrand.filter((p) => p.brand.toLowerCase() === brand.toLowerCase()).length,
-  })).filter((o) => o.count > 0);
-
-  const baseForSize = applyFilters(allProducts, { ...filters, size: null });
-  const allSizes = [...new Set(baseForSize.flatMap((p) => p.sizes ?? []))].sort();
-  const sizeOptions = allSizes.map((size) => ({
-    value: size,
-    label: size,
-    count: baseForSize.filter((p) => p.sizes?.includes(size)).length,
+    count: 0,
   }));
 
-  const resultsCount = filtered.length;
+  const sizeOptions: { value: string; label: string; count: number }[] = [];
 
   // ── Labels ──
   const pageTitle = dict.products.title;
@@ -161,7 +135,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
             sizeOptions={sizeOptions}
             activeCategory={activeCategory}
             activeBrand={activeBrand}
-            activeSize={rawSize || null}
+            activeSize={null}
             pricingOverrides={pricingOverrides}
           />
         </Suspense>
