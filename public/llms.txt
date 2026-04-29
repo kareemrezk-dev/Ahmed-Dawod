@@ -38,7 +38,10 @@ SKF, FAG, NSK, NTN, KOYO, NACHI, INA, IKO, THK, TIMKEN, NMB, ZKL, HAXB, GPZ, CX,
 
 ## Ordering
 
-Orders are placed via WhatsApp after selecting products. Payment methods: Cash on Delivery, InstaPay, Vodafone Cash.
+Orders are placed via WhatsApp after selecting products on the website. Payment methods:
+- Cash on Delivery (الدفع عند الاستلام)
+- Vodafone Cash (فودافون كاش)
+- InstaPay (إنستا باي)
 
 ## Contact
 

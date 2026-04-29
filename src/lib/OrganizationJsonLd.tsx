@@ -86,7 +86,7 @@ export async function OrganizationJsonLd({ locale = "ar" }: { locale?: Locale } 
       { "@type": "Brand", name: "THK" },
       { "@type": "Brand", name: "NACHI" },
     ],
-    paymentAccepted: "Cash, InstaPay, Vodafone Cash",
+    paymentAccepted: "Cash on Delivery (الدفع عند الاستلام), Vodafone Cash (فودافون كاش), InstaPay (إنستا باي)",
     currenciesAccepted: "EGP",
     areaServed: { "@type": "Country", name: "Egypt" },
   };
