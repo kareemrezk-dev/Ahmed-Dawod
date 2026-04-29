@@ -50,5 +50,9 @@ export async function generateLocaleMetadata(
       follow: true,
       googleBot: { index: true, follow: true },
     },
+    keywords:
+      locale === "ar"
+        ? "رولمان بلي, بلي اصلي, SKF, NSK, FAG, NTN, TIMKEN, بحث بالصور, ذكاء اصطناعي, قطع غيار مصانع, أحمد داود"
+        : "ball bearings, AI-powered bearing finder, image recognition, smart comparison, SKF, NSK, FAG, NTN, TIMKEN, industrial spare parts, Ahmed Dawod",
   };
 }

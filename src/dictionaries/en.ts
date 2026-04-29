@@ -4,7 +4,7 @@ export const en: Dictionary = {
   meta: {
     siteName: "Ahmed Dawod for Bearings Trading",
     slogan: "Precision in Motion… Stability in Performance",
-    description: "Ahmed Dawod — Specialists in importing and supplying all types and sizes of genuine ball bearings and factory spare parts across all international brands.",
+    description: "Ahmed Dawod — Specialists in importing and supplying all types and sizes of genuine ball bearings and factory spare parts. AI-powered bearing finder with image recognition and smart comparison.",
     titleTemplate: "%s | Ahmed Dawod for Bearings Trading",
   },
   company: {
@@ -173,7 +173,7 @@ export const en: Dictionary = {
   },
   aiAssistant: {
     title: "Ahmed Dawod Assistant",
-    subtitle: "Your smart industrial products advisor",
+    subtitle: "AI-powered bearing finder with image recognition",
     welcomeMessage: "Hello! 👋 I'm Ahmed Dawod's AI assistant.\n\nI can help you find the right product — whether bearings, linear motion, ball screws, or any spare part.\n\nYou can also upload a photo and I'll identify the product! 📷",
     inputPlaceholder: "Type your question here…",
     send: "Send",
