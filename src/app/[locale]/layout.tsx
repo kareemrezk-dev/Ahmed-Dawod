@@ -50,6 +50,9 @@ export default async function LocaleLayout({
     <html lang={locale} dir={dir}>
       <head>
         <OrganizationJsonLd locale={locale} />
+        <link rel="help" href="/llms.txt" type="text/plain" title="LLM Site Info" />
+        <link rel="alternate" href="/llms-full.txt" type="text/plain" title="Full Product Catalog for AI" />
+        <link rel="author" href="/.well-known/ai-plugin.json" type="application/json" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
