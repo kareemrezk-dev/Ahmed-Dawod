@@ -75,8 +75,10 @@ export function AiFullPage({ locale, dict }: { locale: Locale; dict: Dictionary 
   useEffect(() => { trackAiOpen(); }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isLoading]);
+    if (started) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isLoading, started]);
 
   useEffect(() => {
     inputRef.current?.focus();
