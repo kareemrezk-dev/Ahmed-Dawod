@@ -22,8 +22,13 @@ export function PromoBanner({ locale }: { locale: Locale }) {
     <div className={styles.banner} dir={isAr ? "rtl" : "ltr"}>
       <div className={styles.content}>
         <div className={styles.text}>
-          <span className={styles.icon}>🎉</span>
-          <span>{isAr ? "اطلب الآن عبر الواتساب واستخدم كود الخصم" : "Order now via WhatsApp and use code"}</span>
+          <div className={styles.headerRow}>
+            <span className={styles.icon}>🎁</span>
+            <span className={styles.title}>{isAr ? "خصم خاص لك!" : "Special Offer!"}</span>
+          </div>
+          <span className={styles.messageText}>
+            {isAr ? "استخدم الكود التالي عند الطلب عبر الواتساب للحصول على خصم 10%:" : "Use this code when ordering via WhatsApp for 10% off:"}
+          </span>
           <button 
             onClick={handleCopy} 
             className={`${styles.couponCode} ${copied ? styles.copied : ""}`}
@@ -31,7 +36,6 @@ export function PromoBanner({ locale }: { locale: Locale }) {
           >
             {copied ? (isAr ? "تم النسخ! ✅" : "Copied! ✅") : "DAWOD10"}
           </button>
-          <span>{isAr ? "للحصول على خصم 10%!" : "for a 10% discount!"}</span>
         </div>
       </div>
       <button 
