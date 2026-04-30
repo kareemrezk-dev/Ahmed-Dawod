@@ -6,18 +6,33 @@ import type { Locale } from "@/lib/i18n";
 
 export function PromoBanner({ locale }: { locale: Locale }) {
   const [isVisible, setIsVisible] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   if (!isVisible) return null;
 
   const isAr = locale === "ar";
-  const message = isAr 
-    ? "🎉 اطلب الآن عبر الواتساب واستخدم كود الخصم DAWOD10 للحصول على خصم 10%!"
-    : "🎉 Order now via WhatsApp and use code DAWOD10 for a 10% discount!";
+  
+  const handleCopy = () => {
+    navigator.clipboard.writeText("DAWOD10");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className={styles.banner} dir={isAr ? "rtl" : "ltr"}>
       <div className={styles.content}>
-        <p>{message}</p>
+        <div className={styles.text}>
+          <span className={styles.icon}>🎉</span>
+          <span>{isAr ? "اطلب الآن عبر الواتساب واستخدم كود الخصم" : "Order now via WhatsApp and use code"}</span>
+          <button 
+            onClick={handleCopy} 
+            className={`${styles.couponCode} ${copied ? styles.copied : ""}`}
+            title={isAr ? "اضغط للنسخ" : "Click to copy"}
+          >
+            {copied ? (isAr ? "تم النسخ! ✅" : "Copied! ✅") : "DAWOD10"}
+          </button>
+          <span>{isAr ? "للحصول على خصم 10%!" : "for a 10% discount!"}</span>
+        </div>
       </div>
       <button 
         className={styles.closeBtn} 
