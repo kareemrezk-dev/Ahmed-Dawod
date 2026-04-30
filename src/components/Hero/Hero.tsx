@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries/types";
 import styles from "./Hero.module.css";
@@ -15,17 +14,16 @@ export function Hero({ locale, dict }: HeroProps) {
     <section className={styles.hero} aria-label={dict.company.name}>
       {/* Background Image Setup */}
       <div className={styles.bgWrapper}>
-        <Image
-          src="/images/hero-bg.png"
-          alt="Industrial Bearings Background"
-          fill
-          priority
-          quality={75}
-          sizes="100vw"
-          className={styles.bgImage}
-          placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsM"
-        />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={styles.bgVideo}
+          poster="/images/hero-bg.png"
+        >
+          <source src="/videos/hero-video.mp4" type="video/mp4" />
+        </video>
         <div className={styles.bgOverlay} />
       </div>
 
